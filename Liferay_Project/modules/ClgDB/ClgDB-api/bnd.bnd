@@ -1,0 +1,10 @@
+Bundle-Name: ClgDB-api
+Bundle-SymbolicName: ClgDB.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	ClgDB.exception,\
+	ClgDB.model,\
+	ClgDB.service,\
+	ClgDB.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../ClgDB-service/service.xml

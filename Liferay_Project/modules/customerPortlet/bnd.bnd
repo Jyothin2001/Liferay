@@ -1,0 +1,7 @@
+Bundle-Name: customerPortlet
+Bundle-SymbolicName: customerPortlet
+Bundle-Version: 1.0.0
+Export-Package: customerPortlet.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

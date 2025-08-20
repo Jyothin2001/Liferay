@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false" default-lazy="false">
+	<import class="LoanDB.model.CustomerTable" />
+	<import class="LoanDB.model.LoanTable" />
+	<class name="LoanDB.model.impl.CustomerTableImpl" table="B_CustomerTable">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="customerId" type="long">
+			<generator class="increment" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="email" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="phone" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="dob" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="aadharNumber" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="panNumber" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="address" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+	</class>
+	<class name="LoanDB.model.impl.LoanTableImpl" table="B_LoanTable">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="LoanId" type="long">
+			<generator class="increment" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" column="uuid_" name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="customerId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="loanType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="amount" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="status" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="applicationDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="interestRate" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="tenure" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="remarks" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+	</class>
+</hibernate-mapping>

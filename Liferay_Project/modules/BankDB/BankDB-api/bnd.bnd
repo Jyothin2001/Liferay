@@ -1,0 +1,10 @@
+Bundle-Name: BankDB-api
+Bundle-SymbolicName: BankDB.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	BankDB.exception,\
+	BankDB.model,\
+	BankDB.service,\
+	BankDB.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../BankDB-service/service.xml

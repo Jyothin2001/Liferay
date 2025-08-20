@@ -1,0 +1,7 @@
+Bundle-Name: Bank_Portlet
+Bundle-SymbolicName: Bank_Portlet
+Bundle-Version: 1.0.0
+Export-Package: Bank_Portlet.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

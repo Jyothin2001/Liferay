@@ -1,0 +1,12 @@
+dependencies {
+	api project(":modules:ClgDB:ClgDB-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../ClgDB-api/src/main/java"
+	testDir = "../ClgDB-test/src/testIntegration/java"
+}
+
+group = "ClgDB"

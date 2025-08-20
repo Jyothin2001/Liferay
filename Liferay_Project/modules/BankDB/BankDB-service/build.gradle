@@ -1,0 +1,14 @@
+dependencies {
+	api project(":modules:BankDB:BankDB-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+	
+	compileOnly group: "com.liferay", name: "com.liferay.portal.dao.orm.custom.sql.api", version: "1.0.0"
+}
+
+buildService {
+	apiDir = "../BankDB-api/src/main/java"
+	testDir = "../BankDB-test/src/testIntegration/java"
+}
+
+group = "BankDB"

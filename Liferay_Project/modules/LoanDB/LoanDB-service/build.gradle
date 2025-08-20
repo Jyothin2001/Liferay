@@ -1,0 +1,12 @@
+dependencies {
+	api project(":modules:LoanDB:LoanDB-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../LoanDB-api/src/main/java"
+	testDir = "../LoanDB-test/src/testIntegration/java"
+}
+
+group = "LoanDB"

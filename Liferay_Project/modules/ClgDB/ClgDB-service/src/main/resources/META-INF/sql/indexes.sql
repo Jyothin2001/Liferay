@@ -1,0 +1,1 @@
+create unique index IX_47F1C2AC on B_Clg_Table (uuid_[$COLUMN_LENGTH:75$], groupId);

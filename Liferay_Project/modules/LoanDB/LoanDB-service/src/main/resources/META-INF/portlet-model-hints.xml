@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="LoanDB.model.CustomerTable">
+		<field name="customerId" type="long" />
+		<field name="name" type="String" />
+		<field name="email" type="String" />
+		<field name="phone" type="String" />
+		<field name="dob" type="Date" />
+		<field name="aadharNumber" type="String" />
+		<field name="panNumber" type="String" />
+		<field name="address" type="String" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
+	<model name="LoanDB.model.LoanTable">
+		<field name="uuid" type="String" />
+		<field name="LoanId" type="long" />
+		<field name="customerId" type="long" />
+		<field name="loanType" type="String" />
+		<field name="amount" type="double" />
+		<field name="status" type="String" />
+		<field name="applicationDate" type="Date" />
+		<field name="interestRate" type="double" />
+		<field name="tenure" type="int" />
+		<field name="remarks" type="String" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
+</model-hints>
