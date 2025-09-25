@@ -1,0 +1,7 @@
+Bundle-Name: SignupUserListPortlet
+Bundle-SymbolicName: SignupUserListPortlet
+Bundle-Version: 1.0.0
+Export-Package: SignupUserListPortlet.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

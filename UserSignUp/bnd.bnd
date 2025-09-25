@@ -1,0 +1,7 @@
+Bundle-Name: UserSignUp
+Bundle-SymbolicName: UserSignUp
+Bundle-Version: 1.0.0
+Export-Package: UserSignUp.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

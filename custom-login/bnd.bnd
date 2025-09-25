@@ -1,0 +1,8 @@
+Bundle-Name: custom-login
+Bundle-SymbolicName: custom.login
+Bundle-Version: 1.0.0
+Export-Package: custom.login.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"
+Portlet-Version: 3.0

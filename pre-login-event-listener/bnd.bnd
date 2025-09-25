@@ -1,0 +1,3 @@
+Bundle-Name: pre-login-event-listener
+Bundle-SymbolicName: com.pre.login.event
+Bundle-Version: 1.0.0

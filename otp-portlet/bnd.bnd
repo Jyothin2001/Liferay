@@ -1,0 +1,9 @@
+Bundle-Name: otp-portlet
+Bundle-SymbolicName: otp.portlet
+Bundle-Version: 1.0.0
+Export-Package: otp.portlet.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"
+
+    
