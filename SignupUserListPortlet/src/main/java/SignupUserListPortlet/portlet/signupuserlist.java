@@ -25,7 +25,8 @@ import SignupUserListPortlet.constants.SignupUserListPortletKeys;
     immediate = true,
     property = {
     		"javax.portlet.name=" + SignupUserListPortletKeys.SIGNUPUSERLIST,
-        "mvc.command.name=/"
+        "mvc.command.name=/",
+    		"com.liferay.portlet.show-portlet-header=false"
     },
     service = MVCRenderCommand.class
 )

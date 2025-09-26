@@ -3,25 +3,51 @@
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
-<p>
-	<b><liferay-ui:message key="customlogin.caption"/></b>
-</p>
 
-<%-- <portlet:renderURL var="myRenderURL">
-    <portlet:param name="mvcPath" value="/SignUp.jsp" />
+<h3 style="text-align:center; margin-bottom:20px; color:#2c3e50; font-weight:600;">
+    Create Your Patient Account
+</h3>
+
+<portlet:actionURL name="/signup/submit" var="signupActionURL" />
+
+<div style="max-width:450px; margin:0 auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+    <aui:form action="${signupActionURL}" method="post" name="signupForm">
+
+        <div class="form-group mb-3">
+            <aui:input name="firstName" label="First Name" cssClass="form-control" />
+        </div>
+
+        <div class="form-group mb-3">
+            <aui:input name="lastName" label="Last Name" cssClass="form-control" />
+        </div>
+
+        <div class="form-group mb-3">
+            <aui:input name="screenName" label="Screen Name" required="true" cssClass="form-control" />
+        </div>
+
+        <div class="form-group mb-3">
+            <aui:input name="emailAddress" label="Email Address" type="email" required="true" cssClass="form-control" />
+        </div>
+
+        <div class="form-group mb-3">
+            <aui:input name="password" label="Password" type="password" cssClass="form-control" />
+        </div>
+
+        <div style="text-align:center; margin-top:20px;">
+            <aui:button type="submit" value="Sign Up" cssClass="btn btn-success px-4 py-2 rounded-pill" />
+        </div>
+
+    </aui:form>
+    <portlet:renderURL var="forgotPasswordURL">
+    <portlet:param name="mvcRenderCommandName" value="/forgot_password/view" />
 </portlet:renderURL>
 
-<a href="${myRenderURL}">Go to My SignUp </a> --%>
-
-<%-- Right side button --%>
-    <portlet:renderURL var="myRenderURL">
-        <portlet:param name="mvcPath" value="/SignUp.jsp" />
-    </portlet:renderURL>
-
-    <aui:a href="${myRenderURL}" style="float:right;" cssClass="btn btn-primary">
-        Go to My SignUp
-    </aui:a>
+<p>
+    <a href="<%= forgotPasswordURL %>">Forgot Password?</a>
 </p>
+</div>
+
+
 
 <%-- Show duplicate errors --%>
 <liferay-ui:error key="email-exists">
@@ -32,5 +58,19 @@
    <liferay-ui:message key="screenname-exists-message" />
 </liferay-ui:error>
 
+<%-- <portlet:renderURL var="myRenderURL">
+    <portlet:param name="mvcPath" value="/SignUp.jsp" />
+</portlet:renderURL>
 
+<a href="${myRenderURL}">Go to My SignUp </a> --%>
+
+<%-- Right side button --%>
+    <%-- <portlet:renderURL var="myRenderURL">
+        <portlet:param name="mvcPath" value="/SignUp.jsp" />
+    </portlet:renderURL>
+
+    <aui:a href="${myRenderURL}" style="float:right;" cssClass="btn btn-primary">
+        Go to My SignUp
+    </aui:a>
+ --%>
 

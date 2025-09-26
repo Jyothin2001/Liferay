@@ -1,5 +1,7 @@
 package otp.portlet.portlet;
 
+import com.liferay.mail.kernel.model.MailMessage;
+import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.log.Log;
@@ -12,6 +14,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
+import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
@@ -79,9 +82,32 @@ public class VerifyOtpMVCActionCommand extends BaseMVCActionCommand {
             user.setStatus(WorkflowConstants.STATUS_APPROVED);
             UserLocalServiceUtil.updateUser(user);
             
-                
-        
-                log.info("User " + user.getScreenName() + " verified successfully.");
+                 log.info("User " + user.getScreenName() + " verified successfully.");
+                 
+                 
+              // ✅ Send email to user
+                 try {
+                	 String subject = "Your Patient Registry Account Has Been Activated";
+
+                	 String body = "Dear " + user.getFullName() + ",\n\n" +
+                	               "We are pleased to inform you that your Patient Registry account has been activated successfully.\n\n" +
+                	               "You can now log in using your registered credentials and access your dashboard.\n\n" +
+                	               "If you have any questions or need assistance, please contact our support team.\n\n" +
+                	               "Best regards,\n" +
+                	               "Patient Registry Team";
+
+
+                     InternetAddress from = new InternetAddress("jyothin7981@gmail.com", "Your Company");
+                     InternetAddress to = new InternetAddress(user.getEmailAddress());
+
+                     MailMessage mailMessage = new MailMessage(from, to, subject, body, false);
+                     MailServiceUtil.sendEmail(mailMessage);
+
+                     log.info("Verification email sent to " + user.getEmailAddress());
+                 } catch (Exception e) {
+                     log.error("Failed to send verification email: " + e.getMessage(), e);
+                 }
+
 
                 // ✅ Redirect to dashboard or success page
                 actionResponse.sendRedirect("/web/guest/dashboard"); 
