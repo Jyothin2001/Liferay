@@ -1,11 +1,16 @@
 package otp.portlet.portlet;
 
 import otp.portlet.constants.OtpPortletKeys;
+import otpDB.model.SignupOTP;
+import otpDB.service.SignupOTPLocalServiceUtil;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.PortalUtil;
 import java.io.IOException;
+import java.util.List;
+
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -36,26 +41,49 @@ private static final Log log = LogFactoryUtil.getLog(OtpPortlet.class);
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
-log.info("otp default render method::");
-		
-		// get the token and userId from url
-		HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(renderRequest);
-		HttpServletRequest originalRequest = PortalUtil.getOriginalServletRequest(httpRequest);
+		log.info("OTP default render method");
 
-		String userIdStr = originalRequest.getParameter("userId");
-		String token = originalRequest.getParameter("token");
-		long userId = 0;
-		if (userIdStr != null) {
-		    userId = Long.parseLong(userIdStr);
-		}
-		
-		log.info("userId in otp Portlet: "+userId);
-        log.info("token in otp Portlet: "+token);
-        
-        
-        renderRequest.setAttribute("userId", userId);
-        renderRequest.setAttribute("token", token);
-        
-		super.doView(renderRequest, renderResponse);
+	    // Get token and userId from URL
+	    HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(renderRequest);
+	    HttpServletRequest originalRequest = PortalUtil.getOriginalServletRequest(httpRequest);
+
+	    String userIdStr = originalRequest.getParameter("userId");
+	    String token = originalRequest.getParameter("token");
+
+	    // Parse userId
+	    long userId = 0;
+	    if (userIdStr != null) {
+	        userId = Long.parseLong(userIdStr);
+	    }
+
+	    // Create final copy for lambda
+	    final long finalUserId = userId;
+
+	    log.info("default userId in OTP Portlet: " + finalUserId);
+	    log.info("default token in OTP Portlet: " + token);
+
+	    renderRequest.setAttribute("userId", finalUserId);
+	    renderRequest.setAttribute("token", token);
+
+	    try {
+	        // Fetch the latest unverified OTP for this user
+	        List<SignupOTP> otpList = SignupOTPLocalServiceUtil.getSignupOTPs(-1, -1);
+	        SignupOTP otpRecord = otpList.stream()
+	                .filter(o -> o.getUserId() == finalUserId && !o.isStatus()) // unverified OTP
+	                .reduce((first, second) -> second) // get the latest
+	                .orElse(null);
+
+	        if (otpRecord != null) {
+	            renderRequest.setAttribute("otpRecord", otpRecord); // pass to JSP
+	            log.info("default Fetched OTP record for userId=" + finalUserId + ", OTP=" + otpRecord.getOtp());
+	        } else {
+	            log.info(" default No unverified OTP found for userId=" + finalUserId);
+	        }
+
+	    } catch (Exception e) {
+	        log.error("default Error fetching OTP details: ", e);
+	    }
+
+	    super.doView(renderRequest, renderResponse);
 	}
 }
