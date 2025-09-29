@@ -7,6 +7,14 @@
 <h3 style="text-align:center; margin-bottom:20px; color:#2c3e50; font-weight:600;">
     Create Your Patient Account
 </h3>
+<%-- Show duplicate errors --%>
+<liferay-ui:error key="email-exists">
+   <liferay-ui:message key="email-exists-message" />
+</liferay-ui:error>
+
+<liferay-ui:error key="screenname-exists">
+   <liferay-ui:message key="screenname-exists-message" />
+</liferay-ui:error>
 
 <portlet:actionURL name="/signup/submit" var="signupActionURL" />
 
@@ -49,28 +57,6 @@
 
 
 
-<%-- Show duplicate errors --%>
-<liferay-ui:error key="email-exists">
-   <liferay-ui:message key="email-exists-message" />
-</liferay-ui:error>
 
-<liferay-ui:error key="email-exists">
-   <liferay-ui:message key="screenname-exists-message" />
-</liferay-ui:error>
 
-<%-- <portlet:renderURL var="myRenderURL">
-    <portlet:param name="mvcPath" value="/SignUp.jsp" />
-</portlet:renderURL>
-
-<a href="${myRenderURL}">Go to My SignUp </a> --%>
-
-<%-- Right side button --%>
-    <%-- <portlet:renderURL var="myRenderURL">
-        <portlet:param name="mvcPath" value="/SignUp.jsp" />
-    </portlet:renderURL>
-
-    <aui:a href="${myRenderURL}" style="float:right;" cssClass="btn btn-primary">
-        Go to My SignUp
-    </aui:a>
- --%>
 

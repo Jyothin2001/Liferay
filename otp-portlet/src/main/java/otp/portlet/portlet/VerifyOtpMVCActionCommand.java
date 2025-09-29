@@ -2,7 +2,6 @@ package otp.portlet.portlet;
 
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailServiceUtil;
-import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.SingleVMPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -12,13 +11,16 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
-import org.osgi.service.component.annotations.Activate;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -38,86 +40,168 @@ public class VerifyOtpMVCActionCommand extends BaseMVCActionCommand {
     @Reference
     private SingleVMPool singleVMPool;
 
-    private PortalCache<Long, String> tokenCache;
-
-//    @Activate
-//    protected void activate() {
-//        tokenCache = (PortalCache<Long, String>) singleVMPool.getPortalCache("SIGNUP_TOKEN_CACHE");
-//    }
-
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+    	long userId = ParamUtil.getLong(actionRequest, "userId");
+    	String token = ParamUtil.getString(actionRequest, "token");
+    	String enteredOtp = ParamUtil.getString(actionRequest, "otp");
 
-        // ✅ Take userId and token from link
-        long userId = ParamUtil.getLong(actionRequest, "userId");
-        String token = ParamUtil.getString(actionRequest, "token");
+    	log.info("Entered userId: " + userId + ", token: " + token + ", OTP: " + enteredOtp);
 
-        // ✅ Take OTP entered by user
-        String enteredOtp = ParamUtil.getString(actionRequest, "otp");
+    	HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(actionRequest);
+    	HttpSession httpSession = httpRequest.getSession(false);
 
-        log.info("userId from link: " + userId);
-        log.info("token from link: " + token);
-        log.info("enteredOtp: " + enteredOtp);
+    	Long savedUserId = null;
+    	String savedToken = null;
+    	String savedOtp = null;
 
-//        // Get stored token+OTP from cache
-//        String storedValue = tokenCache.get(userId);
-//
-//        if (storedValue != null) {
-//            String[] parts = storedValue.split(":");
-//            String storedToken = parts[0];
-//            String storedOtp = parts[1];
-//
-//            log.info("storedToken: " + storedToken);
-//            log.info("storedOtp: " + storedOtp);
-//
-//            // Check if token and OTP match
-//            if (storedToken.equals(token) || storedOtp.equals(enteredOtp)) {
+    	if (httpSession != null) {
+    	    savedUserId = (Long) httpSession.getAttribute("userId");
+    	    savedToken = (String) httpSession.getAttribute("token");
+    	    savedOtp = (String) httpSession.getAttribute("otp");
 
-     // Compare with URL parameters directly
-        if (token.equals(ParamUtil.getString(actionRequest, "token")) &&
-            enteredOtp.equals(ParamUtil.getString(actionRequest, "otp"))) {
-            
-        	// Approve user
-            User user = UserLocalServiceUtil.getUser(userId);
-            user.setStatus(WorkflowConstants.STATUS_APPROVED);
-            UserLocalServiceUtil.updateUser(user);
-            
-                 log.info("User " + user.getScreenName() + " verified successfully.");
-                 
-                 
-              // ✅ Send email to user
-                 try {
-                	 String subject = "Your Patient Registry Account Has Been Activated";
+    	    log.info("Retrieved from HTTP session: userId=" + savedUserId
+    	        + ", token=" + savedToken + ", OTP=" + savedOtp);
+    	}
 
-                	 String body = "Dear " + user.getFullName() + ",\n\n" +
-                	               "We are pleased to inform you that your Patient Registry account has been activated successfully.\n\n" +
-                	               "You can now log in using your registered credentials and access your dashboard.\n\n" +
-                	               "If you have any questions or need assistance, please contact our support team.\n\n" +
-                	               "Best regards,\n" +
-                	               "Patient Registry Team";
+    	if (savedUserId != null && savedToken != null && savedOtp != null
+    	        && savedUserId.equals(userId)
+    	        && savedToken.equals(token)
+    	        && savedOtp.equals(enteredOtp)) {
 
+    	    log.info("OTP verified successfully for userId: " + userId);
 
-                     InternetAddress from = new InternetAddress("jyothin7981@gmail.com", "Your Company");
-                     InternetAddress to = new InternetAddress(user.getEmailAddress());
+    	    User user = UserLocalServiceUtil.getUser(userId);
+    	    user.setStatus(WorkflowConstants.STATUS_APPROVED);
+    	    UserLocalServiceUtil.updateUser(user);
 
-                     MailMessage mailMessage = new MailMessage(from, to, subject, body, false);
-                     MailServiceUtil.sendEmail(mailMessage);
+    	    log.info("User " + user.getScreenName() + " verified successfully.");
 
-                     log.info("Verification email sent to " + user.getEmailAddress());
-                 } catch (Exception e) {
-                     log.error("Failed to send verification email: " + e.getMessage(), e);
-                 }
+    	    // Send verification email
+    	    try {
+    	        String subject = "Your Patient Registry Account Has Been Activated";
+    	        String body = "Dear " + user.getFullName() + ",\n\n" +
+    	                      "Your Patient Registry account has been activated successfully.\n\n" +
+    	                      "Best regards,\nPatient Registry Team";
 
+    	        InternetAddress from = new InternetAddress("jyothin7981@gmail.com", "Patient Registry");
+    	        InternetAddress to = new InternetAddress(user.getEmailAddress());
 
-                // ✅ Redirect to dashboard or success page
-                actionResponse.sendRedirect("/web/guest/dashboard"); 
-                return;
-            }
-        }
+    	        MailMessage mailMessage = new MailMessage(from, to, subject, body, false);
+    	        MailServiceUtil.sendEmail(mailMessage);
+    	        log.info("Verification email sent to " + user.getEmailAddress());
+    	    } catch (Exception e) {
+    	        log.error("Failed to send verification email: " + e.getMessage(), e);
+    	    }
 
-//        // If verification fails
-//        log.warn("OTP verification failed for userId: " + userId);
-//        SessionErrors.add(actionRequest, "otp-invalid");
-//        actionResponse.setRenderParameter("mvcRenderCommandName", "/verify/otp");
+    	    // Clear session
+    	    httpSession.removeAttribute("userId");
+    	    httpSession.removeAttribute("token");
+    	    httpSession.removeAttribute("otp");
+
+    	    // Redirect to dashboard
+    	    actionResponse.sendRedirect("/web/guest/dashboard");
+    	    return;
+
+    	} else {
+    	    log.error("OTP verification failed for userId: " + userId);
+    	    SessionErrors.add(actionRequest, "invalid-otp");
+    	}
     }
+}
 
+
+
+
+//package otp.portlet.portlet;
+//
+//import com.liferay.mail.kernel.model.MailMessage;
+//import com.liferay.mail.kernel.service.MailServiceUtil;
+//import com.liferay.portal.kernel.cache.SingleVMPool;
+//import com.liferay.portal.kernel.log.Log;
+//import com.liferay.portal.kernel.log.LogFactoryUtil;
+//import com.liferay.portal.kernel.model.User;
+//import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
+//import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+//import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+//import com.liferay.portal.kernel.util.ParamUtil;
+//import com.liferay.portal.kernel.workflow.WorkflowConstants;
+//import javax.mail.internet.InternetAddress;
+//import javax.portlet.ActionRequest;
+//import javax.portlet.ActionResponse;
+//import org.osgi.service.component.annotations.Component;
+//import org.osgi.service.component.annotations.Reference;
+//
+//import otp.portlet.constants.OtpPortletKeys;
+//
+//@Component(
+//    property = {
+//        "javax.portlet.name=" + OtpPortletKeys.OTP,
+//        "mvc.command.name=/verify/otp"
+//    },
+//    service = MVCActionCommand.class
+//)
+//public class VerifyOtpMVCActionCommand extends BaseMVCActionCommand {
+//
+//    private static final Log log = LogFactoryUtil.getLog(VerifyOtpMVCActionCommand.class);
+//
+//    @Reference
+//    private SingleVMPool singleVMPool;
+//
+// 
+//    @Override
+//    protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+//
+//        // ✅ Take userId,otp and token from link
+//        long userId = ParamUtil.getLong(actionRequest, "userId");
+//        String token = ParamUtil.getString(actionRequest, "token");
+//        String enteredOtp = ParamUtil.getString(actionRequest, "otp");
+//
+//        log.info("userId from link: " + userId);
+//        log.info("token from link: " + token);
+//        log.info("EnteredOtp: " + enteredOtp);
+//
+//     // Compare with URL parameters directly
+//        if (token.equals(ParamUtil.getString(actionRequest, "token")) &&
+//            enteredOtp.equals(ParamUtil.getString(actionRequest, "otp"))) {
+//            
+//        	// Approve user
+//            User user = UserLocalServiceUtil.getUser(userId);
+//            user.setStatus(WorkflowConstants.STATUS_APPROVED);
+//            UserLocalServiceUtil.updateUser(user);
+//            
+//                 log.info("User " + user.getScreenName() + " verified successfully.");
+//                 
+//                 
+//              // ✅ Send email to user
+//                 try {
+//                	 String subject = "Your Patient Registry Account Has Been Activated";
+//
+//                	 String body = "Dear " + user.getFullName() + ",n" +
+//                	               "We are pleased to inform you that your Patient Registry account has been activated successfully.\n" +
+//                	               "You can now log in using your registered credentials and access your dashboard.\n" +
+//                	               "If you have any questions or need assistance, please contact our support team.\n" +
+//                	               "Best regards,\n" +
+//                	               "Patient Registry Team";
+//
+//
+//                     InternetAddress from = new InternetAddress("jyothin7981@gmail.com", "Your Company");
+//                     InternetAddress to = new InternetAddress(user.getEmailAddress());
+//
+//                     MailMessage mailMessage = new MailMessage(from, to, subject, body, false);
+//                     MailServiceUtil.sendEmail(mailMessage);
+//
+//                     log.info("Verification email sent to " + user.getEmailAddress());
+//                 } catch (Exception e) {
+//                     log.error("Failed to send verification email: " + e.getMessage(), e);
+//                 }
+//
+//
+//                // ✅ Redirect to dashboard or success page
+//                actionResponse.sendRedirect("/web/guest/dashboard"); 
+//                return;
+//            }
+//        }
+//
+//    }
+//

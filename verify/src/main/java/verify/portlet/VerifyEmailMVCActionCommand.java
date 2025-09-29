@@ -6,24 +6,22 @@ import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.portlet.PortletRequestModel;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
-import com.liferay.portal.kernel.util.WebKeys;
-
-import java.util.Collections;
 
 import java.util.Random;
 
 import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -43,8 +41,6 @@ import verify.constants.VerifyPortletKeys;
 )
 public class VerifyEmailMVCActionCommand extends BaseMVCActionCommand {
 	
-	
-
     private static final Log log = LogFactoryUtil.getLog(VerifyEmailMVCActionCommand.class);
 
     @Reference
@@ -58,15 +54,12 @@ public class VerifyEmailMVCActionCommand extends BaseMVCActionCommand {
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse)
             throws Exception {
     	
-    	ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-        long groupId = themeDisplay.getScopeGroupId();
-
         // Get parameters from form
         long userId = ParamUtil.getLong(actionRequest, "userId");
         String token = ParamUtil.getString(actionRequest, "token");
         String enteredEmail = ParamUtil.getString(actionRequest, "email");
-
-        log.info("Processing email verification for userId: " + userId + ", token: " + token);
+        
+        log.info("Processing email verification MVCAction for userId: " + userId + ", token: " + token);
 
         // Fetch user
         User user = _userLocalService.fetchUser(userId);
@@ -77,11 +70,25 @@ public class VerifyEmailMVCActionCommand extends BaseMVCActionCommand {
 
         // Generate OTP
         String otp = String.format("%06d", new Random().nextInt(999999));
-        actionRequest.getPortletSession().setAttribute("otp", otp);
-        actionRequest.getPortletSession().setAttribute("userId", userId);
-        actionRequest.getPortletSession().setAttribute("token", token);
+        
+        
+//        actionRequest.getPortletSession().setAttribute("otp", otp);
+//        actionRequest.getPortletSession().setAttribute("userId", userId);
+//        actionRequest.getPortletSession().setAttribute("token", token);
 
-        log.info("Generated OTP for user " + user.getUserId() + ": " + otp);
+     // Store in portlet session with APPLICATION_SCOPE
+//        actionRequest.getPortletSession().setAttribute("otp", otp, PortletSession.APPLICATION_SCOPE);
+//        actionRequest.getPortletSession().setAttribute("userId", userId, PortletSession.APPLICATION_SCOPE);
+//        actionRequest.getPortletSession().setAttribute("token", token, PortletSession.APPLICATION_SCOPE);
+
+     // Store in HTTP session
+        HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(actionRequest);
+        HttpSession httpSession = httpRequest.getSession();
+        httpSession.setAttribute("otp", otp);
+        httpSession.setAttribute("userId", user.getUserId());
+        httpSession.setAttribute("token", token);
+
+        log.info("Stored in HTTP session: userId=" + user.getUserId() + ", OTP=" + otp + ", token=" + token);
 
         // Build verification link
         String portalURL = PortalUtil.getPortalURL(actionRequest);
@@ -92,35 +99,24 @@ public class VerifyEmailMVCActionCommand extends BaseMVCActionCommand {
                 "&p_p_mode=view" +
                 "&_customlogin_WAR_customloginportlet_mvcRenderCommandName=/verify/otp" +
                 "&userId=" + user.getUserId() +
-                "&token=" + token+
-                  "&otp=" + otp;
+                "&token=" + token;
+                  
+             
         /*
 		 * JournalArticle article = journalArticle.get("OTP_Template"); String content =
 		 * article.getContent();
 		 */
-
-//        PortletRequestModel portletRequestModel = new PortletRequestModel(
-//                actionRequest, 
-//                actionResponse
-//        );
-//
-//        String content = _journalContent.getContent(
-//                themeDisplay.getScopeGroupId(),  // groupId
-//                "OTP_Template",                  // articleId
-//                null,                            // templateId
-//                themeDisplay.getLanguageId(),    // languageId
-//                portletRequestModel              // correct viewContext
-//        );
-//        
-//        
-//        // Replace placeholders
-//        content = content.replaceAll("\\[\\{USERNAME}]", user.getFullName());
-//        content = content.replaceAll("\\[\\{OTP}]", otp);
-//        content = content.replaceAll("\\[\\{VERIFY_LINK}]", redirectURL);
-        
+     
      // Replace placeholders in your email content
-        String content = "Dear [{USERNAME}]\n\n" +
-                         "Your OTP code is: [{OTP}]\n\n" ;
+        String content =
+        	    "Dear [{USERNAME}],\n\n" +
+        	    "Welcome to our Patient Registry.\n\n" +
+        	    "Your One-Time Password (OTP) is: [{OTP}]\n\n" +
+        	    "Please enter this OTP to complete your verification process.\n" +
+        	    "For your security, do not share this code with anyone.\n\n" +
+        	    "Thank you,\n" +
+        	    "Patient Registry Team";
+
 //                       +
 //                         "Click the below link to verify: [{VERIFY_LINK}]\n\n" +
 //                         "This code is valid for 5 minutes.";

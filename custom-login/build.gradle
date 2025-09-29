@@ -7,7 +7,7 @@ dependencies {
 	
 	 compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
 	 
-compileOnly project(":modules:verify")
+     compileOnly project(":modules:verify")
  
 	 
 }

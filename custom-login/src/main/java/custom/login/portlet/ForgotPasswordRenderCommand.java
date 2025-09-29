@@ -23,7 +23,7 @@ public class ForgotPasswordRenderCommand implements MVCRenderCommand {
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) 
             throws PortletException {
-    	log.info("inside reder Forgot password: S");
+    	log.info("inside render Forgot password: S");
         return "/forgot_password.jsp"; // This JSP will be shown
     }
 

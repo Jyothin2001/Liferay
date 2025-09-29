@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import custom.login.constants.CustomLoginPortletKeys;
-//import verify.constants.VerifyPortletKeys;
+
 
 @Component(
         immediate = true,
@@ -80,14 +80,22 @@ public class SignUpMVCActionCommand extends BaseMVCActionCommand {
 
             long companyId = themeDisplay.getCompanyId();
 
-            // Check if email already exists
-            User existingUser = UserLocalServiceUtil.fetchUserByEmailAddress(companyId, emailAddress);
-            if (existingUser != null) {
-                SessionErrors.add(actionRequest, "email-exists");
-                log.error("Email already exists: " + emailAddress);
+         // Check if email OR screenName already exists
+            User existingUserByEmail = UserLocalServiceUtil.fetchUserByEmailAddress(companyId, emailAddress);
+            User existingUserByScreenName = UserLocalServiceUtil.fetchUserByScreenName(companyId, screenName);
+
+            if (existingUserByEmail != null || existingUserByScreenName != null) {
+                if (existingUserByEmail != null) {
+                    SessionErrors.add(actionRequest, "email-exists");
+                    log.error("Email already exists: " + emailAddress);
+                }
+                if (existingUserByScreenName != null) {
+                    SessionErrors.add(actionRequest, "screenname-exists");
+                    log.error("Screen name already exists: " + screenName);
+                }
                 return;
             }
-
+            
             // Create inactive user
             User user = UserLocalServiceUtil.addUser(
             	    0, companyId, false, password, password,
@@ -140,7 +148,7 @@ public class SignUpMVCActionCommand extends BaseMVCActionCommand {
             // Send verification email
             try {
             	MailMessage mailMessage = new MailMessage();
-            	mailMessage.setFrom(new InternetAddress("noreply@yourdomain.com"));
+            	mailMessage.setFrom(new InternetAddress("jyothin7981@gmail.com"));
             	mailMessage.setTo(new InternetAddress(emailAddress));
             	mailMessage.setSubject("Verify Your Email");
             	mailMessage.setBody(emailBody);

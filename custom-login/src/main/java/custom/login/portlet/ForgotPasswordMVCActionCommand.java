@@ -40,7 +40,8 @@ public class ForgotPasswordMVCActionCommand extends BaseMVCActionCommand {
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) 
             throws Exception {
-
+   _log.info("inside Forgot Password MVCAction method::");
+   
         String emailAddress = ParamUtil.getString(actionRequest, "emailAddress");
         String newPassword = ParamUtil.getString(actionRequest, "newPassword");
 
