@@ -8,6 +8,8 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
@@ -98,10 +100,10 @@ public class SignUpMVCActionCommand extends BaseMVCActionCommand {
             
             // Create inactive user
             User user = UserLocalServiceUtil.addUser(
-            	    0, companyId, false, password, password,
+            	    0, companyId, false,"password", "password",
             	    false, screenName, emailAddress,
             	    themeDisplay.getLocale(), firstName, "", lastName,
-            	    0, 0, true, 1, 1, 2000, "", 0, null, null, null, null,
+            	    0, 0, true, 1, 1, 2000, "", 1, null, null, null, null,
             	    false, serviceContext
             	);
 
@@ -111,10 +113,18 @@ public class SignUpMVCActionCommand extends BaseMVCActionCommand {
                 SessionErrors.add(actionRequest, "user-creation-failed");
                 return;
             }
+           //to view in control panel all user
+            Indexer<User> indexer = IndexerRegistryUtil.nullSafeGetIndexer(User.class);
+            indexer.reindex(user);
+            
+         // Update password if you want to ensure it works (optional)
+            User updatedUser = UserLocalServiceUtil.updatePassword(user.getUserId(), password, password, false);
 
+            
+            
             // Set user inactive until verification
-            user.setStatus(WorkflowConstants.STATUS_INACTIVE);
-            UserLocalServiceUtil.updateUser(user);
+            updatedUser.setStatus(WorkflowConstants.STATUS_INACTIVE);
+            UserLocalServiceUtil.updateUser(updatedUser);
 
             //verify link
             String token = UUID.randomUUID().toString();
@@ -148,7 +158,7 @@ public class SignUpMVCActionCommand extends BaseMVCActionCommand {
             // Send verification email
             try {
             	MailMessage mailMessage = new MailMessage();
-            	mailMessage.setFrom(new InternetAddress("jyothin7981@gmail.com"));
+            	mailMessage.setFrom(new InternetAddress("jyothin7981@gmail.com","Patient Registry System"));
             	mailMessage.setTo(new InternetAddress(emailAddress));
             	mailMessage.setSubject("Verify Your Email");
             	mailMessage.setBody(emailBody);

@@ -59,6 +59,7 @@ public class VerifyEmailMVCActionCommand extends BaseMVCActionCommand {
         String token = ParamUtil.getString(actionRequest, "token");
         String enteredEmail = ParamUtil.getString(actionRequest, "email");
         
+        
         log.info("Processing email verification MVCAction for userId: " + userId + ", token: " + token);
 
         // Fetch user
@@ -83,9 +84,10 @@ public class VerifyEmailMVCActionCommand extends BaseMVCActionCommand {
         signupOTP.setCreateDate(new Date());
         signupOTP.setModifiedDate(new Date());
 
+
         SignupOTPLocalServiceUtil.addSignupOTP(signupOTP);
 
-        log.info("Stored OTP in SignupOTP: userId=" + userId + ", otp=" + otp);
+        log.info("Stored OTP in SignupOTP: userId=" + userId + ", otp=" + otp );
         
         
         // Build verification link
@@ -125,7 +127,7 @@ public class VerifyEmailMVCActionCommand extends BaseMVCActionCommand {
                          .replace("[{VERIFY_LINK}]", redirectURL);
         // Send email
         try {
-            InternetAddress fromAddress = new InternetAddress("jyothin@gmail.com", "Liferay Portal");
+            InternetAddress fromAddress = new InternetAddress("jyothin@gmail.com", "Patient Registry System");
             InternetAddress toAddress = new InternetAddress(user.getEmailAddress());
 
             MailMessage mailMessage = new MailMessage();
@@ -150,5 +152,12 @@ public class VerifyEmailMVCActionCommand extends BaseMVCActionCommand {
 		
 		  }
 }
+
+
+
+
+
+
+
 
 	

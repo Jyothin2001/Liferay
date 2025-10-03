@@ -60,6 +60,7 @@ public class VerifyPortlet extends MVCPortlet {
         renderRequest.setAttribute("userId", userId);
         renderRequest.setAttribute("token", token);
         
+        
 		super.doView(renderRequest, renderResponse);
 	}
 }

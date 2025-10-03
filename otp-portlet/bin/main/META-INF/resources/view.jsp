@@ -2,13 +2,26 @@
 
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+
 
 
 <%
 //Get values from renderRequest attributes, not request parameters
 Long userId = (Long) renderRequest.getAttribute("userId");
 String token = (String) renderRequest.getAttribute("token");
+Date expiryDate = (Date) renderRequest.getAttribute("expiryDate");
 
+if (expiryDate != null) {
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
+    String formattedExpiry = sdf.format(expiryDate);
+%>
+    <p style="color:red; font-weight:bold;">
+        Your OTP is valid until: <%= formattedExpiry %>
+    </p>
+<%
+}
 
 %>
 

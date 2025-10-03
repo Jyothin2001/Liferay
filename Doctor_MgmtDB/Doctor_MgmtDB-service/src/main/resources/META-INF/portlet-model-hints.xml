@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="Doctor_MgmtDB.model.DoctorProfile">
+		<field name="uuid" type="String" />
+		<field name="doctorId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="name" type="String" />
+		<field name="gender" type="String" />
+		<field name="dob" type="Date" />
+		<field name="email" type="String" />
+		<field name="phone" type="String" />
+		<field name="imageId" type="long" />
+		<field name="specialization" type="String" />
+		<field name="qualification" type="String" />
+		<field name="experienceYears" type="int" />
+		<field name="languages" type="String" />
+		<field name="licenseNumber" type="String" />
+		<field name="availableDays" type="String" />
+		<field name="availableTime" type="String" />
+		<field name="hospitalLocation" type="String" />
+		<field name="consultationMode" type="String" />
+		<field name="address" type="String" />
+		<field name="bio" type="String" />
+		<field name="fees" type="double" />
+		<field name="rating" type="double" />
+	</model>
+</model-hints>

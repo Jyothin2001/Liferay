@@ -46,13 +46,20 @@
         </div>
 
     </aui:form>
-    <portlet:renderURL var="forgotPasswordURL">
-    <portlet:param name="mvcRenderCommandName" value="/forgot_password/view" />
-</portlet:renderURL>
+    
 
-<p>
-    <a href="<%= forgotPasswordURL %>">Forgot Password?</a>
-</p>
+
+
+<!-- 🔹 Login button (go to login JSP/page) -->
+    <portlet:renderURL var="loginPageURL">
+        <portlet:param name="mvcRenderCommandName" value="/custom/login/view" />
+    </portlet:renderURL>
+
+    <div style="text-align:center; margin-top:20px;">
+        <a href="<%= loginPageURL %>" class="btn btn-primary px-4 py-2 rounded-pill">
+            Already have an account? Login
+        </a>
+    </div>
 </div>
 
 

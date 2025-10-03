@@ -48,7 +48,7 @@ public class ForgotPasswordMVCActionCommand extends BaseMVCActionCommand {
         if (_log.isDebugEnabled()) {
             _log.debug("Forgot password request received for email: " + emailAddress);
         }
-
+        _log.debug("Forgot password request received for newPassword: " + newPassword);
         try {
             // Check if user exists by email
             User user = _userLocalService.getUserByEmailAddress(
@@ -61,7 +61,7 @@ public class ForgotPasswordMVCActionCommand extends BaseMVCActionCommand {
                 _userLocalService.updatePassword(
                     user.getUserId(), newPassword, newPassword, false, true);
 
-                _log.info("Password reset successfully for userId: " + user.getUserId());
+                _log.info("Password reset successfully for userId: " + user.getUserId()+ "newpassword is: "+newPassword);
 
                 SessionMessages.add(actionRequest, "password-reset-success");
                 
@@ -81,10 +81,10 @@ public class ForgotPasswordMVCActionCommand extends BaseMVCActionCommand {
                     MailMessage mailMessage = new MailMessage(from, to, subject, body, false);
                     MailServiceUtil.sendEmail(mailMessage);
 
-                    _log.info("Password reset email sent to: " + user.getEmailAddress());
+                    _log.info("Forgot Password  email sent to: " + user.getEmailAddress());
 
                 } catch (Exception e) {
-                    _log.error("Failed to send password reset email to " + user.getEmailAddress(), e);
+                    _log.error("Failed to send forgot password reset email to " + user.getEmailAddress(), e);
                 }
             }
         } catch (NoSuchUserException e) {

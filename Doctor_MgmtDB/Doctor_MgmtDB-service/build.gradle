@@ -1,0 +1,12 @@
+dependencies {
+	api project(":modules:Doctor_MgmtDB:Doctor_MgmtDB-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../Doctor_MgmtDB-api/src/main/java"
+	testDir = "../Doctor_MgmtDB-test/src/testIntegration/java"
+}
+
+group = "Doctor_MgmtDB"

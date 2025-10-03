@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="Doctor_MgmtDB">
+	<namespace>a</namespace>
+	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
+	<entity local-service="true" name="DoctorProfile" remote-service="true" uuid="true">
+
+		<!-- PK fields -->
+
+		<column name="doctorId" primary="true" type="long" id-type="increment"/>
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		
+        <column name="name" type="String" />
+        <column name="gender" type="String" />
+        <column name="dob" type="Date" />
+        <column name="email" type="String" />
+        <column name="phone" type="String" />
+        <column name="imageId" type="long" />
+        <column name="specialization" type="String" />
+        <column name="qualification" type="String" />
+        <column name="experienceYears" type="int" />
+        <column name="languages" type="String" />
+        <column name="licenseNumber" type="String" />
+        <column name="availableDays" type="String" />
+        <column name="availableTime" type="String" />
+        <column name="hospitalLocation" type="String" />
+        <column name="consultationMode" type="String" />
+        <column name="address" type="String" />
+        <column name="bio" type="String" />
+        <column name="fees" type="double" />
+        <column name="rating" type="double" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="name" />
+		</order>
+
+		
+		
+	</entity>
+</service-builder>

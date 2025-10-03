@@ -1,0 +1,7 @@
+Bundle-Name: Doctor_Mgmt_Portlet
+Bundle-SymbolicName: Doctor_Mgmt_Portlet
+Bundle-Version: 1.0.0
+Export-Package: Doctor_Mgmt_Portlet.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

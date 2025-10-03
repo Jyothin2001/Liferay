@@ -11,21 +11,13 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-
 import java.util.List;
-
 import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-
 import otp.portlet.constants.OtpPortletKeys;
 import otpDB.model.SignupOTP;
 import otpDB.service.SignupOTPLocalServiceUtil;
@@ -59,12 +51,13 @@ public class VerifyOtpMVCActionCommand extends BaseMVCActionCommand {
                 .reduce((first, second) -> second) // get latest
                 .orElse(null);
 
-        if (otpEntry != null && otpEntry.getOtp().equals(enteredOtp) && otpEntry.isStatus()) {
+        if (otpEntry != null && otpEntry.getOtp().equals(enteredOtp) && otpEntry.isStatus() ){
             log.info("OTP verified successfully for userId=" + userId);
 
-            // ✅ Approve user
+            // ✅ Approve user,email as verified
             User user = UserLocalServiceUtil.getUser(userId);
-            user.setStatus(WorkflowConstants.STATUS_APPROVED);
+            user.setStatus(WorkflowConstants.STATUS_APPROVED); 
+            user.setEmailAddressVerified(true);
             UserLocalServiceUtil.updateUser(user);
 
             // ✅ Mark OTP as used
@@ -79,7 +72,7 @@ public class VerifyOtpMVCActionCommand extends BaseMVCActionCommand {
     	                      "Your Patient Registry account has been activated successfully.\n\n" +
     	                      "Best regards,\nPatient Registry Team";
 
-    	        InternetAddress from = new InternetAddress("jyothin7981@gmail.com", "Patient Registry");
+    	        InternetAddress from = new InternetAddress("jyothin7981@gmail.com", "Patient Registry System");
     	        InternetAddress to = new InternetAddress(user.getEmailAddress());
 
     	        MailMessage mailMessage = new MailMessage(from, to, subject, body, false);

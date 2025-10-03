@@ -8,6 +8,11 @@ dependencies {
 	 compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
 	 
      compileOnly project(":modules:verify")
+     
+     dependencies {
+    compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "7.4.3" // adjust version
+}
+     
  
 	 
 }

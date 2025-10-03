@@ -1,0 +1,10 @@
+Bundle-Name: Doctor_MgmtDB-api
+Bundle-SymbolicName: Doctor_MgmtDB.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	Doctor_MgmtDB.exception,\
+	Doctor_MgmtDB.model,\
+	Doctor_MgmtDB.service,\
+	Doctor_MgmtDB.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../Doctor_MgmtDB-service/service.xml
