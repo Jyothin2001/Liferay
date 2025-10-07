@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="Case_ManagementDB.model.Case_management">
+		<field name="uuid" type="String" />
+		<field name="caseId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="patientId" type="long" />
+		<field name="doctorId" type="long" />
+		<field name="caseTitle" type="String" />
+		<field name="notes" type="String" />
+		<field name="status" type="String" />
+		<field name="bloodPressure" type="String" />
+		<field name="height" type="double" />
+		<field name="weight" type="double" />
+		<field name="diagnosis" type="String" />
+		<field name="treatment" type="String" />
+		<field name="consultationFee" type="double" />
+		<field name="medicineCharges" type="double" />
+		<field name="testCharges" type="double" />
+		<field name="totalAmount" type="double" />
+		<field name="paymentStatus" type="String" />
+	</model>
+</model-hints>

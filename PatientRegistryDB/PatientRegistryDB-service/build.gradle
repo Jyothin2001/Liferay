@@ -1,0 +1,12 @@
+dependencies {
+	api project(":modules:PatientRegistryDB:PatientRegistryDB-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../PatientRegistryDB-api/src/main/java"
+	testDir = "../PatientRegistryDB-test/src/testIntegration/java"
+}
+
+group = "PatientRegistryDB"

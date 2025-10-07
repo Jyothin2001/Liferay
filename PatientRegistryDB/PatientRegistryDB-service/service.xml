@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="PatientRegistryDB">
+	<namespace>a</namespace>
+	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
+	<entity local-service="true" name="PatientRegistry" remote-service="true" uuid="true">
+
+		<!-- PK fields -->
+
+		<column name="patientId" primary="true" type="long" id-param="increment"/>
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Patient Registration Fields -->
+        <column name="firstName" type="String" />
+        <column name="lastName" type="String" />
+        <column name="dateOfBirth" type="Date" />
+        <column name="gender" type="String" />
+        <column name="contactNumber" type="String" />
+        <column name="email" type="String" />
+        <column name="address" type="String" />
+        <column name="city" type="String" />
+        <column name="state" type="String" />
+        <column name="pincode" type="String" />
+        <column name="emergencyContactName" type="String" />
+        <column name="emergencyContactNumber" type="String" />
+        <column name="bloodGroup" type="String" />
+        <column name="medicalHistory" type="String" />
+        <column name="allergies" type="String" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="firstName" />
+		</order>
+
+	
+		
+	</entity>
+</service-builder>

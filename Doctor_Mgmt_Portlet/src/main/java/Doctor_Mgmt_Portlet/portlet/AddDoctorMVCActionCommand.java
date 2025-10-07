@@ -27,6 +27,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import Doctor_MgmtDB.model.DoctorProfile;
 import Doctor_MgmtDB.service.DoctorProfileLocalService;
+import Doctor_Mgmt_Portlet.constants.Doctor_Mgmt_PortletKeys;
 
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -35,7 +36,7 @@ import com.liferay.portal.kernel.service.ServiceContextFactory;
 @Component(
     immediate = true,
     property = {
-        "javax.portlet.name=doctor_mgmt_web",
+    		"javax.portlet.name=" + Doctor_Mgmt_PortletKeys.DOCTOR_MGMT_,
         "mvc.command.name=/doctor/add"
     },
     service = MVCActionCommand.class
@@ -56,7 +57,7 @@ public class AddDoctorMVCActionCommand extends BaseMVCActionCommand {
     	final Log log = LogFactoryUtil.getLog(AddDoctorMVCActionCommand.class);
 
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
+        log.info("inside doctor:: ");
         // Get form parameters
         String name = ParamUtil.getString(actionRequest, "name");
         String gender = ParamUtil.getString(actionRequest, "gender");

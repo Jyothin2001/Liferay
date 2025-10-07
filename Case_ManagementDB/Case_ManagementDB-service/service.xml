@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="Case_ManagementDB">
+	<namespace>a</namespace>
+	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
+	<entity local-service="true" name="Case_management" remote-service="true" uuid="true">
+
+		<!-- PK fields -->
+
+		<column name="caseId" primary="true" type="long" id-param="increment"/>
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		
+        <!-- Core Case Fields -->
+        <column name="patientId" type="long" />
+        <column name="doctorId" type="long" />
+        <column name="caseTitle" type="String" />
+        <column name="notes" type="String" />
+        <column name="status" type="String" />
+
+        <!-- Patient Vitals -->
+        <column name="bloodPressure" type="String" />
+        <column name="height" type="double" />
+        <column name="weight" type="double" />
+
+        <!-- Doctor Diagnosis/Treatment -->
+        <column name="diagnosis" type="String" />
+        <column name="treatment" type="String" />
+
+        <!-- Billing -->
+        <column name="consultationFee" type="double" />
+        <column name="medicineCharges" type="double" />
+        <column name="testCharges" type="double" />
+        <column name="totalAmount" type="double" />
+        <column name="paymentStatus" type="String" />
+
+        <!-- Ordering -->
+        <order by="asc">
+            <order-column name="caseTitle" />
+        </order>
+		
+	</entity>
+</service-builder>

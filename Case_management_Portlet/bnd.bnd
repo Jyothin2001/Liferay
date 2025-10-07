@@ -1,0 +1,7 @@
+Bundle-Name: Case_management_Portlet
+Bundle-SymbolicName: Case_management_Portlet
+Bundle-Version: 1.0.0
+Export-Package: Case_management_Portlet.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

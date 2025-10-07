@@ -1,0 +1,12 @@
+dependencies {
+	api project(":modules:Case_ManagementDB:Case_ManagementDB-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../Case_ManagementDB-api/src/main/java"
+	testDir = "../Case_ManagementDB-test/src/testIntegration/java"
+}
+
+group = "Case_ManagementDB"

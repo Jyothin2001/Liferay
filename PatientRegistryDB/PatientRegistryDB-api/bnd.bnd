@@ -1,0 +1,10 @@
+Bundle-Name: PatientRegistryDB-api
+Bundle-SymbolicName: PatientRegistryDB.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	PatientRegistryDB.exception,\
+	PatientRegistryDB.model,\
+	PatientRegistryDB.service,\
+	PatientRegistryDB.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../PatientRegistryDB-service/service.xml
