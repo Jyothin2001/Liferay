@@ -1,0 +1,1 @@
+create unique index IX_88F53A71 on a_SignupOTP (uuid_[$COLUMN_LENGTH:75$], groupId);

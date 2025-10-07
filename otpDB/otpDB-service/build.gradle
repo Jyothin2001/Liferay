@@ -1,0 +1,12 @@
+dependencies {
+	api project(":modules:otpDB:otpDB-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../otpDB-api/src/main/java"
+	testDir = "../otpDB-test/src/testIntegration/java"
+}
+
+group = "otpDB"
