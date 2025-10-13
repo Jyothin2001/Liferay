@@ -21,7 +21,7 @@ import Case_management_Portlet.constants.Case_management_PortletKeys;
 
 @Component(
     property = {
-    		"javax.portlet.name=" + Case_management_PortletKeys.CASE_MANAGEMENT_,
+    	"javax.portlet.name=" + Case_management_PortletKeys.CASE_MANAGEMENT_,
         "mvc.command.name=/doctor/submit_diagnosis"
     },
     service = MVCActionCommand.class

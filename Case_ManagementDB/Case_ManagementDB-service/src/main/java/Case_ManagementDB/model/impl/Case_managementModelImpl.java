@@ -70,13 +70,13 @@ public class Case_managementModelImpl
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"patientId", Types.BIGINT}, {"doctorId", Types.BIGINT},
-		{"caseTitle", Types.VARCHAR}, {"notes", Types.VARCHAR},
-		{"status", Types.VARCHAR}, {"bloodPressure", Types.VARCHAR},
-		{"height", Types.DOUBLE}, {"weight", Types.DOUBLE},
-		{"diagnosis", Types.VARCHAR}, {"treatment", Types.VARCHAR},
-		{"consultationFee", Types.DOUBLE}, {"medicineCharges", Types.DOUBLE},
-		{"testCharges", Types.DOUBLE}, {"totalAmount", Types.DOUBLE},
-		{"paymentStatus", Types.VARCHAR}
+		{"doctorUserId", Types.BIGINT}, {"caseTitle", Types.VARCHAR},
+		{"notes", Types.VARCHAR}, {"status", Types.VARCHAR},
+		{"bloodPressure", Types.VARCHAR}, {"height", Types.DOUBLE},
+		{"weight", Types.DOUBLE}, {"diagnosis", Types.VARCHAR},
+		{"treatment", Types.VARCHAR}, {"consultationFee", Types.DOUBLE},
+		{"medicineCharges", Types.DOUBLE}, {"testCharges", Types.DOUBLE},
+		{"totalAmount", Types.DOUBLE}, {"paymentStatus", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -93,6 +93,7 @@ public class Case_managementModelImpl
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("patientId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("doctorId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("doctorUserId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("caseTitle", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("notes", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("status", Types.VARCHAR);
@@ -109,7 +110,7 @@ public class Case_managementModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table a_Case_management (uuid_ VARCHAR(75) null,caseId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,patientId LONG,doctorId LONG,caseTitle VARCHAR(75) null,notes VARCHAR(75) null,status VARCHAR(75) null,bloodPressure VARCHAR(75) null,height DOUBLE,weight DOUBLE,diagnosis VARCHAR(75) null,treatment VARCHAR(75) null,consultationFee DOUBLE,medicineCharges DOUBLE,testCharges DOUBLE,totalAmount DOUBLE,paymentStatus VARCHAR(75) null)";
+		"create table a_Case_management (uuid_ VARCHAR(75) null,caseId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,patientId LONG,doctorId LONG,doctorUserId LONG,caseTitle VARCHAR(75) null,notes VARCHAR(75) null,status VARCHAR(75) null,bloodPressure VARCHAR(75) null,height DOUBLE,weight DOUBLE,diagnosis VARCHAR(75) null,treatment VARCHAR(75) null,consultationFee DOUBLE,medicineCharges DOUBLE,testCharges DOUBLE,totalAmount DOUBLE,paymentStatus VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP = "drop table a_Case_management";
 
@@ -278,6 +279,8 @@ public class Case_managementModelImpl
 			attributeGetterFunctions.put(
 				"doctorId", Case_management::getDoctorId);
 			attributeGetterFunctions.put(
+				"doctorUserId", Case_management::getDoctorUserId);
+			attributeGetterFunctions.put(
 				"caseTitle", Case_management::getCaseTitle);
 			attributeGetterFunctions.put("notes", Case_management::getNotes);
 			attributeGetterFunctions.put("status", Case_management::getStatus);
@@ -352,6 +355,10 @@ public class Case_managementModelImpl
 				"doctorId",
 				(BiConsumer<Case_management, Long>)
 					Case_management::setDoctorId);
+			attributeSetterBiConsumers.put(
+				"doctorUserId",
+				(BiConsumer<Case_management, Long>)
+					Case_management::setDoctorUserId);
 			attributeSetterBiConsumers.put(
 				"caseTitle",
 				(BiConsumer<Case_management, String>)
@@ -618,6 +625,37 @@ public class Case_managementModelImpl
 		}
 
 		_doctorId = doctorId;
+	}
+
+	@JSON
+	@Override
+	public long getDoctorUserId() {
+		return _doctorUserId;
+	}
+
+	@Override
+	public void setDoctorUserId(long doctorUserId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_doctorUserId = doctorUserId;
+	}
+
+	@Override
+	public String getDoctorUserUuid() {
+		try {
+			User user = UserLocalServiceUtil.getUserById(getDoctorUserId());
+
+			return user.getUuid();
+		}
+		catch (PortalException portalException) {
+			return "";
+		}
+	}
+
+	@Override
+	public void setDoctorUserUuid(String doctorUserUuid) {
 	}
 
 	@JSON
@@ -922,6 +960,7 @@ public class Case_managementModelImpl
 		case_managementImpl.setModifiedDate(getModifiedDate());
 		case_managementImpl.setPatientId(getPatientId());
 		case_managementImpl.setDoctorId(getDoctorId());
+		case_managementImpl.setDoctorUserId(getDoctorUserId());
 		case_managementImpl.setCaseTitle(getCaseTitle());
 		case_managementImpl.setNotes(getNotes());
 		case_managementImpl.setStatus(getStatus());
@@ -965,6 +1004,8 @@ public class Case_managementModelImpl
 			this.<Long>getColumnOriginalValue("patientId"));
 		case_managementImpl.setDoctorId(
 			this.<Long>getColumnOriginalValue("doctorId"));
+		case_managementImpl.setDoctorUserId(
+			this.<Long>getColumnOriginalValue("doctorUserId"));
 		case_managementImpl.setCaseTitle(
 			this.<String>getColumnOriginalValue("caseTitle"));
 		case_managementImpl.setNotes(
@@ -1113,6 +1154,8 @@ public class Case_managementModelImpl
 
 		case_managementCacheModel.doctorId = getDoctorId();
 
+		case_managementCacheModel.doctorUserId = getDoctorUserId();
+
 		case_managementCacheModel.caseTitle = getCaseTitle();
 
 		String caseTitle = case_managementCacheModel.caseTitle;
@@ -1253,6 +1296,7 @@ public class Case_managementModelImpl
 	private boolean _setModifiedDate;
 	private long _patientId;
 	private long _doctorId;
+	private long _doctorUserId;
 	private String _caseTitle;
 	private String _notes;
 	private String _status;
@@ -1307,6 +1351,7 @@ public class Case_managementModelImpl
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("patientId", _patientId);
 		_columnOriginalValues.put("doctorId", _doctorId);
+		_columnOriginalValues.put("doctorUserId", _doctorUserId);
 		_columnOriginalValues.put("caseTitle", _caseTitle);
 		_columnOriginalValues.put("notes", _notes);
 		_columnOriginalValues.put("status", _status);
@@ -1363,31 +1408,33 @@ public class Case_managementModelImpl
 
 		columnBitmasks.put("doctorId", 512L);
 
-		columnBitmasks.put("caseTitle", 1024L);
+		columnBitmasks.put("doctorUserId", 1024L);
 
-		columnBitmasks.put("notes", 2048L);
+		columnBitmasks.put("caseTitle", 2048L);
 
-		columnBitmasks.put("status", 4096L);
+		columnBitmasks.put("notes", 4096L);
 
-		columnBitmasks.put("bloodPressure", 8192L);
+		columnBitmasks.put("status", 8192L);
 
-		columnBitmasks.put("height", 16384L);
+		columnBitmasks.put("bloodPressure", 16384L);
 
-		columnBitmasks.put("weight", 32768L);
+		columnBitmasks.put("height", 32768L);
 
-		columnBitmasks.put("diagnosis", 65536L);
+		columnBitmasks.put("weight", 65536L);
 
-		columnBitmasks.put("treatment", 131072L);
+		columnBitmasks.put("diagnosis", 131072L);
 
-		columnBitmasks.put("consultationFee", 262144L);
+		columnBitmasks.put("treatment", 262144L);
 
-		columnBitmasks.put("medicineCharges", 524288L);
+		columnBitmasks.put("consultationFee", 524288L);
 
-		columnBitmasks.put("testCharges", 1048576L);
+		columnBitmasks.put("medicineCharges", 1048576L);
 
-		columnBitmasks.put("totalAmount", 2097152L);
+		columnBitmasks.put("testCharges", 2097152L);
 
-		columnBitmasks.put("paymentStatus", 4194304L);
+		columnBitmasks.put("totalAmount", 4194304L);
+
+		columnBitmasks.put("paymentStatus", 8388608L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

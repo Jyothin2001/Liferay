@@ -20,7 +20,7 @@ import Doctor_Mgmt_Portlet.constants.Doctor_Mgmt_PortletKeys;
 
 @Component(
     property = {
-    		"javax.portlet.name=" + Doctor_Mgmt_PortletKeys.DOCTOR_MGMT_,
+    	"javax.portlet.name=" + Doctor_Mgmt_PortletKeys.DOCTOR_MGMT_,
         "mvc.command.name=/doctor/submit_diagnosis"
     },
     service = MVCActionCommand.class

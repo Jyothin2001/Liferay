@@ -9,6 +9,7 @@ create table a_Case_management (
 	modifiedDate DATE null,
 	patientId LONG,
 	doctorId LONG,
+	doctorUserId LONG,
 	caseTitle VARCHAR(75) null,
 	notes VARCHAR(75) null,
 	status VARCHAR(75) null,

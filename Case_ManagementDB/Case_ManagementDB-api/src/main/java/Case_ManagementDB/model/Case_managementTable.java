@@ -44,6 +44,8 @@ public class Case_managementTable extends BaseTable<Case_managementTable> {
 		"patientId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<Case_managementTable, Long> doctorId = createColumn(
 		"doctorId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<Case_managementTable, Long> doctorUserId = createColumn(
+		"doctorUserId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<Case_managementTable, String> caseTitle = createColumn(
 		"caseTitle", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<Case_managementTable, String> notes = createColumn(

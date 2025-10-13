@@ -12,6 +12,7 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="patientId" type="long" />
 		<field name="doctorId" type="long" />
+		<field name="doctorUserId" type="long" />
 		<field name="caseTitle" type="String" />
 		<field name="notes" type="String" />
 		<field name="status" type="String" />

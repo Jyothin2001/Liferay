@@ -383,6 +383,149 @@ public interface DoctorProfilePersistence
 	public int countByUuid_C(String uuid, long companyId);
 
 	/**
+	 * Returns all the doctor profiles where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the matching doctor profiles
+	 */
+	public java.util.List<DoctorProfile> findByUserId(long userId);
+
+	/**
+	 * Returns a range of all the doctor profiles where userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DoctorProfileModelImpl</code>.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of doctor profiles
+	 * @param end the upper bound of the range of doctor profiles (not inclusive)
+	 * @return the range of matching doctor profiles
+	 */
+	public java.util.List<DoctorProfile> findByUserId(
+		long userId, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the doctor profiles where userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DoctorProfileModelImpl</code>.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of doctor profiles
+	 * @param end the upper bound of the range of doctor profiles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching doctor profiles
+	 */
+	public java.util.List<DoctorProfile> findByUserId(
+		long userId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<DoctorProfile>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the doctor profiles where userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DoctorProfileModelImpl</code>.
+	 * </p>
+	 *
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of doctor profiles
+	 * @param end the upper bound of the range of doctor profiles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching doctor profiles
+	 */
+	public java.util.List<DoctorProfile> findByUserId(
+		long userId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<DoctorProfile>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first doctor profile in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching doctor profile
+	 * @throws NoSuchDoctorProfileException if a matching doctor profile could not be found
+	 */
+	public DoctorProfile findByUserId_First(
+			long userId,
+			com.liferay.portal.kernel.util.OrderByComparator<DoctorProfile>
+				orderByComparator)
+		throws NoSuchDoctorProfileException;
+
+	/**
+	 * Returns the first doctor profile in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching doctor profile, or <code>null</code> if a matching doctor profile could not be found
+	 */
+	public DoctorProfile fetchByUserId_First(
+		long userId,
+		com.liferay.portal.kernel.util.OrderByComparator<DoctorProfile>
+			orderByComparator);
+
+	/**
+	 * Returns the last doctor profile in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching doctor profile
+	 * @throws NoSuchDoctorProfileException if a matching doctor profile could not be found
+	 */
+	public DoctorProfile findByUserId_Last(
+			long userId,
+			com.liferay.portal.kernel.util.OrderByComparator<DoctorProfile>
+				orderByComparator)
+		throws NoSuchDoctorProfileException;
+
+	/**
+	 * Returns the last doctor profile in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching doctor profile, or <code>null</code> if a matching doctor profile could not be found
+	 */
+	public DoctorProfile fetchByUserId_Last(
+		long userId,
+		com.liferay.portal.kernel.util.OrderByComparator<DoctorProfile>
+			orderByComparator);
+
+	/**
+	 * Returns the doctor profiles before and after the current doctor profile in the ordered set where userId = &#63;.
+	 *
+	 * @param doctorId the primary key of the current doctor profile
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next doctor profile
+	 * @throws NoSuchDoctorProfileException if a doctor profile with the primary key could not be found
+	 */
+	public DoctorProfile[] findByUserId_PrevAndNext(
+			long doctorId, long userId,
+			com.liferay.portal.kernel.util.OrderByComparator<DoctorProfile>
+				orderByComparator)
+		throws NoSuchDoctorProfileException;
+
+	/**
+	 * Removes all the doctor profiles where userId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 */
+	public void removeByUserId(long userId);
+
+	/**
+	 * Returns the number of doctor profiles where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the number of matching doctor profiles
+	 */
+	public int countByUserId(long userId);
+
+	/**
 	 * Caches the doctor profile in the entity cache if it is enabled.
 	 *
 	 * @param doctorProfile the doctor profile

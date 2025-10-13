@@ -54,7 +54,7 @@ public class Case_managementCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(47);
+		StringBundler sb = new StringBundler(49);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -76,6 +76,8 @@ public class Case_managementCacheModel
 		sb.append(patientId);
 		sb.append(", doctorId=");
 		sb.append(doctorId);
+		sb.append(", doctorUserId=");
+		sb.append(doctorUserId);
 		sb.append(", caseTitle=");
 		sb.append(caseTitle);
 		sb.append(", notes=");
@@ -146,6 +148,7 @@ public class Case_managementCacheModel
 
 		case_managementImpl.setPatientId(patientId);
 		case_managementImpl.setDoctorId(doctorId);
+		case_managementImpl.setDoctorUserId(doctorUserId);
 
 		if (caseTitle == null) {
 			case_managementImpl.setCaseTitle("");
@@ -227,6 +230,8 @@ public class Case_managementCacheModel
 		patientId = objectInput.readLong();
 
 		doctorId = objectInput.readLong();
+
+		doctorUserId = objectInput.readLong();
 		caseTitle = objectInput.readUTF();
 		notes = objectInput.readUTF();
 		status = objectInput.readUTF();
@@ -278,6 +283,8 @@ public class Case_managementCacheModel
 		objectOutput.writeLong(patientId);
 
 		objectOutput.writeLong(doctorId);
+
+		objectOutput.writeLong(doctorUserId);
 
 		if (caseTitle == null) {
 			objectOutput.writeUTF("");
@@ -351,6 +358,7 @@ public class Case_managementCacheModel
 	public long modifiedDate;
 	public long patientId;
 	public long doctorId;
+	public long doctorUserId;
 	public String caseTitle;
 	public String notes;
 	public String status;

@@ -16,6 +16,7 @@
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="patientId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="doctorId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="doctorUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="caseTitle" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="notes" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="status" type="com.liferay.portal.dao.orm.hibernate.StringType" />

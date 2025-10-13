@@ -5,9 +5,13 @@
 
 package Doctor_MgmtDB.service.impl;
 
+
+import Doctor_MgmtDB.model.DoctorProfile;
 import Doctor_MgmtDB.service.base.DoctorProfileLocalServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
+
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -18,6 +22,16 @@ import org.osgi.service.component.annotations.Component;
 	property = "model.class.name=Doctor_MgmtDB.model.DoctorProfile",
 	service = AopService.class
 )
-public class DoctorProfileLocalServiceImpl
-	extends DoctorProfileLocalServiceBaseImpl {
+public class DoctorProfileLocalServiceImpl extends DoctorProfileLocalServiceBaseImpl {
+	
+	public DoctorProfile getDoctorByUserId(long userId) {
+	    List<DoctorProfile> list = null;
+		list = (List<DoctorProfile>) doctorProfilePersistence.findByUserId(userId);
+		System.out.println("list of doctor profile in local serviceImpl: "+list);
+	    if (!list.isEmpty()) {
+	        return list.get(0);
+	    }
+	    return null;
+	}
+
 }

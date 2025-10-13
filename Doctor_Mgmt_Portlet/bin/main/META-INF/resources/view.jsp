@@ -2,10 +2,22 @@
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <liferay-ui:success key="doctorAdded" message="Doctor added successfully!" />
 
-<portlet:actionURL name="/doctor/add" var="addDoctorURL" />
+<portlet:renderURL var="doctorDashboardURL">
+    <portlet:param name="mvcRenderCommandName" value="/doctor/dashboard" />
+</portlet:renderURL>
+<a href="<%= doctorDashboardURL %>" class="btn btn-primary">👨‍⚕️ My Cases</a>
+
+
+ 
+
+
+<%-- <portlet:actionURL name="/doctor/add" var="addDoctorURL" />
 
 <div class="doctor-form-container">
     <h2>Doctor Profile</h2>
@@ -27,12 +39,15 @@
                     <aui:input name="dob" label="Date of Birth" type="date" required="true" />
                 </aui:col>
                 <aui:col>
-                    <aui:field-wrapper label="Gender" required="true">
-                        <aui:input type="radio" name="gender" value="Male" label="Male" />
-                        <aui:input type="radio" name="gender" value="Female" label="Female" />
-                        <aui:input type="radio" name="gender" value="Other" label="Other" />
-                    </aui:field-wrapper>
-                </aui:col>
+                <aui:field-wrapper label="Gender" required="true">
+    <div class="radio-group">
+        <aui:input type="radio" name="gender" value="Male" label="Male" required="true" />
+        <aui:input type="radio" name="gender" value="Female" label="Female" required="true" />
+        <aui:input type="radio" name="gender" value="Other" label="Other" required="true"/>
+    </div>
+</aui:field-wrapper>
+</aui:col>
+
             </aui:row>
 
             <aui:row>
@@ -143,11 +158,7 @@
     </aui:form>
 </div>
 
-<portlet:renderURL var="doctorDashboardURL">
-    <portlet:param name="mvcRenderCommandName" value="/doctor/dashboard" />
-</portlet:renderURL>
 
-<a href="<%= doctorDashboardURL %>" class="btn btn-primary">My Cases</a>
 
 <style>
     .doctor-form-container {
@@ -220,4 +231,26 @@
     .btn-secondary:hover {
         background-color: #90a4ae;
     }
+    
+    
+    .btn-view-doctors {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.btn-view-doctors:hover {
+    background-color: #0056b3;
+}
+
+
+ .radio-group .aui-field-wrapper {
+        display: block;
+        margin-bottom: 5px;
+    }
+    
 </style>
+ --%>

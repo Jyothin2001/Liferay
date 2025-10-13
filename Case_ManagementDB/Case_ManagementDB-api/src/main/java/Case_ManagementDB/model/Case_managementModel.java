@@ -224,6 +224,34 @@ public interface Case_managementModel
 	public void setDoctorId(long doctorId);
 
 	/**
+	 * Returns the doctor user ID of this case_management.
+	 *
+	 * @return the doctor user ID of this case_management
+	 */
+	public long getDoctorUserId();
+
+	/**
+	 * Sets the doctor user ID of this case_management.
+	 *
+	 * @param doctorUserId the doctor user ID of this case_management
+	 */
+	public void setDoctorUserId(long doctorUserId);
+
+	/**
+	 * Returns the doctor user uuid of this case_management.
+	 *
+	 * @return the doctor user uuid of this case_management
+	 */
+	public String getDoctorUserUuid();
+
+	/**
+	 * Sets the doctor user uuid of this case_management.
+	 *
+	 * @param doctorUserUuid the doctor user uuid of this case_management
+	 */
+	public void setDoctorUserUuid(String doctorUserUuid);
+
+	/**
 	 * Returns the case title of this case_management.
 	 *
 	 * @return the case title of this case_management

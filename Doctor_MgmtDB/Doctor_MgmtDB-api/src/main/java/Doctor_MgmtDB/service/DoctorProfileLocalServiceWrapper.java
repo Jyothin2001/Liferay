@@ -246,6 +246,11 @@ public class DoctorProfileLocalServiceWrapper
 		return _doctorProfileLocalService.getActionableDynamicQuery();
 	}
 
+	@Override
+	public Doctor_MgmtDB.model.DoctorProfile getDoctorByUserId(long userId) {
+		return _doctorProfileLocalService.getDoctorByUserId(userId);
+	}
+
 	/**
 	 * Returns the doctor profile with the primary key.
 	 *

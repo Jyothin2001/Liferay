@@ -223,6 +223,10 @@ public class DoctorProfileLocalServiceUtil {
 		return getService().getActionableDynamicQuery();
 	}
 
+	public static DoctorProfile getDoctorByUserId(long userId) {
+		return getService().getDoctorByUserId(userId);
+	}
+
 	/**
 	 * Returns the doctor profile with the primary key.
 	 *

@@ -208,6 +208,9 @@ public interface DoctorProfileLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public DoctorProfile getDoctorByUserId(long userId);
+
 	/**
 	 * Returns the doctor profile with the primary key.
 	 *

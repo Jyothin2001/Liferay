@@ -50,6 +50,10 @@
 		</order>
 
 		
-		
+		<!-- Finder to get doctor by portal userId -->
+   <finder name="UserId" return-type="Collection">
+    <finder-column name="userId" />
+</finder>
+
 	</entity>
 </service-builder>

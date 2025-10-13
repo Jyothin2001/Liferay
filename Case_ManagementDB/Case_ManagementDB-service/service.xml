@@ -26,6 +26,7 @@
         <!-- Core Case Fields -->
         <column name="patientId" type="long" />
         <column name="doctorId" type="long" />
+         <column name="doctorUserId" type="long" />
         <column name="caseTitle" type="String" />
         <column name="notes" type="String" />
         <column name="status" type="String" />

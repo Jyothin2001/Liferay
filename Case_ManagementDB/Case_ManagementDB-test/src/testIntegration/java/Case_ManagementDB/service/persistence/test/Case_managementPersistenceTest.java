@@ -137,6 +137,8 @@ public class Case_managementPersistenceTest {
 
 		newCase_management.setDoctorId(RandomTestUtil.nextLong());
 
+		newCase_management.setDoctorUserId(RandomTestUtil.nextLong());
+
 		newCase_management.setCaseTitle(RandomTestUtil.randomString());
 
 		newCase_management.setNotes(RandomTestUtil.randomString());
@@ -197,6 +199,9 @@ public class Case_managementPersistenceTest {
 		Assert.assertEquals(
 			existingCase_management.getDoctorId(),
 			newCase_management.getDoctorId());
+		Assert.assertEquals(
+			existingCase_management.getDoctorUserId(),
+			newCase_management.getDoctorUserId());
 		Assert.assertEquals(
 			existingCase_management.getCaseTitle(),
 			newCase_management.getCaseTitle());
@@ -292,10 +297,11 @@ public class Case_managementPersistenceTest {
 			"a_Case_management", "uuid", true, "caseId", true, "groupId", true,
 			"companyId", true, "userId", true, "userName", true, "createDate",
 			true, "modifiedDate", true, "patientId", true, "doctorId", true,
-			"caseTitle", true, "notes", true, "status", true, "bloodPressure",
-			true, "height", true, "weight", true, "diagnosis", true,
-			"treatment", true, "consultationFee", true, "medicineCharges", true,
-			"testCharges", true, "totalAmount", true, "paymentStatus", true);
+			"doctorUserId", true, "caseTitle", true, "notes", true, "status",
+			true, "bloodPressure", true, "height", true, "weight", true,
+			"diagnosis", true, "treatment", true, "consultationFee", true,
+			"medicineCharges", true, "testCharges", true, "totalAmount", true,
+			"paymentStatus", true);
 	}
 
 	@Test
@@ -593,6 +599,8 @@ public class Case_managementPersistenceTest {
 		case_management.setPatientId(RandomTestUtil.nextLong());
 
 		case_management.setDoctorId(RandomTestUtil.nextLong());
+
+		case_management.setDoctorUserId(RandomTestUtil.nextLong());
 
 		case_management.setCaseTitle(RandomTestUtil.randomString());
 

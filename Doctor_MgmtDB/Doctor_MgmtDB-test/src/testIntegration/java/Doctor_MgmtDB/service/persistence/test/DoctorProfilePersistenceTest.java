@@ -275,6 +275,13 @@ public class DoctorProfilePersistenceTest {
 	}
 
 	@Test
+	public void testCountByUserId() throws Exception {
+		_persistence.countByUserId(RandomTestUtil.nextLong());
+
+		_persistence.countByUserId(0L);
+	}
+
+	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		DoctorProfile newDoctorProfile = addDoctorProfile();
 
