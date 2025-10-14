@@ -1,0 +1,8 @@
+Bundle-Name: common-util
+Bundle-SymbolicName: com.ats.common.util
+Bundle-Version: 1.0.0
+Export-Package: com.ats.common.util.constants,\
+				com.ats.common.util.portlet
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

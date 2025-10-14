@@ -270,6 +270,13 @@ public class Case_managementPersistenceTest {
 	}
 
 	@Test
+	public void testCountByfindByDoctor() throws Exception {
+		_persistence.countByfindByDoctor(RandomTestUtil.nextLong());
+
+		_persistence.countByfindByDoctor(0L);
+	}
+
+	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		Case_management newCase_management = addCase_management();
 

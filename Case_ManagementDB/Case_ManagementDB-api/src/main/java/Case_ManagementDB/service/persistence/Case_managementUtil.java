@@ -525,6 +525,179 @@ public class Case_managementUtil {
 	}
 
 	/**
+	 * Returns all the case_managements where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @return the matching case_managements
+	 */
+	public static List<Case_management> findByfindByDoctor(long doctorUserId) {
+		return getPersistence().findByfindByDoctor(doctorUserId);
+	}
+
+	/**
+	 * Returns a range of all the case_managements where doctorUserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>Case_managementModelImpl</code>.
+	 * </p>
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param start the lower bound of the range of case_managements
+	 * @param end the upper bound of the range of case_managements (not inclusive)
+	 * @return the range of matching case_managements
+	 */
+	public static List<Case_management> findByfindByDoctor(
+		long doctorUserId, int start, int end) {
+
+		return getPersistence().findByfindByDoctor(doctorUserId, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the case_managements where doctorUserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>Case_managementModelImpl</code>.
+	 * </p>
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param start the lower bound of the range of case_managements
+	 * @param end the upper bound of the range of case_managements (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching case_managements
+	 */
+	public static List<Case_management> findByfindByDoctor(
+		long doctorUserId, int start, int end,
+		OrderByComparator<Case_management> orderByComparator) {
+
+		return getPersistence().findByfindByDoctor(
+			doctorUserId, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the case_managements where doctorUserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>Case_managementModelImpl</code>.
+	 * </p>
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param start the lower bound of the range of case_managements
+	 * @param end the upper bound of the range of case_managements (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching case_managements
+	 */
+	public static List<Case_management> findByfindByDoctor(
+		long doctorUserId, int start, int end,
+		OrderByComparator<Case_management> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByfindByDoctor(
+			doctorUserId, start, end, orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first case_management in the ordered set where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching case_management
+	 * @throws NoSuchCase_managementException if a matching case_management could not be found
+	 */
+	public static Case_management findByfindByDoctor_First(
+			long doctorUserId,
+			OrderByComparator<Case_management> orderByComparator)
+		throws Case_ManagementDB.exception.NoSuchCase_managementException {
+
+		return getPersistence().findByfindByDoctor_First(
+			doctorUserId, orderByComparator);
+	}
+
+	/**
+	 * Returns the first case_management in the ordered set where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching case_management, or <code>null</code> if a matching case_management could not be found
+	 */
+	public static Case_management fetchByfindByDoctor_First(
+		long doctorUserId,
+		OrderByComparator<Case_management> orderByComparator) {
+
+		return getPersistence().fetchByfindByDoctor_First(
+			doctorUserId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last case_management in the ordered set where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching case_management
+	 * @throws NoSuchCase_managementException if a matching case_management could not be found
+	 */
+	public static Case_management findByfindByDoctor_Last(
+			long doctorUserId,
+			OrderByComparator<Case_management> orderByComparator)
+		throws Case_ManagementDB.exception.NoSuchCase_managementException {
+
+		return getPersistence().findByfindByDoctor_Last(
+			doctorUserId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last case_management in the ordered set where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching case_management, or <code>null</code> if a matching case_management could not be found
+	 */
+	public static Case_management fetchByfindByDoctor_Last(
+		long doctorUserId,
+		OrderByComparator<Case_management> orderByComparator) {
+
+		return getPersistence().fetchByfindByDoctor_Last(
+			doctorUserId, orderByComparator);
+	}
+
+	/**
+	 * Returns the case_managements before and after the current case_management in the ordered set where doctorUserId = &#63;.
+	 *
+	 * @param caseId the primary key of the current case_management
+	 * @param doctorUserId the doctor user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next case_management
+	 * @throws NoSuchCase_managementException if a case_management with the primary key could not be found
+	 */
+	public static Case_management[] findByfindByDoctor_PrevAndNext(
+			long caseId, long doctorUserId,
+			OrderByComparator<Case_management> orderByComparator)
+		throws Case_ManagementDB.exception.NoSuchCase_managementException {
+
+		return getPersistence().findByfindByDoctor_PrevAndNext(
+			caseId, doctorUserId, orderByComparator);
+	}
+
+	/**
+	 * Removes all the case_managements where doctorUserId = &#63; from the database.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 */
+	public static void removeByfindByDoctor(long doctorUserId) {
+		getPersistence().removeByfindByDoctor(doctorUserId);
+	}
+
+	/**
+	 * Returns the number of case_managements where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @return the number of matching case_managements
+	 */
+	public static int countByfindByDoctor(long doctorUserId) {
+		return getPersistence().countByfindByDoctor(doctorUserId);
+	}
+
+	/**
 	 * Caches the case_management in the entity cache if it is enabled.
 	 *
 	 * @param case_management the case_management

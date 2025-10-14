@@ -31,6 +31,7 @@ import Doctor_MgmtDB.service.DoctorProfileLocalService;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 
@@ -60,20 +61,41 @@ public class AddDoctorMVCActionCommand extends BaseMVCActionCommand {
     	ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         log.info("Inside AddDoctorMVCActionCommand");
 
-        // ✅ Get selected Doctor user from dropdown
+        // Get selected Doctor user from dropdown
         long doctorUserId = ParamUtil.getLong(actionRequest, "doctorUserId");
-
-     // ✅ Verify selected user has site-wide "Doctor" role
-        Role doctorRole = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Doctor");
-        boolean hasDoctorRole = doctorRole != null &&
-                RoleLocalServiceUtil.hasUserRole(doctorUserId, doctorRole.getRoleId());
-
-        if (!hasDoctorRole) {
-            log.error("Selected user does not have Doctor role!");
-            SessionMessages.add(actionRequest, "errorUserNotDoctor");
+        if (doctorUserId <= 0) {
+            log.error("No valid user selected!");
+            SessionMessages.add(actionRequest, "errorNoUserSelected");
             return;
         }
 
+        // Assign "Doctor" role if not already assigned
+        Role doctorRole = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Doctor");
+        if (doctorRole != null) {
+            boolean hasRole = RoleLocalServiceUtil.hasUserRole(
+                    doctorUserId, themeDisplay.getCompanyId(), "Doctor", true);
+            if (!hasRole) {
+                UserLocalServiceUtil.addRoleUsers(doctorRole.getRoleId(), new long[]{doctorUserId});
+                log.info("✅ 'Doctor' role assigned to userId=" + doctorUserId);
+            }
+        } else {
+            log.error("❌ 'Doctor' role not found in Control Panel → Roles.");
+            return;
+        }
+        
+    
+        
+//     // ✅ Verify selected user has site-wide "Doctor" role
+//        Role doctorRole = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Doctor");
+//        boolean hasDoctorRole = doctorRole != null &&
+//                RoleLocalServiceUtil.hasUserRole(doctorUserId, doctorRole.getRoleId());
+//
+//        if (!hasDoctorRole) {
+//            log.error("Selected user does not have Doctor role!");
+//            SessionMessages.add(actionRequest, "errorUserNotDoctor");
+//            return;
+//        }
+//
 
         // ✅ Get other form fields
         String name = ParamUtil.getString(actionRequest, "name");

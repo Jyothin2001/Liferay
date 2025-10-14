@@ -245,6 +245,13 @@ public class Case_managementLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<Case_ManagementDB.model.Case_management> findByDoctor(
+		long doctorId) {
+
+		return _case_managementLocalService.findByDoctor(doctorId);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 

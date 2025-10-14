@@ -8,25 +8,9 @@
 <%@ include file="/init.jsp" %>
 
 <%
-    // 1️⃣ Get logged-in userId
-   
-    long userId = themeDisplay.getUserId();
-
-    // 2️⃣ Fetch DoctorProfile for this user
-    DoctorProfile doctor = DoctorProfileLocalServiceUtil.getDoctorByUserId(userId);
-    long doctorId = 0;
-    if (doctor != null) {
-        doctorId = doctor.getDoctorId();
-    }
-
-    // 3️⃣ Fetch all cases assigned to this doctor
-    List<Case_management> allCases = Case_managementLocalServiceUtil.getCase_managements(-1, -1);
-    List<Case_management> assignedCases = new ArrayList<>();
-    for (Case_management c : allCases) {
-        if (c.getDoctorId() == doctorId) {
-            assignedCases.add(c);
-        }
-    }
+    
+List<Case_management> cases =  (List<Case_management>)request.getAttribute("cases");
+  
 %>
 
 <div class="case-list-container">
@@ -43,14 +27,14 @@
         </thead>
         <tbody>
         <%
-            if (assignedCases.isEmpty()) {
+            if (cases.isEmpty()) {
         %>
             <tr>
                 <td colspan="5" style="text-align:center; font-style:italic;">No cases assigned.</td>
             </tr>
         <%
             } else {
-                for (Case_management c : assignedCases) {
+                for (Case_management c : cases) {
         %>
             <tr>
                 <td><%= c.getCaseId() %></td>

@@ -1404,6 +1404,511 @@ public class Case_managementPersistenceImpl
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 =
 		"case_management.companyId = ?";
 
+	private FinderPath _finderPathWithPaginationFindByfindByDoctor;
+	private FinderPath _finderPathWithoutPaginationFindByfindByDoctor;
+	private FinderPath _finderPathCountByfindByDoctor;
+
+	/**
+	 * Returns all the case_managements where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @return the matching case_managements
+	 */
+	@Override
+	public List<Case_management> findByfindByDoctor(long doctorUserId) {
+		return findByfindByDoctor(
+			doctorUserId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the case_managements where doctorUserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>Case_managementModelImpl</code>.
+	 * </p>
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param start the lower bound of the range of case_managements
+	 * @param end the upper bound of the range of case_managements (not inclusive)
+	 * @return the range of matching case_managements
+	 */
+	@Override
+	public List<Case_management> findByfindByDoctor(
+		long doctorUserId, int start, int end) {
+
+		return findByfindByDoctor(doctorUserId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the case_managements where doctorUserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>Case_managementModelImpl</code>.
+	 * </p>
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param start the lower bound of the range of case_managements
+	 * @param end the upper bound of the range of case_managements (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching case_managements
+	 */
+	@Override
+	public List<Case_management> findByfindByDoctor(
+		long doctorUserId, int start, int end,
+		OrderByComparator<Case_management> orderByComparator) {
+
+		return findByfindByDoctor(
+			doctorUserId, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the case_managements where doctorUserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>Case_managementModelImpl</code>.
+	 * </p>
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param start the lower bound of the range of case_managements
+	 * @param end the upper bound of the range of case_managements (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching case_managements
+	 */
+	@Override
+	public List<Case_management> findByfindByDoctor(
+		long doctorUserId, int start, int end,
+		OrderByComparator<Case_management> orderByComparator,
+		boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByfindByDoctor;
+				finderArgs = new Object[] {doctorUserId};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByfindByDoctor;
+			finderArgs = new Object[] {
+				doctorUserId, start, end, orderByComparator
+			};
+		}
+
+		List<Case_management> list = null;
+
+		if (useFinderCache) {
+			list = (List<Case_management>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (Case_management case_management : list) {
+					if (doctorUserId != case_management.getDoctorUserId()) {
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(3);
+			}
+
+			sb.append(_SQL_SELECT_CASE_MANAGEMENT_WHERE);
+
+			sb.append(_FINDER_COLUMN_FINDBYDOCTOR_DOCTORUSERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(Case_managementModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(doctorUserId);
+
+				list = (List<Case_management>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first case_management in the ordered set where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching case_management
+	 * @throws NoSuchCase_managementException if a matching case_management could not be found
+	 */
+	@Override
+	public Case_management findByfindByDoctor_First(
+			long doctorUserId,
+			OrderByComparator<Case_management> orderByComparator)
+		throws NoSuchCase_managementException {
+
+		Case_management case_management = fetchByfindByDoctor_First(
+			doctorUserId, orderByComparator);
+
+		if (case_management != null) {
+			return case_management;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("doctorUserId=");
+		sb.append(doctorUserId);
+
+		sb.append("}");
+
+		throw new NoSuchCase_managementException(sb.toString());
+	}
+
+	/**
+	 * Returns the first case_management in the ordered set where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching case_management, or <code>null</code> if a matching case_management could not be found
+	 */
+	@Override
+	public Case_management fetchByfindByDoctor_First(
+		long doctorUserId,
+		OrderByComparator<Case_management> orderByComparator) {
+
+		List<Case_management> list = findByfindByDoctor(
+			doctorUserId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last case_management in the ordered set where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching case_management
+	 * @throws NoSuchCase_managementException if a matching case_management could not be found
+	 */
+	@Override
+	public Case_management findByfindByDoctor_Last(
+			long doctorUserId,
+			OrderByComparator<Case_management> orderByComparator)
+		throws NoSuchCase_managementException {
+
+		Case_management case_management = fetchByfindByDoctor_Last(
+			doctorUserId, orderByComparator);
+
+		if (case_management != null) {
+			return case_management;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("doctorUserId=");
+		sb.append(doctorUserId);
+
+		sb.append("}");
+
+		throw new NoSuchCase_managementException(sb.toString());
+	}
+
+	/**
+	 * Returns the last case_management in the ordered set where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching case_management, or <code>null</code> if a matching case_management could not be found
+	 */
+	@Override
+	public Case_management fetchByfindByDoctor_Last(
+		long doctorUserId,
+		OrderByComparator<Case_management> orderByComparator) {
+
+		int count = countByfindByDoctor(doctorUserId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Case_management> list = findByfindByDoctor(
+			doctorUserId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the case_managements before and after the current case_management in the ordered set where doctorUserId = &#63;.
+	 *
+	 * @param caseId the primary key of the current case_management
+	 * @param doctorUserId the doctor user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next case_management
+	 * @throws NoSuchCase_managementException if a case_management with the primary key could not be found
+	 */
+	@Override
+	public Case_management[] findByfindByDoctor_PrevAndNext(
+			long caseId, long doctorUserId,
+			OrderByComparator<Case_management> orderByComparator)
+		throws NoSuchCase_managementException {
+
+		Case_management case_management = findByPrimaryKey(caseId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Case_management[] array = new Case_managementImpl[3];
+
+			array[0] = getByfindByDoctor_PrevAndNext(
+				session, case_management, doctorUserId, orderByComparator,
+				true);
+
+			array[1] = case_management;
+
+			array[2] = getByfindByDoctor_PrevAndNext(
+				session, case_management, doctorUserId, orderByComparator,
+				false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Case_management getByfindByDoctor_PrevAndNext(
+		Session session, Case_management case_management, long doctorUserId,
+		OrderByComparator<Case_management> orderByComparator,
+		boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_CASE_MANAGEMENT_WHERE);
+
+		sb.append(_FINDER_COLUMN_FINDBYDOCTOR_DOCTORUSERID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(Case_managementModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(doctorUserId);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						case_management)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<Case_management> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the case_managements where doctorUserId = &#63; from the database.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 */
+	@Override
+	public void removeByfindByDoctor(long doctorUserId) {
+		for (Case_management case_management :
+				findByfindByDoctor(
+					doctorUserId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(case_management);
+		}
+	}
+
+	/**
+	 * Returns the number of case_managements where doctorUserId = &#63;.
+	 *
+	 * @param doctorUserId the doctor user ID
+	 * @return the number of matching case_managements
+	 */
+	@Override
+	public int countByfindByDoctor(long doctorUserId) {
+		FinderPath finderPath = _finderPathCountByfindByDoctor;
+
+		Object[] finderArgs = new Object[] {doctorUserId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_CASE_MANAGEMENT_WHERE);
+
+			sb.append(_FINDER_COLUMN_FINDBYDOCTOR_DOCTORUSERID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(doctorUserId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_FINDBYDOCTOR_DOCTORUSERID_2 =
+		"case_management.doctorUserId = ?";
+
 	public Case_managementPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -2034,6 +2539,24 @@ public class Case_managementPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "companyId"}, false);
+
+		_finderPathWithPaginationFindByfindByDoctor = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByfindByDoctor",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"doctorUserId"}, true);
+
+		_finderPathWithoutPaginationFindByfindByDoctor = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByfindByDoctor",
+			new String[] {Long.class.getName()}, new String[] {"doctorUserId"},
+			true);
+
+		_finderPathCountByfindByDoctor = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByfindByDoctor",
+			new String[] {Long.class.getName()}, new String[] {"doctorUserId"},
+			false);
 
 		Case_managementUtil.setPersistence(this);
 	}

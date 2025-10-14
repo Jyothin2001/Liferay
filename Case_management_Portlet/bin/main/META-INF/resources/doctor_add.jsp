@@ -10,33 +10,24 @@
 
 <portlet:actionURL name="/doctor/add" var="addDoctorURL" />
 
-<div class="doctor-form-container">
-    <h2>Add Doctor Profile</h2>
 
-    <aui:form action="${addDoctorURL}" method="post" name="addDoctorForm" enctype="multipart/form-data">
-
-        <%-- Doctor User Selection --%>
-        <%
-            Role doctorRole = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Doctor");
-            List<User> doctorUsers = new java.util.ArrayList<>();
-
-            if (doctorRole != null) {
-                doctorUsers = UserLocalServiceUtil.getRoleUsers(doctorRole.getRoleId());
-            }
-        %>
-
-        <aui:select name="doctorUserId" label="Select Doctor User" required="true">
-    <aui:option value="">-- Select Doctor --</aui:option>
+<%
+    List<User> users = UserLocalServiceUtil.getUsers(-1, -1);
+%>
+<aui:form action="${addDoctorURL}" method="post" name="addDoctorForm" enctype="multipart/form-data">
+<aui:select name="doctorUserId" label="Select Doctor User" required="true">
+    <aui:option value="">-- Select User --</aui:option>
     <%
-        for (User doctorUser : doctorUsers) {
+        for (User defaultUser : users) {
     %>
-        <aui:option value="<%= doctorUser.getUserId() %>">
-            <%= doctorUser.getFullName() %> (<%= doctorUser.getEmailAddress() %>)
+        <aui:option value="<%= user.getUserId() %>">
+            <%= defaultUser.getFullName() %> (<%= defaultUser.getEmailAddress() %>)
         </aui:option>
     <%
         }
     %>
 </aui:select>
+
 
 
         <%-- Basic Details --%>

@@ -5,9 +5,12 @@
 
 package Case_ManagementDB.service.impl;
 
+import Case_ManagementDB.model.Case_management;
 import Case_ManagementDB.service.base.Case_managementLocalServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
+
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -20,4 +23,9 @@ import org.osgi.service.component.annotations.Component;
 )
 public class Case_managementLocalServiceImpl
 	extends Case_managementLocalServiceBaseImpl {
+	
+	public List<Case_management> findByDoctor(long doctorId) {
+		return case_managementPersistence.findByfindByDoctor(doctorId);
+	}
+	
 }
