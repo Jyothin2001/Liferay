@@ -5,9 +5,12 @@
 
 package PatientRegistryDB.service.impl;
 
+import PatientRegistryDB.model.PatientRegistry;
 import PatientRegistryDB.service.base.PatientRegistryLocalServiceBaseImpl;
 
 import com.liferay.portal.aop.AopService;
+
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -20,4 +23,15 @@ import org.osgi.service.component.annotations.Component;
 )
 public class PatientRegistryLocalServiceImpl
 	extends PatientRegistryLocalServiceBaseImpl {
+	
+	public PatientRegistry getPatientByUserId(long userId) {
+	    List<PatientRegistry> list = patientRegistryPersistence.findByUserId(userId);
+	    System.out.println("list of patient registry in local serviceImpl: " + list);
+
+	    if (!list.isEmpty()) {
+	        return list.get(0);
+	    }
+	    return null;
+	}
+
 }

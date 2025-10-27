@@ -249,6 +249,10 @@ public class PatientRegistryLocalServiceUtil {
 		return getService().getOSGiServiceIdentifier();
 	}
 
+	public static PatientRegistry getPatientByUserId(long userId) {
+		return getService().getPatientByUserId(userId);
+	}
+
 	/**
 	 * Returns a range of all the patient registries.
 	 *

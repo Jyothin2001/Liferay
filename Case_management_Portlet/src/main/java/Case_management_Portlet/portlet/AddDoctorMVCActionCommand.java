@@ -100,7 +100,18 @@ public class AddDoctorMVCActionCommand extends BaseMVCActionCommand {
         // ✅ Get other form fields
         String name = ParamUtil.getString(actionRequest, "name");
         String gender = ParamUtil.getString(actionRequest, "gender");
-        Date dob = ParamUtil.getDate(actionRequest, "dob", new SimpleDateFormat("yyyy-MM-dd"));
+        //Date dob = ParamUtil.getDate(actionRequest, "dob", new SimpleDateFormat("yyyy-MM-dd"));
+     // Get date as String and parse manually
+        String dobStr = ParamUtil.getString(actionRequest, "dob");
+        Date dob = null;
+        if (dobStr != null && !dobStr.isEmpty()) {
+            try {
+                dob = new SimpleDateFormat("yyyy-MM-dd").parse(dobStr);
+            } catch (Exception e) {
+                log.error("Error parsing DOB: " + dobStr, e);
+            }
+        }
+
         String email = ParamUtil.getString(actionRequest, "email");
         String phone = ParamUtil.getString(actionRequest, "phone");
         String specialization = ParamUtil.getString(actionRequest, "specialization");

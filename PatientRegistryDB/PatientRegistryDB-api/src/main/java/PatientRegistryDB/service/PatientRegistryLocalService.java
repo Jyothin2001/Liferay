@@ -223,6 +223,9 @@ public interface PatientRegistryLocalService
 	 */
 	public String getOSGiServiceIdentifier();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public PatientRegistry getPatientByUserId(long userId);
+
 	/**
 	 * Returns a range of all the patient registries.
 	 *

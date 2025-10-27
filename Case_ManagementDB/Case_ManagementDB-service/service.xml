@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
 
-<service-builder dependency-injector="ds" package-path="Case_ManagementDB">
+<service-builder dependency-injector="ds" package-path="Case_ManagementDB" >
 	<namespace>a</namespace>
 	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
 	<entity local-service="true" name="Case_management" remote-service="true" uuid="true">
@@ -25,6 +25,7 @@
 		
         <!-- Core Case Fields -->
         <column name="patientId" type="long" />
+         <column name="patientUserId" type="long" />
         <column name="doctorId" type="long" />
          <column name="doctorUserId" type="long" />
         <column name="caseTitle" type="String" />
@@ -53,9 +54,13 @@
         </order>
         
         
-        <finder return-type="Collection" name="findByDoctor">
+        <finder name="findByDoctor" return-type="Collection" >
         	<finder-column name="doctorUserId"></finder-column>
         </finder>
+		
+		<finder name="findByPatient" return-type="Collection">
+    <finder-column name="patientUserId" />
+</finder>
 		
 	</entity>
 </service-builder>

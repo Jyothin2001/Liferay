@@ -7,5 +7,7 @@ dependencies {
 	
 	api project(":modules:Case_ManagementDB:Case_ManagementDB-api")
 	
+	api project(":modules:PatientRegistryDB:PatientRegistryDB-api")
+	
 	api project(":modules:common-util")
 }

@@ -279,6 +279,13 @@ public class PatientRegistryLocalServiceWrapper
 		return _patientRegistryLocalService.getOSGiServiceIdentifier();
 	}
 
+	@Override
+	public PatientRegistryDB.model.PatientRegistry getPatientByUserId(
+		long userId) {
+
+		return _patientRegistryLocalService.getPatientByUserId(userId);
+	}
+
 	/**
 	 * Returns a range of all the patient registries.
 	 *

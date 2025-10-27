@@ -33,5 +33,9 @@ public class DoctorProfileLocalServiceImpl extends DoctorProfileLocalServiceBase
 	    }
 	    return null;
 	}
+	
+	 public List<DoctorProfile> getDoctorProfiles(int start, int end) {
+	        return doctorProfilePersistence.findAll(start, end);
+	    }
 
 }

@@ -24,8 +24,11 @@ import org.osgi.service.component.annotations.Component;
 public class Case_managementLocalServiceImpl
 	extends Case_managementLocalServiceBaseImpl {
 	
-	public List<Case_management> findByDoctor(long doctorId) {
-		return case_managementPersistence.findByfindByDoctor(doctorId);
+	public List<Case_management> findByDoctor(long doctorUserId) {
+		return case_managementPersistence.findByfindByDoctor(doctorUserId);
 	}
 	
+	public List<Case_management> findByPatient(long patientId) {
+		return case_managementPersistence.findByfindByPatient(patientId);
+	}
 }

@@ -11,4 +11,6 @@ dependencies {
 	api project(":modules:Doctor_MgmtDB:Doctor_MgmtDB-api")
 	
 	api project(":modules:PatientRegistryDB:PatientRegistryDB-api")
+	
+	api project(":modules:common-util")
 }

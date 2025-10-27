@@ -5,9 +5,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<%@ page import="Case_ManagementDB.model.Case_management" %>
 
-<h2>Enter Billing Details</h2>
+<%
+Case_management caseObj = (Case_management) request.getAttribute("caseObj");
+long caseId = (long) request.getAttribute("caseId");
+%>
 
+<h2>Billing Form - Case ID: <%= caseId %></h2>
+
+<!-- <h2>Enter Billing Details</h2>
+ -->
 <portlet:actionURL var="addBillingURL" name="/billing/add" />
 
 <aui:form action="<%= addBillingURL %>" method="post" name="billingForm" id="billingForm">

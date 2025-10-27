@@ -21,6 +21,7 @@ public class RoleUtil {
     public static boolean isPatient(ThemeDisplay themeDisplay) {
         return hasRole(themeDisplay, "Patient");
     }
+    
 
     private static boolean hasRole(ThemeDisplay themeDisplay, String roleName) {
         try {

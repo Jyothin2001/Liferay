@@ -135,6 +135,8 @@ public class Case_managementPersistenceTest {
 
 		newCase_management.setPatientId(RandomTestUtil.nextLong());
 
+		newCase_management.setPatientUserId(RandomTestUtil.nextLong());
+
 		newCase_management.setDoctorId(RandomTestUtil.nextLong());
 
 		newCase_management.setDoctorUserId(RandomTestUtil.nextLong());
@@ -196,6 +198,9 @@ public class Case_managementPersistenceTest {
 		Assert.assertEquals(
 			existingCase_management.getPatientId(),
 			newCase_management.getPatientId());
+		Assert.assertEquals(
+			existingCase_management.getPatientUserId(),
+			newCase_management.getPatientUserId());
 		Assert.assertEquals(
 			existingCase_management.getDoctorId(),
 			newCase_management.getDoctorId());
@@ -277,6 +282,13 @@ public class Case_managementPersistenceTest {
 	}
 
 	@Test
+	public void testCountByfindByPatient() throws Exception {
+		_persistence.countByfindByPatient(RandomTestUtil.nextLong());
+
+		_persistence.countByfindByPatient(0L);
+	}
+
+	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		Case_management newCase_management = addCase_management();
 
@@ -303,12 +315,12 @@ public class Case_managementPersistenceTest {
 		return OrderByComparatorFactoryUtil.create(
 			"a_Case_management", "uuid", true, "caseId", true, "groupId", true,
 			"companyId", true, "userId", true, "userName", true, "createDate",
-			true, "modifiedDate", true, "patientId", true, "doctorId", true,
-			"doctorUserId", true, "caseTitle", true, "notes", true, "status",
-			true, "bloodPressure", true, "height", true, "weight", true,
-			"diagnosis", true, "treatment", true, "consultationFee", true,
-			"medicineCharges", true, "testCharges", true, "totalAmount", true,
-			"paymentStatus", true);
+			true, "modifiedDate", true, "patientId", true, "patientUserId",
+			true, "doctorId", true, "doctorUserId", true, "caseTitle", true,
+			"notes", true, "status", true, "bloodPressure", true, "height",
+			true, "weight", true, "diagnosis", true, "treatment", true,
+			"consultationFee", true, "medicineCharges", true, "testCharges",
+			true, "totalAmount", true, "paymentStatus", true);
 	}
 
 	@Test
@@ -604,6 +616,8 @@ public class Case_managementPersistenceTest {
 		case_management.setModifiedDate(RandomTestUtil.nextDate());
 
 		case_management.setPatientId(RandomTestUtil.nextLong());
+
+		case_management.setPatientUserId(RandomTestUtil.nextLong());
 
 		case_management.setDoctorId(RandomTestUtil.nextLong());
 

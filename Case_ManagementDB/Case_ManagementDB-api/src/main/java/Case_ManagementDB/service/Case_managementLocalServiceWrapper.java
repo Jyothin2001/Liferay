@@ -246,9 +246,16 @@ public class Case_managementLocalServiceWrapper
 
 	@Override
 	public java.util.List<Case_ManagementDB.model.Case_management> findByDoctor(
-		long doctorId) {
+		long doctorUserId) {
 
-		return _case_managementLocalService.findByDoctor(doctorId);
+		return _case_managementLocalService.findByDoctor(doctorUserId);
+	}
+
+	@Override
+	public java.util.List<Case_ManagementDB.model.Case_management>
+		findByPatient(long patientId) {
+
+		return _case_managementLocalService.findByPatient(patientId);
 	}
 
 	@Override

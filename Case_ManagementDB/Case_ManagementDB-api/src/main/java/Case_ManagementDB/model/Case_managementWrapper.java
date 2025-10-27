@@ -43,6 +43,7 @@ public class Case_managementWrapper
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("patientId", getPatientId());
+		attributes.put("patientUserId", getPatientUserId());
 		attributes.put("doctorId", getDoctorId());
 		attributes.put("doctorUserId", getDoctorUserId());
 		attributes.put("caseTitle", getCaseTitle());
@@ -116,6 +117,12 @@ public class Case_managementWrapper
 
 		if (patientId != null) {
 			setPatientId(patientId);
+		}
+
+		Long patientUserId = (Long)attributes.get("patientUserId");
+
+		if (patientUserId != null) {
+			setPatientUserId(patientUserId);
 		}
 
 		Long doctorId = (Long)attributes.get("doctorId");
@@ -372,6 +379,26 @@ public class Case_managementWrapper
 	@Override
 	public long getPatientId() {
 		return model.getPatientId();
+	}
+
+	/**
+	 * Returns the patient user ID of this case_management.
+	 *
+	 * @return the patient user ID of this case_management
+	 */
+	@Override
+	public long getPatientUserId() {
+		return model.getPatientUserId();
+	}
+
+	/**
+	 * Returns the patient user uuid of this case_management.
+	 *
+	 * @return the patient user uuid of this case_management
+	 */
+	@Override
+	public String getPatientUserUuid() {
+		return model.getPatientUserUuid();
 	}
 
 	/**
@@ -647,6 +674,26 @@ public class Case_managementWrapper
 	@Override
 	public void setPatientId(long patientId) {
 		model.setPatientId(patientId);
+	}
+
+	/**
+	 * Sets the patient user ID of this case_management.
+	 *
+	 * @param patientUserId the patient user ID of this case_management
+	 */
+	@Override
+	public void setPatientUserId(long patientUserId) {
+		model.setPatientUserId(patientUserId);
+	}
+
+	/**
+	 * Sets the patient user uuid of this case_management.
+	 *
+	 * @param patientUserUuid the patient user uuid of this case_management
+	 */
+	@Override
+	public void setPatientUserUuid(String patientUserUuid) {
+		model.setPatientUserUuid(patientUserUuid);
 	}
 
 	/**

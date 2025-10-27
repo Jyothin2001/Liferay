@@ -42,6 +42,9 @@ public class Case_managementTable extends BaseTable<Case_managementTable> {
 		"modifiedDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 	public final Column<Case_managementTable, Long> patientId = createColumn(
 		"patientId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<Case_managementTable, Long> patientUserId =
+		createColumn(
+			"patientUserId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<Case_managementTable, Long> doctorId = createColumn(
 		"doctorId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<Case_managementTable, Long> doctorUserId = createColumn(

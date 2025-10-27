@@ -26,7 +26,7 @@
         <tr><th>Date</th><td><%= caseDetails.getCreateDate() %></td></tr>
         <tr><th>Doctor Name</th><td><%= (doctor != null) ? doctor.getName() : "N/A" %></td></tr>
         <tr><th>Patient Name</th><td><%= (patient != null) ? patient.getFirstName() + " " + patient.getLastName() : "N/A" %></td></tr>
-        <tr><th>Age</th>
+       <%--  <tr><th>Age</th>
             <td>
                 <%
             if (patient != null && patient.getDateOfBirth() != null) {
@@ -41,7 +41,7 @@
             }
         %>
             </td>
-        </tr>
+        </tr> --%>
         <tr><th>Case Title</th><td><%= caseDetails.getCaseTitle() %></td></tr>
         <tr><th>Diagnosis</th><td><%= caseDetails.getDiagnosis() %></td></tr>
         <tr><th>Treatment</th><td><%= caseDetails.getTreatment() %></td></tr>

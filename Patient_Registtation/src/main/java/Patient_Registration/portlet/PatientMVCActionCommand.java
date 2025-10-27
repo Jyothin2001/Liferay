@@ -3,11 +3,15 @@ package Patient_Registration.portlet;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Role;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -44,6 +48,30 @@ public class PatientMVCActionCommand extends BaseMVCActionCommand {
 
         ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
         log.info("inside patient Registry::");
+        
+        // Get selected user from dropdown
+        long patientUserId = ParamUtil.getLong(actionRequest, "patientUserId");
+        if (patientUserId <= 0) {
+            log.error("No valid user selected!");
+            SessionMessages.add(actionRequest, "errorNoUserSelected");
+            return;
+        }
+
+        // Assign "Patient" role if not already assigned
+        Role patientRole = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Patient");
+        if (patientRole != null) {
+            boolean hasRole = RoleLocalServiceUtil.hasUserRole(
+                    patientUserId, themeDisplay.getCompanyId(), "Patient", true);
+            if (!hasRole) {
+                UserLocalServiceUtil.addRoleUsers(patientRole.getRoleId(), new long[]{patientUserId});
+                log.info("✅ 'Patient' role assigned to userId=" + patientUserId);
+            }
+        } else {
+            log.error("❌ 'Patient' role not found in Control Panel → Roles.");
+            return;
+        }
+
+        
         long patientId = CounterLocalServiceUtil.increment(PatientRegistry.class.getName());
 
         String firstName = ParamUtil.getString(actionRequest, "firstName");
@@ -66,7 +94,7 @@ public class PatientMVCActionCommand extends BaseMVCActionCommand {
         PatientRegistry patient = _patientLocalService.createPatientRegistry(patientId);
         patient.setGroupId(themeDisplay.getScopeGroupId());
         patient.setCompanyId(themeDisplay.getCompanyId());
-        patient.setUserId(themeDisplay.getUserId());
+        patient.setUserId(patientUserId);
         patient.setUserName(themeDisplay.getUser().getFullName());
         patient.setCreateDate(new Date());
         patient.setModifiedDate(new Date());

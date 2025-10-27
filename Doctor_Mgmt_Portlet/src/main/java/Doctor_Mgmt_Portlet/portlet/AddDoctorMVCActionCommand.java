@@ -1,7 +1,6 @@
 package Doctor_Mgmt_Portlet.portlet;
 
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
-
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -25,6 +24,7 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+
 import Doctor_MgmtDB.model.DoctorProfile;
 import Doctor_MgmtDB.service.DoctorProfileLocalService;
 import Doctor_Mgmt_Portlet.constants.Doctor_Mgmt_PortletKeys;
@@ -32,6 +32,10 @@ import Doctor_Mgmt_Portlet.constants.Doctor_Mgmt_PortletKeys;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
+
 
 @Component(
     immediate = true,
@@ -42,8 +46,6 @@ import com.liferay.portal.kernel.service.ServiceContextFactory;
     service = MVCActionCommand.class
 )
 public class AddDoctorMVCActionCommand extends BaseMVCActionCommand {
-	
-	
 
     @Reference
     private DoctorProfileLocalService _doctorLocalService;
@@ -51,17 +53,66 @@ public class AddDoctorMVCActionCommand extends BaseMVCActionCommand {
     @Reference
     private DLAppLocalService _dlAppLocalService;
 
+    private static final Log log = LogFactoryUtil.getLog(AddDoctorMVCActionCommand.class);
+
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse)
             throws Exception {
-    	final Log log = LogFactoryUtil.getLog(AddDoctorMVCActionCommand.class);
 
-        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-        log.info("inside doctor:: ");
-        // Get form parameters
+    	ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+        log.info("Inside AddDoctorMVCActionCommand");
+
+        // Get selected Doctor user from dropdown
+        long doctorUserId = ParamUtil.getLong(actionRequest, "doctorUserId");
+        if (doctorUserId <= 0) {
+            log.error("No valid user selected!");
+            SessionMessages.add(actionRequest, "errorNoUserSelected");
+            return;
+        }
+
+        // Assign "Doctor" role if not already assigned
+        Role doctorRole = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Doctor");
+        if (doctorRole != null) {
+            boolean hasRole = RoleLocalServiceUtil.hasUserRole(
+                    doctorUserId, themeDisplay.getCompanyId(), "Doctor", true);
+            if (!hasRole) {
+                UserLocalServiceUtil.addRoleUsers(doctorRole.getRoleId(), new long[]{doctorUserId});
+                log.info("✅ 'Doctor' role assigned to userId=" + doctorUserId);
+            }
+        } else {
+            log.error("❌ 'Doctor' role not found in Control Panel → Roles.");
+            return;
+        }
+        
+    
+        
+//     // ✅ Verify selected user has site-wide "Doctor" role
+//        Role doctorRole = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Doctor");
+//        boolean hasDoctorRole = doctorRole != null &&
+//                RoleLocalServiceUtil.hasUserRole(doctorUserId, doctorRole.getRoleId());
+//
+//        if (!hasDoctorRole) {
+//            log.error("Selected user does not have Doctor role!");
+//            SessionMessages.add(actionRequest, "errorUserNotDoctor");
+//            return;
+//        }
+//
+
+        // ✅ Get other form fields
         String name = ParamUtil.getString(actionRequest, "name");
         String gender = ParamUtil.getString(actionRequest, "gender");
-        Date dob = ParamUtil.getDate(actionRequest, "dob", new SimpleDateFormat("yyyy-MM-dd"));
+        //Date dob = ParamUtil.getDate(actionRequest, "dob", new SimpleDateFormat("yyyy-MM-dd"));
+     // Get date as String and parse manually
+        String dobStr = ParamUtil.getString(actionRequest, "dob");
+        Date dob = null;
+        if (dobStr != null && !dobStr.isEmpty()) {
+            try {
+                dob = new SimpleDateFormat("yyyy-MM-dd").parse(dobStr);
+            } catch (Exception e) {
+                log.error("Error parsing DOB: " + dobStr, e);
+            }
+        }
+
         String email = ParamUtil.getString(actionRequest, "email");
         String phone = ParamUtil.getString(actionRequest, "phone");
         String specialization = ParamUtil.getString(actionRequest, "specialization");
@@ -77,56 +128,40 @@ public class AddDoctorMVCActionCommand extends BaseMVCActionCommand {
         String bio = ParamUtil.getString(actionRequest, "bio");
         double fees = ParamUtil.getDouble(actionRequest, "fees");
         double rating = ParamUtil.getDouble(actionRequest, "rating");
-        
-        log.info("Adding Doctor: name=" + name + ", gender=" + gender + ", dob=" + dob + ", email=" + email);
 
-        // Upload profile photo to Documents & Media
+        log.info("Adding Doctor Profile for userId=" + doctorUserId + " name=" + name);
+
+        // ✅ Upload profile image
         UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
         File file = uploadRequest.getFile("imageFile");
         String fileName = uploadRequest.getFileName("imageFile");
 
-        long folderId = 0; // Default folder
         long repositoryId = themeDisplay.getScopeGroupId();
-
+        long folderId = 0;
         long imageId = 0;
 
         if (file != null && file.exists()) {
-            ServiceContext serviceContext = ServiceContextFactory.getInstance(
-                    FileEntry.class.getName(), actionRequest);
-
+            ServiceContext serviceContext = ServiceContextFactory.getInstance(FileEntry.class.getName(), actionRequest);
             try {
-                @SuppressWarnings("deprecation")
-                com.liferay.portal.kernel.repository.model.FileEntry fileEntry =
-                        _dlAppLocalService.addFileEntry(
-                                themeDisplay.getUserId(),
-                                repositoryId,
-                                folderId,
-                                fileName,
-                                MimeTypesUtil.getContentType(file),
-                                fileName,
-                                "Doctor Profile Photo",
-                                "",
-                                file,
-                                serviceContext
-                        );
-
+                FileEntry fileEntry = _dlAppLocalService.addFileEntry(
+                        themeDisplay.getUserId(), repositoryId, folderId, fileName,
+                        MimeTypesUtil.getContentType(file), fileName,
+                        "Doctor Profile Photo", "", file, serviceContext);
                 imageId = fileEntry.getFileEntryId();
-                log.info("File uploaded successfully, fileEntryId=" + imageId);
+                log.info("File uploaded successfully: " + fileEntry.getTitle());
             } catch (Exception e) {
                 log.error("Error uploading file: " + fileName, e);
             }
-        } else {
-            log.info("No file uploaded for doctor: " + name);
         }
 
-        // Create DoctorProfile entity
+        // ✅ Create DoctorProfile
         long doctorId = CounterLocalServiceUtil.increment(DoctorProfile.class.getName());
         DoctorProfile doctor = _doctorLocalService.createDoctorProfile(doctorId);
 
         doctor.setGroupId(themeDisplay.getScopeGroupId());
         doctor.setCompanyId(themeDisplay.getCompanyId());
-        doctor.setUserId(themeDisplay.getUserId());
-        doctor.setUserName(themeDisplay.getUser().getFullName());
+        doctor.setUserId(doctorUserId); // The actual doctor user ID
+        doctor.setUserName(themeDisplay.getUser().getFullName()); // Admin adding it
         doctor.setCreateDate(new Date());
         doctor.setModifiedDate(new Date());
 
@@ -151,11 +186,8 @@ public class AddDoctorMVCActionCommand extends BaseMVCActionCommand {
         doctor.setImageId(imageId);
 
         _doctorLocalService.addDoctorProfile(doctor);
-        
-        log.info("DoctorProfile saved successfully: doctorId=" + doctorId);
-        
+
+        log.info("DoctorProfile created successfully for userId=" + doctorUserId);
         SessionMessages.add(actionRequest, "doctorAdded");
     }
-
-		}
-
+}

@@ -219,8 +219,12 @@ public class Case_managementLocalServiceUtil {
 		return getService().fetchCase_managementByUuidAndGroupId(uuid, groupId);
 	}
 
-	public static List<Case_management> findByDoctor(long doctorId) {
-		return getService().findByDoctor(doctorId);
+	public static List<Case_management> findByDoctor(long doctorUserId) {
+		return getService().findByDoctor(doctorUserId);
+	}
+
+	public static List<Case_management> findByPatient(long patientId) {
+		return getService().findByPatient(patientId);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery

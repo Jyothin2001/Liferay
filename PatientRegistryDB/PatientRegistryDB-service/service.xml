@@ -45,6 +45,9 @@
 			<order-column name="firstName" />
 		</order>
 
+	<finder name="UserId" return-type="Collection">
+    <finder-column name="userId" />
+</finder>
 	
 		
 	</entity>

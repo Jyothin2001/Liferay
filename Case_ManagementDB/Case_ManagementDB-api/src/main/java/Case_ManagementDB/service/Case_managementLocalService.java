@@ -206,7 +206,9 @@ public interface Case_managementLocalService
 	public Case_management fetchCase_managementByUuidAndGroupId(
 		String uuid, long groupId);
 
-	public List<Case_management> findByDoctor(long doctorId);
+	public List<Case_management> findByDoctor(long doctorUserId);
+
+	public List<Case_management> findByPatient(long patientId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
