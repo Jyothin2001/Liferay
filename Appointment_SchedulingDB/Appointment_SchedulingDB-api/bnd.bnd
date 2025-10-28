@@ -1,0 +1,10 @@
+Bundle-Name: Appointment_SchedulingDB-api
+Bundle-SymbolicName: Appointment_SchedulingDB.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	Appointment_SchedulingDB.exception,\
+	Appointment_SchedulingDB.model,\
+	Appointment_SchedulingDB.service,\
+	Appointment_SchedulingDB.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../Appointment_SchedulingDB-service/service.xml

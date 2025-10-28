@@ -1,0 +1,14 @@
+dependencies {
+    // ✅ Link to the generated REST API module
+	api project(":modules:appointment-scheduling-headlessAPI-rest:appointment-scheduling-headlessAPI-rest-api")
+
+    // ✅ Liferay base API
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+	
+	// ✅ Link to your Service Builder generated service JAR
+    implementation project(":modules:Appointment_SchedulingDB:Appointment_SchedulingDB-service")
+	
+	compileOnly group: "javax.annotation", name: "javax.annotation-api", version: "1.3.2"
+}
+
+group = "appointment.scheduling.headlessAPI.rest"

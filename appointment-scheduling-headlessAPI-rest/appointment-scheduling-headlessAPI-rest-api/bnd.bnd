@@ -1,0 +1,6 @@
+Bundle-Name: appointment-scheduling-headlessAPI-rest-api
+Bundle-SymbolicName: appointment.scheduling.headlessAPI.rest.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	appointment.scheduling.headlessAPI.rest.dto.v1_0,\
+	appointment.scheduling.headlessAPI.rest.resource.v1_0

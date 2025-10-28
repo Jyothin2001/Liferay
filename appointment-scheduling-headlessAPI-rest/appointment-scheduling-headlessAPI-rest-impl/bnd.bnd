@@ -1,0 +1,3 @@
+Bundle-Name: appointment-scheduling-headlessAPI-rest-impl
+Bundle-SymbolicName: appointment.scheduling.headlessAPI.rest.impl
+Bundle-Version: 1.0.0

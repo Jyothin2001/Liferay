@@ -1,0 +1,12 @@
+dependencies {
+	api project(":modules:Appointment_SchedulingDB:Appointment_SchedulingDB-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../Appointment_SchedulingDB-api/src/main/java"
+	testDir = "../Appointment_SchedulingDB-test/src/testIntegration/java"
+}
+
+group = "Appointment_SchedulingDB"

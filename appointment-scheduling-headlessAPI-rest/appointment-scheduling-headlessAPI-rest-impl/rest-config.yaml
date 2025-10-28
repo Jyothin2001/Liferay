@@ -1,0 +1,9 @@
+apiDir: "../appointment-scheduling-headlessAPI-rest-api/src/main/java"
+apiPackagePath: "appointment.scheduling.headlessAPI.rest"
+application:
+    baseURI: "/appointment-scheduling-headlessAPI-rest"
+    className: "AppointmentSchedulingHeadlessAPIRestApplication"
+    name: "AppointmentSchedulingHeadlessAPIRest"
+author: "Jyothi"
+clientDir: "../appointment-scheduling-headlessAPI-rest-client/src/main/java"
+testDir: "../appointment-scheduling-headlessAPI-rest-test/src/testIntegration/java"
