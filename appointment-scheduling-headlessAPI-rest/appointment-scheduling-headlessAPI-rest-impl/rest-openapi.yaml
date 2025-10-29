@@ -1,10 +1,9 @@
 openapi: 3.0.1
 
 info:
-  title: "Appointment Scheduling Headless API"
+  title: "AppointmentSchedulingHeadless"
   version: v1.0
-  description: >
-    Liferay Headless API for managing doctor-patient appointments.
+  description: "Headless REST API for managing appointments."
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -12,13 +11,26 @@ info:
 components:
   schemas:
     Appointment:
-      description: >
-        Represents appointment scheduling details between doctors and patients.
+      description: "Represents an appointment entity in the Appointment Scheduling system."
       type: object
       properties:
         appointmentId:
           type: integer
           format: int64
+        companyId:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        userName:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        modifiedDate:
+          type: string
+          format: date-time
         doctorId:
           type: integer
           format: int64
@@ -27,96 +39,94 @@ components:
           format: int64
         appointmentDate:
           type: string
-          format: date
+          format: date-time
         timeSlot:
           type: string
         status:
           type: string
-          example: "Scheduled"
+        message:
+          type: object
+          readOnly: true
+        data:
+          type: object
 
 paths:
-
-  /get-appointments:
+  "/appointments":
     get:
       operationId: getAppointments
       tags: ["Appointment"]
+      summary: "Get all appointments"
+      description: "Retrieve a list of all scheduled appointments."
       responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Appointment"
+        '200':
+          description: "Appointments listed successfully"
         '403':
-          description: Access denied or no appointments found.
+          description: "No appointments found"
         '404':
-          description: API not found.
+          description: "API not found"
 
+  "/appointments/add":
     post:
       operationId: addAppointment
       tags: ["Appointment"]
-      summary: "Create a new appointment"
-      description: "Add a new doctor-patient appointment."
+      summary: "Add a new appointment"
+      description: "Create a new appointment entry in the system."
       requestBody:
-        description: "Appointment details to be created."
         required: true
+        description: "Appointment details to create"
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/Appointment"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Appointment"
       responses:
         '200':
-          description: Appointment added successfully.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Appointment"
-        '400':
-          description: Invalid input data.
+          description: "Appointment added successfully"
         '403':
-          description: Access denied.
+          description: "Appointment not added"
+        '404':
+          description: "API not found"
 
-  /appointments/{appointmentId}:
+  "/appointments/{appointmentId}":
     put:
       operationId: updateAppointment
       tags: ["Appointment"]
       summary: "Update an appointment"
-      description: "Modify details of an existing appointment."
+      description: "Update details of an existing appointment by its ID."
       parameters:
-        - in: path
-          name: appointmentId
+        - name: appointmentId
+          in: path
           required: true
           schema:
             type: integer
-            format: int64
       requestBody:
-        description: "Updated appointment data."
         required: true
+        description: "Updated appointment details"
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/Appointment"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Appointment"
       responses:
         '200':
-          description: Appointment updated successfully.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Appointment"
+          description: "Appointment updated successfully"
         '403':
-          description: No appointment found or unauthorized.
+          description: "Appointment not found"
         '404':
-          description: Appointment not found.
+          description: "API not found"
 
+  "/appointments/delete":
     delete:
       operationId: deleteAppointment
       tags: ["Appointment"]
       summary: "Delete an appointment"
-      description: "Delete an appointment by its ID."
+      description: "Delete an appointment from the system by its ID."
       parameters:
-        - in: path
+        - in: query
           name: appointmentId
           required: true
           schema:
@@ -124,16 +134,8 @@ paths:
             format: int64
       responses:
         '200':
-          description: Appointment deleted successfully.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Appointment deleted successfully"
+          description: "Appointment deleted successfully"
         '403':
-          description: Access denied or appointment not found.
+          description: "Appointment not found"
         '404':
-          description: API not found.
+          description: "API not found"

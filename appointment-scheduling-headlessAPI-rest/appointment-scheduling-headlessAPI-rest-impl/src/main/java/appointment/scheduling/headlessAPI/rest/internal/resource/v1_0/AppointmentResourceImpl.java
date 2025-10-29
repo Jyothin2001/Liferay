@@ -11,27 +11,29 @@ import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.security.access.control.AccessControlled;
 
-import com.liferay.portal.vulcan.pagination.Page;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+
+import javax.ws.rs.core.Response;
+
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONObject;
+
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
- * REST implementation for Appointment API
- * Provides CRUD operations for Appointment entity.
+ * Custom implementation of AppointmentResource
+ * This class connects your REST API with the Service Builder layer.
  *
  * @author Jyothi
  */
-@AccessControlled(guestAccessEnabled = true)
 @Component(
     properties = "OSGI-INF/liferay/rest/v1_0/appointment.properties",
     scope = ServiceScope.PROTOTYPE,
@@ -41,121 +43,190 @@ public class AppointmentResourceImpl extends BaseAppointmentResourceImpl {
 
     private static final Log _log = LogFactoryUtil.getLog(AppointmentResourceImpl.class);
 
-    // --------------------------------------------------
-    // 🟢 GET - Fetch all appointments
-    // --------------------------------------------------
-//    @GET
-//    @Path("/get-appointments")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<Appointment> getAppointments() {
-//        List<appointmentTable> appointments = appointmentTableLocalServiceUtil.getappointmentTables(-1, -1);
-//        List<Appointment> list = new ArrayList<>();
+    /**
+     * GET /appointments
+     * Returns all appointments in JSON format.
+     */
+    
+//    @Override
+//    public String getAppointments() throws Exception {
+//        try {
+//            List<appointmentTable> appointments = appointmentTableLocalServiceUtil.getappointmentTables(-1, -1);
+//            List<Appointment> list = new ArrayList<>();
 //
-//        for (appointmentTable a : appointments) {
-//            list.add(toDTO(a));
+//            for (appointmentTable a : appointments) {
+//                list.add(toDTO(a));
+//            }
+//
+//            // Convert list to JSON manually
+//            StringBuilder sb = new StringBuilder();
+//            sb.append("[");
+//            for (int i = 0; i < list.size(); i++) {
+//                Appointment appt = list.get(i);
+//                sb.append("{")
+//                    .append("\"appointmentId\":").append(appt.getAppointmentId()).append(",")
+//                    .append("\"doctorId\":").append(appt.getDoctorId()).append(",")
+//                    .append("\"patientId\":").append(appt.getPatientId()).append(",")
+//                    .append("\"status\":\"").append(appt.getStatus()).append("\"")
+//                    .append("}");
+//                if (i < list.size() - 1) {
+//                    sb.append(",");
+//                }
+//            }
+//            sb.append("]");
+//            return sb.toString();
+//
+//        } catch (Exception e) {
+//            _log.error("Error fetching appointments: " + e.getMessage(), e);
+//            return "[]";
 //        }
-//
-//        return list;  // ✅ Works perfectly now
 //    }
-
-
-
-    // 🟢 POST - Add new appointment
-    @POST
-    @Path("/add-appointment")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Appointment addAppointment(Appointment dto) {
+    @Override
+    public String getAppointments() throws Exception {
         try {
-            appointmentTable a = appointmentTableLocalServiceUtil.createappointmentTable(0);
+            List<appointmentTable> appointments = appointmentTableLocalServiceUtil.getappointmentTables(-1, -1);
+            JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
-            a.setDoctorId(dto.getDoctorId());
-            a.setPatientId(dto.getPatientId());
-            a.setAppointmentDate(dto.getAppointmentDate());
-            a.setTimeSlot(dto.getTimeSlot());
-            a.setStatus(dto.getStatus());
+            for (appointmentTable a : appointments) {
+                Appointment appt = toDTO(a);
 
-            a = appointmentTableLocalServiceUtil.addappointmentTable(a);
+                JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
+                jsonObj.put("appointmentId", appt.getAppointmentId());
+                jsonObj.put("doctorId", appt.getDoctorId());
+                jsonObj.put("patientId", appt.getPatientId());
+                jsonObj.put("status", appt.getStatus());
 
-            return toDTO(a);
+                jsonArray.put(jsonObj);
+            }
+
+            return jsonArray.toString();
+
         } catch (Exception e) {
-            _log.error("Error creating appointment", e);
-            throw new WebApplicationException("Unable to create appointment", e);
+            _log.error("Error fetching appointments: " + e.getMessage(), e);
+            return "[]";
+        }
+    }
+    /**
+     * POST /appointments/add
+     * Adds a new appointment record.
+     */
+    @Override
+    public Response addAppointment(Appointment appointment) throws Exception {
+        try {
+            long userId = contextUser.getUserId();
+            long companyId = contextCompany.getCompanyId();
+
+            appointmentTable app = appointmentTableLocalServiceUtil.createappointmentTable(0);
+
+            app.setCompanyId(companyId);
+            app.setUserId(userId);
+            app.setUserName(contextUser.getFullName());
+            app.setCreateDate(new Date());
+            app.setModifiedDate(new Date());
+
+            app.setDoctorId(appointment.getDoctorId());
+            app.setPatientId(appointment.getPatientId());
+            app.setAppointmentDate(appointment.getAppointmentDate() != null ? 
+                appointment.getAppointmentDate() : new Date());
+            app.setTimeSlot(appointment.getTimeSlot());
+            app.setStatus(appointment.getStatus());
+
+            app = appointmentTableLocalServiceUtil.addappointmentTable(app);
+
+            return Response.ok(toDTO(app)).build();
+
+        } catch (Exception e) {
+            _log.error("Error adding appointment: " + e.getMessage(), e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\":\"Unable to add appointment\"}")
+                    .build();
         }
     }
 
-    // 🟢 PUT - Update existing appointment
-    @PUT
-    @Path("/update-appointment")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Appointment updateAppointment(Appointment dto) {
+    /**
+     * PUT /appointments/{appointmentId}
+     * Updates existing appointment details.
+     */
+    @Override
+    public Response updateAppointment(Integer appointmentId, Appointment appointment) throws Exception {
         try {
-            // 🔹 Fetch existing appointment record using ID
-            appointmentTable a = appointmentTableLocalServiceUtil.getappointmentTable(dto.getAppointmentId());
+            appointmentTable existing = appointmentTableLocalServiceUtil.getappointmentTable(appointmentId);
 
-            // 🔹 Update values from the DTO (only if provided)
-            if (dto.getDoctorId() != 0) {
-                a.setDoctorId(dto.getDoctorId());
-            }
+            existing.setModifiedDate(new Date());
+            existing.setDoctorId(appointment.getDoctorId());
+            existing.setPatientId(appointment.getPatientId());
+            existing.setAppointmentDate(appointment.getAppointmentDate());
+            existing.setTimeSlot(appointment.getTimeSlot());
+            existing.setStatus(appointment.getStatus());
 
-            if (dto.getPatientId() != 0) {
-                a.setPatientId(dto.getPatientId());
-            }
+            existing = appointmentTableLocalServiceUtil.updateappointmentTable(existing);
 
-            if (dto.getAppointmentDate() != null) {
-                a.setAppointmentDate(dto.getAppointmentDate());
-            }
-
-            if (dto.getTimeSlot() != null) {
-                a.setTimeSlot(dto.getTimeSlot());
-            }
-
-            if (dto.getStatus() != null && !dto.getStatus().isEmpty()) {
-                a.setStatus(dto.getStatus());
-            }
-
-            // 🔹 Save updated appointment to DB
-            a = appointmentTableLocalServiceUtil.updateappointmentTable(a);
-
-            // 🔹 Return updated DTO
-            return toDTO(a);
+            return Response.ok(toDTO(existing)).build();
 
         } catch (PortalException e) {
-            _log.error("Error updating appointment", e);
-            throw new NotFoundException("Appointment not found with ID: " + dto.getAppointmentId());
+            _log.error("Appointment not found with ID: " + appointmentId, e);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\":\"Appointment not found\"}")
+                    .build();
+        } catch (Exception e) {
+            _log.error("Error updating appointment: " + e.getMessage(), e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\":\"Unable to update appointment\"}")
+                    .build();
         }
     }
 
-
-    // 🟢 DELETE - Delete appointment
-    @DELETE
-    @Path("/delete-appointment")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String deleteAppointment(@QueryParam("appointmentId") long appointmentId) {
+    /**
+     * DELETE /appointments/delete?appointmentId={id}
+     * Deletes an appointment by ID.
+     */
+    @Override
+    public Response deleteAppointment(Long appointmentId) throws Exception {
         try {
             appointmentTableLocalServiceUtil.deleteappointmentTable(appointmentId);
-            return "Appointment deleted successfully";
+            return Response.ok("{\"message\":\"Appointment deleted successfully\"}").build();
+
         } catch (PortalException e) {
-            _log.error("Error deleting appointment", e);
-            throw new NotFoundException("Appointment not found");
+            _log.error("Appointment not found with ID: " + appointmentId, e);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\":\"Appointment not found\"}")
+                    .build();
+
+        } catch (Exception e) {
+            _log.error("Error deleting appointment: " + e.getMessage(), e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\":\"Unable to delete appointment\"}")
+                    .build();
         }
     }
 
-    // 🧩 DTO converter
-    private Appointment toDTO(appointmentTable a) {
+    /**
+     * Convert Service Builder model to DTO.
+     * It takes a database model (appointmentTable) and
+     * copies values into the REST DTO (Appointment).
+     */
+    private Appointment toDTO(appointmentTable model) {
         Appointment dto = new Appointment();
-        dto.setAppointmentId(a.getAppointmentId());
-        dto.setDoctorId(a.getDoctorId());
-        dto.setPatientId(a.getPatientId());
-        dto.setAppointmentDate(a.getAppointmentDate());
-        dto.setTimeSlot(a.getTimeSlot());
-        dto.setStatus(a.getStatus());
+
+        dto.setAppointmentId(model.getAppointmentId());
+        dto.setCompanyId(model.getCompanyId());
+        dto.setUserId(model.getUserId());
+        dto.setUserName(model.getUserName());
+        dto.setCreateDate(model.getCreateDate());
+        dto.setModifiedDate(model.getModifiedDate());
+        dto.setDoctorId(model.getDoctorId());
+        dto.setPatientId(model.getPatientId());
+        dto.setAppointmentDate(model.getAppointmentDate());
+        dto.setTimeSlot(model.getTimeSlot());
+        dto.setStatus(model.getStatus());
+
         return dto;
     }
 
-    @Override
-    public void setContextBatchUnsafeBiConsumer(
-        UnsafeBiConsumer<Collection<Appointment>, UnsafeFunction<Appointment, Appointment, Exception>, Exception> contextBatchUnsafeBiConsumer) {
-    }
+	@Override
+	public void setContextBatchUnsafeBiConsumer(
+			UnsafeBiConsumer<Collection<Appointment>, UnsafeFunction<Appointment, Appointment, Exception>, Exception> contextBatchUnsafeBiConsumer) {
+		// TODO Auto-generated method stub
+		
+	}
 }

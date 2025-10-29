@@ -44,10 +44,12 @@ public class Query {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {appointments{appointmentId, doctorId, patientId, appointmentDate, timeSlot, status, message, data}}"}' -u 'test@liferay.com:test'
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {appointments{}}"}' -u 'test@liferay.com:test'
 	 */
-	@GraphQLField(description = "Fetch list of all appointments")
-	public Appointment appointments() throws Exception {
+	@GraphQLField(
+		description = "Retrieve a list of all scheduled appointments."
+	)
+	public String appointments() throws Exception {
 		return _applyComponentServiceObjects(
 			_appointmentResourceComponentServiceObjects,
 			this::_populateResourceContext,

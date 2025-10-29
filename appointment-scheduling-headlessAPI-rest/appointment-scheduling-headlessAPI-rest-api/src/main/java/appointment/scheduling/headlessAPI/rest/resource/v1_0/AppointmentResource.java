@@ -42,14 +42,15 @@ public interface AppointmentResource {
 		return FactoryHolder.factory.create();
 	}
 
-	public Appointment getAppointments() throws Exception;
+	public String getAppointments() throws Exception;
 
-	public Appointment addAppointment(Appointment appointment) throws Exception;
+	public Response addAppointment(Appointment appointment) throws Exception;
 
-	public Appointment updateAppointment(Appointment appointment)
+	public Response updateAppointment(
+			Integer appointmentId, Appointment appointment)
 		throws Exception;
 
-	public Appointment deleteAppointment(Long appointmentId) throws Exception;
+	public Response deleteAppointment(Long appointmentId) throws Exception;
 
 	public Response deleteAppointmentBatch(String callbackURL, Object object)
 		throws Exception;

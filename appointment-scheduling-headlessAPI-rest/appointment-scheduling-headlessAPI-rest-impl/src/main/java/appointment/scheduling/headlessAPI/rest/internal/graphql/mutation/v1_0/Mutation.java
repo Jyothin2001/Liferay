@@ -39,8 +39,8 @@ public class Mutation {
 			appointmentResourceComponentServiceObjects;
 	}
 
-	@GraphQLField(description = "Book a new appointment")
-	public Appointment addAppointment(
+	@GraphQLField(description = "Create a new appointment entry in the system.")
+	public Response addAppointment(
 			@GraphQLName("appointment") Appointment appointment)
 		throws Exception {
 
@@ -51,8 +51,11 @@ public class Mutation {
 				appointment));
 	}
 
-	@GraphQLField(description = "Update existing appointment")
-	public Appointment updateAppointment(
+	@GraphQLField(
+		description = "Update details of an existing appointment by its ID."
+	)
+	public Response updateAppointment(
+			@GraphQLName("appointmentId") Integer appointmentId,
 			@GraphQLName("appointment") Appointment appointment)
 		throws Exception {
 
@@ -60,11 +63,13 @@ public class Mutation {
 			_appointmentResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			appointmentResource -> appointmentResource.updateAppointment(
-				appointment));
+				appointmentId, appointment));
 	}
 
-	@GraphQLField(description = "Delete appointment by ID")
-	public Appointment deleteAppointment(
+	@GraphQLField(
+		description = "Delete an appointment from the system by its ID."
+	)
+	public Response deleteAppointment(
 			@GraphQLName("appointmentId") Long appointmentId)
 		throws Exception {
 

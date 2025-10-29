@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Reference;
 )
 @Generated("")
 @OpenAPIDefinition(
-	info = @Info(description = "AppointmentHeadlessDelivery REST API for Doctor-Patient Appointment Scheduling", license = @License(name = "Apache 2.0", url = "http://www.apache.org/licenses/LICENSE-2.0.html"), title = "AppointmentHeadlessDelivery", version = "v1.0")
+	info = @Info(description = "Headless REST API for managing appointments.", license = @License(name = "Apache 2.0", url = "http://www.apache.org/licenses/LICENSE-2.0.html"), title = "AppointmentSchedulingHeadless", version = "v1.0")
 )
 @Path("/v1.0")
 public class OpenAPIResourceImpl {

@@ -4,6 +4,7 @@ import appointment.scheduling.headlessAPI.rest.dto.v1_0.Appointment;
 import appointment.scheduling.headlessAPI.rest.resource.v1_0.AppointmentResource;
 
 import com.liferay.petra.function.UnsafeFunction;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.GroupedModel;
 import com.liferay.portal.kernel.search.Sort;
@@ -56,73 +57,85 @@ public abstract class BaseAppointmentResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'GET' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/get-appointments'  -u 'test@liferay.com:test'
+	 * curl -X 'GET' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/appointments'  -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Fetch list of all appointments"
+		description = "Retrieve a list of all scheduled appointments."
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
 		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Appointment")}
 	)
 	@javax.ws.rs.GET
-	@javax.ws.rs.Path("/get-appointments")
-	@javax.ws.rs.Produces({"application/json", "application/xml"})
+	@javax.ws.rs.Path("/appointments")
 	@Override
-	public Appointment getAppointments() throws Exception {
-		return new Appointment();
+	public String getAppointments() throws Exception {
+		return StringPool.BLANK;
 	}
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'POST' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/add-appointment' -d $'{"appointmentDate": ___, "appointmentId": ___, "data": ___, "doctorId": ___, "patientId": ___, "status": ___, "timeSlot": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'POST' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/appointments/add' -d $'{"appointmentDate": ___, "appointmentId": ___, "companyId": ___, "createDate": ___, "data": ___, "doctorId": ___, "modifiedDate": ___, "patientId": ___, "status": ___, "timeSlot": ___, "userId": ___, "userName": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Book a new appointment"
+		description = "Create a new appointment entry in the system."
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
 		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Appointment")}
 	)
 	@javax.ws.rs.Consumes({"application/json", "application/xml"})
-	@javax.ws.rs.Path("/add-appointment")
+	@javax.ws.rs.Path("/appointments/add")
 	@javax.ws.rs.POST
-	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Appointment addAppointment(Appointment appointment)
-		throws Exception {
+	public Response addAppointment(Appointment appointment) throws Exception {
+		Response.ResponseBuilder responseBuilder = Response.ok();
 
-		return new Appointment();
+		return responseBuilder.build();
 	}
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PUT' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/update-appointment' -d $'{"appointmentDate": ___, "appointmentId": ___, "data": ___, "doctorId": ___, "patientId": ___, "status": ___, "timeSlot": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PUT' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/appointments/{appointmentId}' -d $'{"appointmentDate": ___, "appointmentId": ___, "companyId": ___, "createDate": ___, "data": ___, "doctorId": ___, "modifiedDate": ___, "patientId": ___, "status": ___, "timeSlot": ___, "userId": ___, "userName": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Update existing appointment"
+		description = "Update details of an existing appointment by its ID."
+	)
+	@io.swagger.v3.oas.annotations.Parameters(
+		value = {
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
+				name = "appointmentId"
+			)
+		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
 		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Appointment")}
 	)
 	@javax.ws.rs.Consumes({"application/json", "application/xml"})
-	@javax.ws.rs.Path("/update-appointment")
-	@javax.ws.rs.Produces({"application/json", "application/xml"})
+	@javax.ws.rs.Path("/appointments/{appointmentId}")
 	@javax.ws.rs.PUT
 	@Override
-	public Appointment updateAppointment(Appointment appointment)
+	public Response updateAppointment(
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.validation.constraints.NotNull
+			@javax.ws.rs.PathParam("appointmentId")
+			Integer appointmentId,
+			Appointment appointment)
 		throws Exception {
 
-		return new Appointment();
+		Response.ResponseBuilder responseBuilder = Response.ok();
+
+		return responseBuilder.build();
 	}
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'DELETE' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/delete-appointment'  -u 'test@liferay.com:test'
+	 * curl -X 'DELETE' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/appointments/delete'  -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Delete appointment by ID"
+		description = "Delete an appointment from the system by its ID."
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -136,23 +149,24 @@ public abstract class BaseAppointmentResourceImpl
 		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Appointment")}
 	)
 	@javax.ws.rs.DELETE
-	@javax.ws.rs.Path("/delete-appointment")
-	@javax.ws.rs.Produces({"application/json", "application/xml"})
+	@javax.ws.rs.Path("/appointments/delete")
 	@Override
-	public Appointment deleteAppointment(
+	public Response deleteAppointment(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.QueryParam("appointmentId")
 			Long appointmentId)
 		throws Exception {
 
-		return new Appointment();
+		Response.ResponseBuilder responseBuilder = Response.ok();
+
+		return responseBuilder.build();
 	}
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'DELETE' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/delete-appointment/batch'  -u 'test@liferay.com:test'
+	 * curl -X 'DELETE' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/appointments/delete/batch'  -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -167,7 +181,7 @@ public abstract class BaseAppointmentResourceImpl
 	)
 	@javax.ws.rs.Consumes("application/json")
 	@javax.ws.rs.DELETE
-	@javax.ws.rs.Path("/delete-appointment/batch")
+	@javax.ws.rs.Path("/appointments/delete/batch")
 	@javax.ws.rs.Produces("application/json")
 	@Override
 	public Response deleteAppointmentBatch(
