@@ -75,7 +75,7 @@ public abstract class BaseAppointmentResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'POST' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/appointments/add' -d $'{"appointmentDate": ___, "appointmentId": ___, "companyId": ___, "createDate": ___, "data": ___, "doctorId": ___, "modifiedDate": ___, "patientId": ___, "status": ___, "timeSlot": ___, "userId": ___, "userName": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'POST' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/appointments/add' -d $'{"appointmentDate": ___, "appointmentId": ___, "companyId": ___, "createDate": ___, "doctorId": ___, "modifiedDate": ___, "patientId": ___, "status": ___, "timeSlot": ___, "userId": ___, "userName": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
 		description = "Create a new appointment entry in the system."
@@ -96,10 +96,46 @@ public abstract class BaseAppointmentResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PUT' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/appointments/{appointmentId}' -d $'{"appointmentDate": ___, "appointmentId": ___, "companyId": ___, "createDate": ___, "data": ___, "doctorId": ___, "modifiedDate": ___, "patientId": ___, "status": ___, "timeSlot": ___, "userId": ___, "userName": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PATCH' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/appointments/{appointmentId}' -d $'{"appointmentDate": ___, "appointmentId": ___, "companyId": ___, "createDate": ___, "doctorId": ___, "modifiedDate": ___, "patientId": ___, "status": ___, "timeSlot": ___, "userId": ___, "userName": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Update details of an existing appointment by its ID."
+		description = "Update only specific fields (e.g., status, timeSlot) without replacing entire record."
+	)
+	@io.swagger.v3.oas.annotations.Parameters(
+		value = {
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
+				name = "appointmentId"
+			)
+		}
+	)
+	@io.swagger.v3.oas.annotations.tags.Tags(
+		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Appointment")}
+	)
+	@javax.ws.rs.Consumes({"application/json", "application/xml"})
+	@javax.ws.rs.PATCH
+	@javax.ws.rs.Path("/appointments/{appointmentId}")
+	@Override
+	public Response patchAppointment(
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.validation.constraints.NotNull
+			@javax.ws.rs.PathParam("appointmentId")
+			Long appointmentId,
+			Appointment appointment)
+		throws Exception {
+
+		Response.ResponseBuilder responseBuilder = Response.ok();
+
+		return responseBuilder.build();
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -X 'PUT' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/appointments/{appointmentId}' -d $'{"appointmentDate": ___, "appointmentId": ___, "companyId": ___, "createDate": ___, "doctorId": ___, "modifiedDate": ___, "patientId": ___, "status": ___, "timeSlot": ___, "userId": ___, "userName": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 */
+	@io.swagger.v3.oas.annotations.Operation(
+		description = "Replace an existing appointment with all new details."
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -120,7 +156,7 @@ public abstract class BaseAppointmentResourceImpl
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.PathParam("appointmentId")
-			Integer appointmentId,
+			Long appointmentId,
 			Appointment appointment)
 		throws Exception {
 
@@ -134,9 +170,6 @@ public abstract class BaseAppointmentResourceImpl
 	 *
 	 * curl -X 'DELETE' 'http://localhost:8080/o/appointment-scheduling-headlessAPI-rest/v1.0/appointments/delete'  -u 'test@liferay.com:test'
 	 */
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Delete an appointment from the system by its ID."
-	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(

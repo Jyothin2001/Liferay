@@ -52,10 +52,25 @@ public class Mutation {
 	}
 
 	@GraphQLField(
-		description = "Update details of an existing appointment by its ID."
+		description = "Update only specific fields (e.g., status, timeSlot) without replacing entire record."
+	)
+	public Response patchAppointment(
+			@GraphQLName("appointmentId") Long appointmentId,
+			@GraphQLName("appointment") Appointment appointment)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_appointmentResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			appointmentResource -> appointmentResource.patchAppointment(
+				appointmentId, appointment));
+	}
+
+	@GraphQLField(
+		description = "Replace an existing appointment with all new details."
 	)
 	public Response updateAppointment(
-			@GraphQLName("appointmentId") Integer appointmentId,
+			@GraphQLName("appointmentId") Long appointmentId,
 			@GraphQLName("appointment") Appointment appointment)
 		throws Exception {
 
@@ -66,9 +81,7 @@ public class Mutation {
 				appointmentId, appointment));
 	}
 
-	@GraphQLField(
-		description = "Delete an appointment from the system by its ID."
-	)
+	@GraphQLField
 	public Response deleteAppointment(
 			@GraphQLName("appointmentId") Long appointmentId)
 		throws Exception {

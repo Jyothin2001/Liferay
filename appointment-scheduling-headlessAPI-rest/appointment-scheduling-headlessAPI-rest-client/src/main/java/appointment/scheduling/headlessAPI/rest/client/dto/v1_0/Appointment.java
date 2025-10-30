@@ -105,25 +105,6 @@ public class Appointment implements Cloneable, Serializable {
 
 	protected Date createDate;
 
-	public Object getData() {
-		return data;
-	}
-
-	public void setData(Object data) {
-		this.data = data;
-	}
-
-	public void setData(UnsafeSupplier<Object, Exception> dataUnsafeSupplier) {
-		try {
-			data = dataUnsafeSupplier.get();
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected Object data;
-
 	public Long getDoctorId() {
 		return doctorId;
 	}
@@ -144,27 +125,6 @@ public class Appointment implements Cloneable, Serializable {
 	}
 
 	protected Long doctorId;
-
-	public Object getMessage() {
-		return message;
-	}
-
-	public void setMessage(Object message) {
-		this.message = message;
-	}
-
-	public void setMessage(
-		UnsafeSupplier<Object, Exception> messageUnsafeSupplier) {
-
-		try {
-			message = messageUnsafeSupplier.get();
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected Object message;
 
 	public Date getModifiedDate() {
 		return modifiedDate;

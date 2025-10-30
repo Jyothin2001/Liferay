@@ -191,6 +191,11 @@ public abstract class BaseAppointmentResourceTestCase {
 	}
 
 	@Test
+	public void testPatchAppointment() throws Exception {
+		Assert.assertTrue(false);
+	}
+
+	@Test
 	public void testUpdateAppointment() throws Exception {
 		Assert.assertTrue(false);
 	}
@@ -310,24 +315,8 @@ public abstract class BaseAppointmentResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("data", additionalAssertFieldName)) {
-				if (appointment.getData() == null) {
-					valid = false;
-				}
-
-				continue;
-			}
-
 			if (Objects.equals("doctorId", additionalAssertFieldName)) {
 				if (appointment.getDoctorId() == null) {
-					valid = false;
-				}
-
-				continue;
-			}
-
-			if (Objects.equals("message", additionalAssertFieldName)) {
-				if (appointment.getMessage() == null) {
 					valid = false;
 				}
 
@@ -519,30 +508,10 @@ public abstract class BaseAppointmentResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("data", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(
-						appointment1.getData(), appointment2.getData())) {
-
-					return false;
-				}
-
-				continue;
-			}
-
 			if (Objects.equals("doctorId", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
 						appointment1.getDoctorId(),
 						appointment2.getDoctorId())) {
-
-					return false;
-				}
-
-				continue;
-			}
-
-			if (Objects.equals("message", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(
-						appointment1.getMessage(), appointment2.getMessage())) {
 
 					return false;
 				}
@@ -785,17 +754,7 @@ public abstract class BaseAppointmentResourceTestCase {
 			return sb.toString();
 		}
 
-		if (entityFieldName.equals("data")) {
-			throw new IllegalArgumentException(
-				"Invalid entity field " + entityFieldName);
-		}
-
 		if (entityFieldName.equals("doctorId")) {
-			throw new IllegalArgumentException(
-				"Invalid entity field " + entityFieldName);
-		}
-
-		if (entityFieldName.equals("message")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
 		}

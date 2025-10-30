@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.vulcan.graphql.annotation.GraphQLField;
 import com.liferay.portal.vulcan.graphql.annotation.GraphQLName;
@@ -27,8 +26,6 @@ import java.util.Set;
 
 import javax.annotation.Generated;
 
-import javax.validation.Valid;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -37,8 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Generated("")
 @GraphQLName(
-	description = "Represents an appointment entity in the Appointment Scheduling system.",
-	value = "Appointment"
+	description = "Represents an appointment record.", value = "Appointment"
 )
 @JsonFilter("Liferay.Vulcan")
 @XmlRootElement(name = "Appointment")
@@ -165,33 +161,6 @@ public class Appointment implements Serializable {
 	protected Date createDate;
 
 	@Schema
-	@Valid
-	public Object getData() {
-		return data;
-	}
-
-	public void setData(Object data) {
-		this.data = data;
-	}
-
-	@JsonIgnore
-	public void setData(UnsafeSupplier<Object, Exception> dataUnsafeSupplier) {
-		try {
-			data = dataUnsafeSupplier.get();
-		}
-		catch (RuntimeException re) {
-			throw re;
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected Object data;
-
-	@Schema
 	public Long getDoctorId() {
 		return doctorId;
 	}
@@ -218,35 +187,6 @@ public class Appointment implements Serializable {
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected Long doctorId;
-
-	@Schema
-	@Valid
-	public Object getMessage() {
-		return message;
-	}
-
-	public void setMessage(Object message) {
-		this.message = message;
-	}
-
-	@JsonIgnore
-	public void setMessage(
-		UnsafeSupplier<Object, Exception> messageUnsafeSupplier) {
-
-		try {
-			message = messageUnsafeSupplier.get();
-		}
-		catch (RuntimeException re) {
-			throw re;
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	protected Object message;
 
 	@Schema
 	public Date getModifiedDate() {
@@ -494,26 +434,6 @@ public class Appointment implements Serializable {
 			sb.append("\"");
 		}
 
-		if (data != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"data\": ");
-
-			if (data instanceof Map) {
-				sb.append(JSONFactoryUtil.createJSONObject((Map<?, ?>)data));
-			}
-			else if (data instanceof String) {
-				sb.append("\"");
-				sb.append(_escape((String)data));
-				sb.append("\"");
-			}
-			else {
-				sb.append(data);
-			}
-		}
-
 		if (doctorId != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -522,26 +442,6 @@ public class Appointment implements Serializable {
 			sb.append("\"doctorId\": ");
 
 			sb.append(doctorId);
-		}
-
-		if (message != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"message\": ");
-
-			if (message instanceof Map) {
-				sb.append(JSONFactoryUtil.createJSONObject((Map<?, ?>)message));
-			}
-			else if (message instanceof String) {
-				sb.append("\"");
-				sb.append(_escape((String)message));
-				sb.append("\"");
-			}
-			else {
-				sb.append(message);
-			}
 		}
 
 		if (modifiedDate != null) {

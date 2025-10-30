@@ -11,26 +11,12 @@ info:
 components:
   schemas:
     Appointment:
-      description: "Represents an appointment entity in the Appointment Scheduling system."
       type: object
+      description: "Represents an appointment record."
       properties:
         appointmentId:
           type: integer
           format: int64
-        companyId:
-          type: integer
-          format: int64
-        userId:
-          type: integer
-          format: int64
-        userName:
-          type: string
-        createDate:
-          type: string
-          format: date-time
-        modifiedDate:
-          type: string
-          format: date-time
         doctorId:
           type: integer
           format: int64
@@ -44,12 +30,27 @@ components:
           type: string
         status:
           type: string
-        message:
-          type: object
-          readOnly: true
-        data:
-          type: object
-
+        # Optional internal fields (hidden in Swagger)
+        companyId:
+          type: integer
+          format: int64
+          x-hidden: true
+        userId:
+          type: integer
+          format: int64
+          x-hidden: true
+        userName:
+          type: string
+          x-hidden: true
+        createDate:
+          type: string
+          format: date-time
+          x-hidden: true
+        modifiedDate:
+          type: string
+          format: date-time
+          x-hidden: true
+     
 paths:
   "/appointments":
     get:
@@ -73,7 +74,6 @@ paths:
       description: "Create a new appointment entry in the system."
       requestBody:
         required: true
-        description: "Appointment details to create"
         content:
           application/json:
             schema:
@@ -93,17 +93,17 @@ paths:
     put:
       operationId: updateAppointment
       tags: ["Appointment"]
-      summary: "Update an appointment"
-      description: "Update details of an existing appointment by its ID."
+      summary: "Update an appointment completely"
+      description: "Replace an existing appointment with all new details."
       parameters:
         - name: appointmentId
           in: path
           required: true
           schema:
             type: integer
+            format: int64
       requestBody:
         required: true
-        description: "Updated appointment details"
         content:
           application/json:
             schema:
@@ -119,15 +119,43 @@ paths:
         '404':
           description: "API not found"
 
+    patch:
+      operationId: patchAppointment
+      tags: ["Appointment"]
+      summary: "Partially update an appointment"
+      description: "Update only specific fields (e.g., status, timeSlot) without replacing entire record."
+      parameters:
+        - name: appointmentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Appointment"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Appointment"
+      responses:
+        '200':
+          description: "Appointment patched successfully"
+        '403':
+          description: "Appointment not found"
+        '404':
+          description: "API not found"
+
   "/appointments/delete":
     delete:
       operationId: deleteAppointment
       tags: ["Appointment"]
       summary: "Delete an appointment"
-      description: "Delete an appointment from the system by its ID."
       parameters:
-        - in: query
-          name: appointmentId
+        - name: appointmentId
+          in: query
           required: true
           schema:
             type: integer

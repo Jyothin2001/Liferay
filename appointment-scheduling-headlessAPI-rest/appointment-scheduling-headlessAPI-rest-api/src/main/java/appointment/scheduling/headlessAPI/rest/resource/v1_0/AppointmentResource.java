@@ -46,8 +46,12 @@ public interface AppointmentResource {
 
 	public Response addAppointment(Appointment appointment) throws Exception;
 
+	public Response patchAppointment(
+			Long appointmentId, Appointment appointment)
+		throws Exception;
+
 	public Response updateAppointment(
-			Integer appointmentId, Appointment appointment)
+			Long appointmentId, Appointment appointment)
 		throws Exception;
 
 	public Response deleteAppointment(Long appointmentId) throws Exception;

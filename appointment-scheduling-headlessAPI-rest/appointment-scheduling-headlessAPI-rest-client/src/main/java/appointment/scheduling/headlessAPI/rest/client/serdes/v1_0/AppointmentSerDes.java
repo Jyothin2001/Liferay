@@ -98,23 +98,6 @@ public class AppointmentSerDes {
 			sb.append("\"");
 		}
 
-		if (appointment.getData() != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"data\": ");
-
-			if (appointment.getData() instanceof String) {
-				sb.append("\"");
-				sb.append((String)appointment.getData());
-				sb.append("\"");
-			}
-			else {
-				sb.append(appointment.getData());
-			}
-		}
-
 		if (appointment.getDoctorId() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -123,23 +106,6 @@ public class AppointmentSerDes {
 			sb.append("\"doctorId\": ");
 
 			sb.append(appointment.getDoctorId());
-		}
-
-		if (appointment.getMessage() != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"message\": ");
-
-			if (appointment.getMessage() instanceof String) {
-				sb.append("\"");
-				sb.append((String)appointment.getMessage());
-				sb.append("\"");
-			}
-			else {
-				sb.append(appointment.getMessage());
-			}
 		}
 
 		if (appointment.getModifiedDate() != null) {
@@ -276,25 +242,11 @@ public class AppointmentSerDes {
 				liferayToJSONDateFormat.format(appointment.getCreateDate()));
 		}
 
-		if (appointment.getData() == null) {
-			map.put("data", null);
-		}
-		else {
-			map.put("data", String.valueOf(appointment.getData()));
-		}
-
 		if (appointment.getDoctorId() == null) {
 			map.put("doctorId", null);
 		}
 		else {
 			map.put("doctorId", String.valueOf(appointment.getDoctorId()));
-		}
-
-		if (appointment.getMessage() == null) {
-			map.put("message", null);
-		}
-		else {
-			map.put("message", String.valueOf(appointment.getMessage()));
 		}
 
 		if (appointment.getModifiedDate() == null) {
@@ -386,20 +338,10 @@ public class AppointmentSerDes {
 						toDate((String)jsonParserFieldValue));
 				}
 			}
-			else if (Objects.equals(jsonParserFieldName, "data")) {
-				if (jsonParserFieldValue != null) {
-					appointment.setData((Object)jsonParserFieldValue);
-				}
-			}
 			else if (Objects.equals(jsonParserFieldName, "doctorId")) {
 				if (jsonParserFieldValue != null) {
 					appointment.setDoctorId(
 						Long.valueOf((String)jsonParserFieldValue));
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "message")) {
-				if (jsonParserFieldValue != null) {
-					appointment.setMessage((Object)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "modifiedDate")) {
