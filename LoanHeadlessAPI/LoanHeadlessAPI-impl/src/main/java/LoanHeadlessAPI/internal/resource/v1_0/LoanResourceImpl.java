@@ -23,7 +23,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 import LoanDB.service.LoanLocalServiceUtil;
 
 /**
- * @author Jyothi
+ * @author JyothiN
  */
 @Component(
 	properties = "OSGI-INF/liferay/rest/v1_0/loan.properties",

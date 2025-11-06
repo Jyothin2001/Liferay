@@ -17,7 +17,7 @@ import java.util.Date;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Brian Wing Shun Chan jyothi
  */
 @Component(
 	property = "model.class.name=LoanDB.model.Loan", service = AopService.class
