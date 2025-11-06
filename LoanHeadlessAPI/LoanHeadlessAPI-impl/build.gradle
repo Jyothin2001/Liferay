@@ -1,0 +1,11 @@
+dependencies {
+	api project(":modules:LoanHeadlessAPI:LoanHeadlessAPI-api")
+	
+     api project(":modules:LoanDB:LoanDB-api")
+     
+     compileOnly group: "javax.annotation", name: "javax.annotation-api", version: "1.3.2"
+     
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+group = "LoanHeadlessAPI"

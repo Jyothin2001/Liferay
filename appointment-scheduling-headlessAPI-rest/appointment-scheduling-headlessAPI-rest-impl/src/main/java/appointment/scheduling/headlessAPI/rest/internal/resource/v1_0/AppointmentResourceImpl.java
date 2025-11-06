@@ -254,9 +254,6 @@ public class AppointmentResourceImpl extends BaseAppointmentResourceImpl {
 
 
 
-
-
-
     private Date parseFlexibleDate(String dateStr) {
         if (dateStr == null || dateStr.isEmpty()) return null;
 

@@ -1,0 +1,10 @@
+Bundle-Name: LoanDB-api
+Bundle-SymbolicName: LoanDB.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	LoanDB.exception,\
+	LoanDB.model,\
+	LoanDB.service,\
+	LoanDB.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../LoanDB-service/service.xml

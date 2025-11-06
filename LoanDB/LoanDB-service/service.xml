@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="LoanDB">
+	<namespace>ATS</namespace>
+	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
+	<entity local-service="true" name="Loan" remote-service="false" uuid="true">
+
+		<!-- PK fields -->
+
+		<column name="loanId" primary="true" type="long" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		
+    
+    <column name="customerId" type="long" />
+    <column name="amount" type="double" />
+    <column name="interestRate" type="double" />
+    <column name="loanType" type="String" />
+    <column name="tenureMonths" type="int" />
+
+		
+	</entity>
+</service-builder>

@@ -1,0 +1,1 @@
+create unique index IX_665D52EB on ATS_Loan (uuid_[$COLUMN_LENGTH:75$], groupId);

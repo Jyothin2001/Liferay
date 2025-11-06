@@ -1,0 +1,5 @@
+Bundle-Name: LoanHeadlessAPI-test
+Bundle-SymbolicName: LoanHeadlessAPI.test
+Bundle-Version: 1.0.0
+-includeresource: LoanHeadlessAPI.client.jar=../LoanHeadlessAPI-client/build/libs/LoanHeadlessAPI.client-1.0.0.jar;lib:=true
+-provider-policy: ${replacestring;${range;[==,==]};.*,(.*)];$1}

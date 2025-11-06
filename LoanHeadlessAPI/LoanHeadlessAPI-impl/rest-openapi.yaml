@@ -1,0 +1,149 @@
+openapi: 3.0.1
+info:
+  title: "LoanDBHeadlessAPI"
+  version: v1.0
+  description: "Headless REST API for managing loans."
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+
+components:
+  schemas:
+    Loan:
+      description: "Represents a loan record."
+      type: object
+      properties:
+        loanId:
+          type: integer
+          format: int64
+        customerId:
+          type: integer
+          format: int64
+        amount:
+          type: number
+          format: double
+        interestRate:
+          type: number
+          format: double
+        loanType:
+          type: string
+          description: "Loan type or Asset Category ID"
+        tenureMonths:
+          type: integer
+          format: int32
+
+paths:
+  "/get-loans":
+    get:
+      operationId: getLoans
+      tags: ["Loan"]
+      summary: "Get all loans"
+      description: "Retrieve all loan records."
+      responses:
+        '200':
+          description: Loans listed successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Loan"
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Loan"
+        '403':
+          description: No loans found
+        '404':
+          description: API not found
+
+  "/add-loan":
+    post:
+      operationId: addLoan
+      tags: ["Loan"]
+      summary: "Add a new loan"
+      description: "Create a new loan record."
+      requestBody:
+        description: "Loan details to add"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Loan"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Loan"
+      responses:
+        '200':
+          description: Loan added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Loan"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Loan"
+        '403':
+          description: Loan could not be added
+        '404':
+          description: API not found
+
+  "/update-loan":
+    put:
+      operationId: updateLoan
+      tags: ["Loan"]
+      summary: "Update a loan"
+      description: "Update an existing loan record."
+      requestBody:
+        description: "Updated loan data"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Loan"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Loan"
+      responses:
+        '200':
+          description: Loan updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Loan"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Loan"
+        '403':
+          description: Loan update failed
+        '404':
+          description: API not found
+
+  "/delete-loan":
+    delete:
+      operationId: deleteLoan
+      tags: ["Loan"]
+      summary: "Delete a loan"
+      description: "Delete an existing loan record by ID."
+      parameters:
+        - in: query
+          name: loanId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Loan deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Loan"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Loan"
+        '403':
+          description: Loan deletion failed
+        '404':
+          description: API not found

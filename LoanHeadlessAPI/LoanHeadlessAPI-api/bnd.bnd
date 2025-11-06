@@ -1,0 +1,6 @@
+Bundle-Name: LoanHeadlessAPI-api
+Bundle-SymbolicName: LoanHeadlessAPI.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	LoanHeadlessAPI.dto.v1_0,\
+	LoanHeadlessAPI.resource.v1_0

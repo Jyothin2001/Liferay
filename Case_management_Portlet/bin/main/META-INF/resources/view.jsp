@@ -6,7 +6,9 @@
 <%@ page import="com.liferay.portal.kernel.model.User"%>
 <%@ page import="com.liferay.portal.kernel.service.UserLocalServiceUtil"%>
 
+
 <%
+
 String dashboardType = (String) request.getAttribute("dashboardType");
 if (dashboardType == null) dashboardType = "";
 
@@ -52,6 +54,16 @@ if("admin".equals(dashboardType)) {
                 My Assigned Cases
             <% } %>
         </h2>
+        
+        <% if ("admin".equals(dashboardType)) { %>
+    <portlet:renderURL var="bookAppointmentURL">
+        <portlet:param name="mvcRenderCommandName" value="/book_appointment" />
+    </portlet:renderURL>
+
+    <a href="<%= bookAppointmentURL %>" class="btn btn-primary">
+        🩺 Book Appointment
+    </a>
+<% } %>
 
         <% if("admin".equals(dashboardType)) { %>
             <portlet:renderURL var="addCaseURL">
@@ -59,6 +71,8 @@ if("admin".equals(dashboardType)) {
             </portlet:renderURL>
             <a href="<%= addCaseURL %>" class="add-case-btn">➕ Add Case</a>
         <% } %>
+        
+        
     </div>
 
     <div class="table-scroll">

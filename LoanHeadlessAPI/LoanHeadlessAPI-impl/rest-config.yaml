@@ -1,0 +1,9 @@
+apiDir: "../LoanHeadlessAPI-api/src/main/java"
+apiPackagePath: "LoanHeadlessAPI"
+application:
+    baseURI: "/LoanHeadlessAPI"
+    className: "LoanHeadlessAPIApplication"
+    name: "LoanHeadlessAPI"
+author: "Jyothi"
+clientDir: "../LoanHeadlessAPI-client/src/main/java"
+testDir: "../LoanHeadlessAPI-test/src/testIntegration/java"
