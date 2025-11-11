@@ -1,0 +1,3 @@
+import React,{useEffect,useState} from 'react'
+import { api } from '../api'
+export default function PublicHome(){const [posts,setPosts]=useState([]);useEffect(()=>{api.get('/posts').then(r=>setPosts(r.data)).catch(()=>setPosts([]))},[]);return(<div className='container'><h1>Welcome — Public Site</h1><p className='card'>Simple public landing with posts fetched from the API.</p>{posts.map(p=>(<div key={p.id} className='card'><h3>{p.title}</h3><p>{p.content}</p></div>))}</div>)}

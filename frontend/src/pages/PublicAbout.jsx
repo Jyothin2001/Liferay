@@ -1,0 +1,1 @@
+export default function PublicAbout(){return(<div className='container'><h2>About</h2><p className='card'>This is a minimal competition-ready website: public pages + admin panel backed by FastAPI.</p></div>)}
