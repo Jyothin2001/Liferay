@@ -1,0 +1,42 @@
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+.conversion-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+  font-family: Arial, sans-serif;
+}
+
+.conversion-table th,
+.conversion-table td {
+  border: 1px solid #ddd;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.conversion-table th {
+  background: linear-gradient(90deg, #4CAF50, #81C784); /* green gradient header */
+  color: white;
+  font-weight: bold;
+}
+
+.conversion-table tr:nth-child(even) {
+  background-color: #f2f2f2; /* light gray for even rows */
+}
+
+.conversion-table tr:nth-child(odd) {
+  background-color: #ffffff; /* white for odd rows */
+}
+
+.conversion-table tr:hover {
+  background-color: #94f4f6; /* yellow highlight on hover */
+  transition: 0.3s;
+}
+
+.conversion-table td {
+  color: #333;
+}

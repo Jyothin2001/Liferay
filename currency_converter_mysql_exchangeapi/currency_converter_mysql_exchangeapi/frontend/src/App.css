@@ -1,0 +1,161 @@
+/* -------------------- App Container -------------------- */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* full viewport height */
+}
+
+
+/* -------------------- Header -------------------- */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px; /* or your header height */
+  background-color: #2196F3;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-container h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.header-buttons button {
+  margin-left: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #64b5f6;
+  color: white;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.header-buttons button.active,
+.header-buttons button:hover {
+  background-color: #ffeb3b;
+  color: #333;
+}
+
+.container {
+  margin-top: 80px; /* slightly more than header height */
+  margin-bottom: 70px; /* to keep space above footer */
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* -------------------- Main Content -------------------- */
+
+.app-content {
+  flex: 1; /* take all space between header and footer */
+  padding-top: 80px; /* space for fixed header */
+  padding-bottom: 120px; /* space for sticky footer + extra */
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+
+/* -------------------- Footer -------------------- */
+.app-footer {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 15px 0;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  margin-top: auto; /* push footer to bottom if content is short */
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+/* -------------------- Converter Table -------------------- */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+.conversion-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+  font-family: Arial, sans-serif;
+}
+
+.conversion-table th,
+.conversion-table td {
+  border: 1px solid #ddd;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.conversion-table th {
+  background: linear-gradient(90deg, #4CAF50, #81C784); /* green gradient header */
+  color: white;
+  font-weight: bold;
+}
+
+.conversion-table tr:nth-child(even) {
+  background-color: #f2f2f2; /* light gray for even rows */
+}
+
+.conversion-table tr:nth-child(odd) {
+  background-color: #ffffff; /* white for odd rows */
+}
+
+.conversion-table tr:hover {
+  background-color: #ffe082; /* yellow highlight on hover */
+  transition: 0.3s;
+}
+
+.conversion-table td {
+  color: #333;
+}
+
+/* -------------------- Inputs & Buttons -------------------- */
+input {
+  padding: 8px 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #2196F3;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #1976D2;
+}
+
+
+
+
+
