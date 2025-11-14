@@ -61,6 +61,17 @@ class ConversionCreate(BaseModel):
     to_currency: str
     amount: float
 
+# class ConversionOut(BaseModel):
+#     id: int
+#     timestamp: datetime
+#     from_currency: str
+#     to_currency: str
+#     amount: float
+#     result: float
+#     rate: float
+
+#     model_config = {"from_attributes": True}  # for Pydantic V2
+
 class ConversionOut(BaseModel):
     id: int
     timestamp: datetime
@@ -68,9 +79,10 @@ class ConversionOut(BaseModel):
     to_currency: str
     amount: float
     result: float
-    rate: float
+    rate: Optional[float] = None   # ✅ FIXED
 
-    model_config = {"from_attributes": True}  # for Pydantic V2
+    model_config = {"from_attributes": True}
+
 
 class ConvertRequest(BaseModel):
     from_currency: str

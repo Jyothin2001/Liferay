@@ -1,156 +1,136 @@
-/* General body styling */
-body {
+/* -------------------- Admin Container -------------------- */
+.admin-container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 50px auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  margin: 0;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
-/* Card container */
-.card {
-  max-width: 1000px;
-  margin: 30px auto;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  background-color: #ffffff;
-  transition: transform 0.2s, box-shadow 0.2s;
+/* -------------------- Login Form -------------------- */
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #f7f9fc;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
-}
-
-/* Login section */
-.login-container h3 {
-  font-size: 1.8rem;
-  color: #1F2937;
-  margin-bottom: 16px;
+.login-container h2 {
   text-align: center;
-}
-
-.login-container label {
-  display: block;
-  margin-top: 12px;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: #374151;
+  margin-bottom: 20px;
+  color: #1f3c88;
 }
 
 .login-container input {
+  padding: 12px 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   width: 100%;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #D1D5DB;
-  outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
 }
 
-.login-container input:focus {
-  border-color: #3B82F6;
-  box-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
-}
-
-.login-button button {
-  width: 100%;
-  margin-top: 16px;
-  background: linear-gradient(90deg, #3B82F6 0%, #2563EB 100%);
+.login-btn {
+  padding: 12px;
+  font-size: 16px;
+  background-color: #1f3c88;
   color: white;
   border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-weight: 700;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: 0.3s;
 }
 
-.login-button button:hover {
-  background: linear-gradient(90deg, #2563EB 0%, #1D4ED8 100%);
-  transform: translateY(-2px);
+.login-btn:hover {
+  background-color: #3e8ed0;
 }
 
-/* Dashboard header */
+/* -------------------- Dashboard Header -------------------- */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  flex-wrap: wrap;
 }
 
-.dashboard-header h4 {
-  font-size: 1.6rem;
-  color: #111827;
-  margin: 0;
-}
-
-.logout-btn {
-  background: linear-gradient(90deg, #EF4444 0%, #DC2626 100%);
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 8px;
-  border: none;
-  font-weight: 600;
+.logout-link {
   cursor: pointer;
-  transition: transform 0.2s, background 0.3s;
+  color: #f44336;
+  font-weight: 500;
+  text-decoration: underline;
 }
 
-.logout-btn:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(90deg, #DC2626 0%, #B91C1C 100%);
-}
-
-/* Table styling */
+/* -------------------- Table -------------------- */
 .table-wrapper {
+  width: 100%;
   overflow-x: auto;
-  border-radius: 12px;
 }
 
 .admin-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .admin-table th {
-  text-align: left;
-  padding: 12px;
-  background-color: #F3F4F6;
-  color: #374151;
+  background-color: #1f3c88;
+  color: white;
   font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
-.admin-table td {
-  padding: 12px;
-  background-color: #ffffff;
-  color: #1F2937;
+.admin-table tr:nth-child(even) {
+  background-color: #f8f8f8;
 }
 
-.admin-table tbody tr {
-  border-radius: 12px;
-  transition: transform 0.2s, box-shadow 0.2s;
+.admin-table tr:hover {
+  background-color: #e0f7fa;
 }
 
-.admin-table tbody tr:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .dashboard-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+/* -------------------- Responsive -------------------- */
+@media (max-width: 1400px) {
+  .admin-table th,
+  .admin-table td {
+    padding: 10px;
+    font-size: 14px;
   }
+}
 
-  .logout-btn {
-    align-self: flex-start;
-  }
-
+@media (max-width: 1024px) {
   .admin-table th,
   .admin-table td {
     padding: 8px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .login-container {
+    width: 90%;
+    margin: 30px auto;
   }
 }

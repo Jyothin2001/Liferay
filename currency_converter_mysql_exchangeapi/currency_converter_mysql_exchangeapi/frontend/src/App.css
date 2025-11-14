@@ -2,33 +2,35 @@
 .app-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* full viewport height */
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f6f8;
+  color: #333;
 }
 
-
-/* -------------------- Header -------------------- */
+/* Header */
 .app-header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 70px; /* or your header height */
-  background-color: #2196F3;
+  height: 70px;
+  background-color: #1f3c88;
   color: white;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   z-index: 1000;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .header-container {
-  max-width: 1200px;
-  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .header-container h1 {
@@ -45,42 +47,136 @@
   background-color: #64b5f6;
   color: white;
   font-weight: 500;
-  transition: background-color 0.3s;
 }
 
-.header-buttons button.active,
-.header-buttons button:hover {
+.header-buttons button:hover,
+.header-buttons button.active {
   background-color: #ffeb3b;
   color: #333;
 }
 
-.container {
-  margin-top: 80px; /* slightly more than header height */
-  margin-bottom: 70px; /* to keep space above footer */
-  padding: 20px;
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 100px 20px 40px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Client/Admin container */
+.client-container, .admin-container {
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Inputs */
+input[type="email"],
+input[type="password"] {
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  width: 100%;
   box-sizing: border-box;
-  overflow-y: auto;
 }
 
-/* -------------------- Main Content -------------------- */
+/* Button group */
+.button-group {
+  display: flex;
+  gap: 10px;
+}
 
-.app-content {
-  flex: 1; /* take all space between header and footer */
-  padding-top: 80px; /* space for fixed header */
-  padding-bottom: 120px; /* space for sticky footer + extra */
-  padding-left: 20px;
-  padding-right: 20px;
+.button-group button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #1f3c88;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.button-group button:hover {
+  background: #3e5cb8;
+}
+
+/* Logout button */
+.logout-btn {
+  background: #ff5252;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #ff1744;
+}
+
+/* Terms and Conditions */
+.terms {
+  font-size: 14px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between checkbox and text */
+  margin: 10px 0;
+}
+
+.terms input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.terms a {
+  color: #1f3c88;
+  text-decoration: underline;
+}
+
+/* Disabled button style */
+.button-group button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+  color: #eee;
 }
 
 
-/* -------------------- Footer -------------------- */
+.extra-info {
+  font-size: 14px;
+  color: #555;
+  margin-top: 5px;
+}
+
+/* Admin header logout */
+.admin-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.logout-link {
+  color: #ff5252;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.logout-link:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
 .app-footer {
   background-color: #f5f5f5;
   color: #333;
-  padding: 15px 0;
+  padding: 20px 0;
   border-top: 1px solid #ddd;
   text-align: center;
-  margin-top: auto; /* push footer to bottom if content is short */
 }
 
 .footer-container {
@@ -89,73 +185,9 @@
   font-size: 14px;
 }
 
-/* -------------------- Converter Table -------------------- */
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  margin-top: 10px;
+/* Responsive */
+@media (max-width: 768px) {
+  .button-group {
+    flex-direction: column;
+  }
 }
-
-.conversion-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 600px;
-  font-family: Arial, sans-serif;
-}
-
-.conversion-table th,
-.conversion-table td {
-  border: 1px solid #ddd;
-  padding: 10px 12px;
-  text-align: center;
-}
-
-.conversion-table th {
-  background: linear-gradient(90deg, #4CAF50, #81C784); /* green gradient header */
-  color: white;
-  font-weight: bold;
-}
-
-.conversion-table tr:nth-child(even) {
-  background-color: #f2f2f2; /* light gray for even rows */
-}
-
-.conversion-table tr:nth-child(odd) {
-  background-color: #ffffff; /* white for odd rows */
-}
-
-.conversion-table tr:hover {
-  background-color: #ffe082; /* yellow highlight on hover */
-  transition: 0.3s;
-}
-
-.conversion-table td {
-  color: #333;
-}
-
-/* -------------------- Inputs & Buttons -------------------- */
-input {
-  padding: 8px 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #2196F3;
-  color: white;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #1976D2;
-}
-
-
-
-
-

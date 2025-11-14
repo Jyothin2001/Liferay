@@ -7,6 +7,8 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from auth import create_default_admin
 from database import init_db, get_db, engine, Base, SessionLocal
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from pydantic import EmailStr
 
 
 
@@ -51,8 +53,7 @@ app = FastAPI(title="Currency Converter API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173",   # React dev server
-    "http://127.0.0.1:5173","http://localhost:5174",     # ✅ add this
-        "http://127.0.0.1:5174"],  # tighten for production
+    "http://127.0.0.1:5173"],  # tighten for production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -70,6 +71,9 @@ def startup():
         print("🚀 Server started, admin checked/created successfully")
     finally:
         db.close()
+
+
+        
 
     # Root endpoint
 @app.get("/")

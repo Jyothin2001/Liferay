@@ -20,17 +20,34 @@ load_dotenv()
 API_KEY = os.getenv("EXCHANGE_API_KEY", "0d162a229870b719134c8e58")
 BASE_URL = "https://v6.exchangerate-api.com/v6"
 
+# def fetch_rate_pair(from_currency: str, to_currency: str):
+#     # Use ExchangeRate-API pair endpoint
+#     url = f"{BASE_URL}/{API_KEY}/pair/{from_currency}/{to_currency}"
+#     r = requests.get(url, timeout=10)
+#     r.raise_for_status()
+#     data = r.json()
+#     # Expected structure: {'result':'success', 'conversion_rate': ...}
+#     if data.get("result") == "success":
+#         return float(data.get("conversion_rate")), data
+#     else:
+#         raise Exception("ExchangeRate-API error: " + str(data))
+
+
 def fetch_rate_pair(from_currency: str, to_currency: str):
-    # Use ExchangeRate-API pair endpoint
     url = f"{BASE_URL}/{API_KEY}/pair/{from_currency}/{to_currency}"
-    r = requests.get(url, timeout=10)
-    r.raise_for_status()
-    data = r.json()
-    # Expected structure: {'result':'success', 'conversion_rate': ...}
-    if data.get("result") == "success":
-        return float(data.get("conversion_rate")), data
-    else:
-        raise Exception("ExchangeRate-API error: " + str(data))
+    try:
+        r = requests.get(url, timeout=30)  # increase timeout
+        r.raise_for_status()
+        data = r.json()
+        if data.get("result") == "success":
+            return float(data.get("conversion_rate")), data
+        else:
+            raise Exception("ExchangeRate-API returned error: " + str(data))
+    except requests.exceptions.Timeout:
+        raise Exception("ExchangeRate API timed out. Please try again later.")
+    except requests.exceptions.RequestException as e:
+        raise Exception(f"ExchangeRate API error: {e}")
+
 
 def fetch_supported_currencies():
     # ExchangeRate-API has /codes endpoint

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException,BackgroundTasks
 from sqlalchemy.orm import Session
 from database import get_db
 from models import User, ConversionLog
@@ -7,6 +7,9 @@ from auth import hash_password, verify_password, create_access_token, decode_acc
 from pydantic import BaseModel
 from routers import user_router
 import re
+from services.exchange_service import fetch_rate_pair
+from email_utils import send_registration_email
+
 
 
 router = APIRouter()
@@ -36,7 +39,7 @@ class UserAuth(BaseModel):
 #     return {"message": "User registered successfully"}
 
 @router.post("/register")
-def register_user(data: UserAuth, db: Session = Depends(get_db)):
+def register_user(data: UserAuth, db: Session = Depends(get_db), background_tasks: BackgroundTasks = None):
     email = data.email
     password = data.password
 
@@ -80,6 +83,8 @@ def register_user(data: UserAuth, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+    background_tasks.add_task(send_registration_email, new_user.email, new_user.email.split("@")[0])
+
 
     return {"message": "User registered successfully"}
 
@@ -107,7 +112,36 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     return user
 
 
-# ✅ Convert endpoint
+# # ✅ Convert endpoint
+# @router.post("/convert", response_model=ConvertResponse)
+# def convert_currency(
+#     req: ConvertRequest,
+#     db: Session = Depends(get_db),
+#     current_user: User = Depends(get_current_user)
+# ):
+#     if not current_user:
+#         raise HTTPException(status_code=401, detail="Unauthorized user")
+
+#     # Example placeholder conversion logic
+#     conversion = ConversionLog(
+#         user_id=current_user.id,
+#         from_currency=req.from_currency,
+#         to_currency=req.to_currency,
+#         amount=req.amount,
+#         result=req.amount * 83.0  # example fixed rate
+#     )
+#     db.add(conversion)
+#     db.commit()
+#     db.refresh(conversion)
+
+#     return {
+#         "from_currency": req.from_currency,
+#         "to_currency": req.to_currency,
+#         "amount": req.amount,
+#         "result": conversion.result
+#     }
+
+
 @router.post("/convert", response_model=ConvertResponse)
 def convert_currency(
     req: ConvertRequest,
@@ -117,23 +151,38 @@ def convert_currency(
     if not current_user:
         raise HTTPException(status_code=401, detail="Unauthorized user")
 
-    # Example placeholder conversion logic
+    # Fetch real-time rate dynamically
+    try:
+        rate, raw = fetch_rate_pair(req.from_currency.upper(), req.to_currency.upper())
+        if rate is None:
+            raise HTTPException(status_code=400, detail="Rate not found")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error fetching rate: {str(e)}")
+
+    # Calculate result dynamically
+    result = round(req.amount * rate, 6)
+
+    # Save conversion in DB
     conversion = ConversionLog(
         user_id=current_user.id,
-        from_currency=req.from_currency,
-        to_currency=req.to_currency,
+        from_currency=req.from_currency.upper(),
+        to_currency=req.to_currency.upper(),
         amount=req.amount,
-        result=req.amount * 83.0  # example fixed rate
+        result=result,
+        rate=rate,
+        raw_response=str(raw)
     )
     db.add(conversion)
     db.commit()
     db.refresh(conversion)
 
+    # Return response
     return {
-        "from_currency": req.from_currency,
-        "to_currency": req.to_currency,
+        "from_currency": req.from_currency.upper(),
+        "to_currency": req.to_currency.upper(),
         "amount": req.amount,
-        "result": conversion.result
+        "result": result,
+        "rate": rate
     }
 
 
