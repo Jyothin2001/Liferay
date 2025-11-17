@@ -1,42 +1,257 @@
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
+/* ---------------- Container ---------------- */
+.converter-container {
+  max-width: 900px;
+  padding: 25px;
+  background: linear-gradient(145deg, #ffffff10, #ffffff05); /* subtle gradient */
+  border-radius: 16px;
+  color: #0b0101; /* default text dark */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  /* Modern card shadow */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px); /* soft frosted glass effect */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover lift effect */
+.converter-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25), 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ---------------- Header ---------------- */
+.converter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.converter-header h2 {
+  color: #0b0101; /* dark heading */
+  margin: 0;
+}
+
+.logout-btn {
+  background: #ff4d4d;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #e04343;
+}
+
+/* ---------------- Form ---------------- */
+.converter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.converter-input {
+  min-width: 120px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  flex: 1;
+  max-width: 180px;
+  background: #fff;
+  color: #000; /* dark input text */
+  transition: box-shadow 0.2s ease, border 0.2s ease;
+}
+
+.converter-input:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 8px rgba(0, 191, 255, 0.4);
+}
+
+.converter-input::placeholder {
+  color: #888;
+}
+
+.converter-dropdowns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.converter-select {
+  flex-shrink: 0;
+  min-width: 180px;
+}
+
+/* React-select light dropdown */
+.converter-select .react-select__control {
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  transition: box-shadow 0.2s ease, border 0.2s ease;
+}
+
+.converter-select .react-select__control:hover {
+  border-color: #00bfff;
+  box-shadow: 0 0 6px rgba(0, 191, 255, 0.3);
+}
+
+.converter-select .react-select__single-value {
+  color: #000;
+}
+
+.converter-select .react-select__menu {
+  background: #fff;
+  color: #000;
+}
+
+.converter-select .react-select__option {
+  color: #000;
+}
+
+.converter-select .react-select__option--is-focused {
+  background: #e0f0ff;
+}
+
+/* ---------------- Buttons ---------------- */
+.swap-btn {
+  background: #00bfff;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  padding: 0 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.swap-btn:hover {
+  background: #0099cc;
+  transform: scale(1.1);
+}
+
+.convert-btn {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.convert-btn:hover {
+  background: #218838;
+  transform: scale(1.05);
+}
+
+/* ---------------- Error ---------------- */
+.converter-error {
   margin-top: 10px;
+  color: #ff4d4d;
+  font-weight: bold;
+}
+
+/* ---------------- Result ---------------- */
+.converter-result {
+  margin-top: 20px;
+  background: #ffffff10;
+  padding: 20px;
+  border-radius: 12px;
+  color: #000; /* dark text */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  backdrop-filter: blur(6px);
+}
+
+.converter-result h3,
+.converter-result div,
+.converter-history-select label {
+  color: #000; /* dark text inside result */
+}
+
+.converter-history-select select {
+  color: #000;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  margin-left: 10px;
+}
+
+/* ---------------- Table ---------------- */
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 20px;
 }
 
 .conversion-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px;
-  font-family: Arial, sans-serif;
 }
 
 .conversion-table th,
 .conversion-table td {
-  border: 1px solid #ddd;
-  padding: 10px 12px;
+  border: 1px solid #ccc;
+  padding: 10px;
   text-align: center;
+  color: #000; /* dark table text */
+  background: #fff;
+  border-radius: 6px;
 }
 
 .conversion-table th {
-  background: linear-gradient(90deg, #4CAF50, #81C784); /* green gradient header */
-  color: white;
-  font-weight: bold;
+  background: #f0f0f0; /* light header */
 }
 
-.conversion-table tr:nth-child(even) {
-  background-color: #f2f2f2; /* light gray for even rows */
+/* ---------------- Pagination ---------------- */
+.converter-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
 }
 
-.conversion-table tr:nth-child(odd) {
-  background-color: #ffffff; /* white for odd rows */
+.converter-pagination button,
+.converter-pagination span {
+  color: #000; /* dark text */
+  background: #00bfff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.conversion-table tr:hover {
-  background-color: #94f4f6; /* yellow highlight on hover */
-  transition: 0.3s;
+.converter-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.conversion-table td {
-  color: #333;
+.converter-pagination button:hover:not(:disabled) {
+  background: #0099cc;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 700px) {
+  .converter-dropdowns,
+  .converter-form {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .swap-btn {
+    margin: 5px 0;
+  }
 }

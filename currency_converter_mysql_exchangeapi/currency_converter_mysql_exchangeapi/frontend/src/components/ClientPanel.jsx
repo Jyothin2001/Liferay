@@ -63,7 +63,9 @@ export default function ClientPanel() {
             <h3>Welcome, {email}</h3>
             <button onClick={logout}>Logout</button>
           </div>
-          <Converter token={token} email={email} />
+          {/* <Converter token={token} email={email} /> */}
+          <Converter token={token} email={email} logout={logout} />
+
         </div>
       )}
     </div>

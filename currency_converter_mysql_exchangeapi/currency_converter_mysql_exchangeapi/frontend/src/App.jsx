@@ -137,8 +137,10 @@ export default function App() {
               </div>
             ) : (
               <>
-                <button className="logout-btn" onClick={handleClientLogout}>Logout</button>
-                <Converter token={clientToken} email={clientEmail} />
+                {/* <button className="logout-btn" onClick={handleClientLogout}>Logout</button> */}
+                {/* <Converter token={clientToken} email={clientEmail} /> */}
+                <Converter token={clientToken} email={clientEmail} logout={handleClientLogout} />
+
               </>
             )}
           </div>
