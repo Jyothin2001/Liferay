@@ -67,7 +67,7 @@
 /* Client/Admin container */
 .client-container, .admin-container {
   width: 100%;
-  max-width: 450px;
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
   gap: 25px;

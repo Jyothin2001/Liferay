@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Converter from './components/Converter';
 import AdminPanel from './components/AdminPanel';
-import { clientLogin, clientRegister, adminLogin } from "./api";
+import { clientLogin, clientRegister } from "./api";
 import './App.css';
 
 export default function App() {
@@ -12,19 +12,15 @@ export default function App() {
   // ---------------- Initialize view based on tokens ----------------
   const [view, setView] = useState(() => {
     const savedView = localStorage.getItem("last_view");
-    if (savedView) return savedView; // remember last view if saved
+    if (savedView) return savedView;
     if (localStorage.getItem("admin_token")) return "admin";
-    return "client"; // default
+    return "client";
   });
 
   // ---------------- Client States ----------------
   const [clientEmail, setClientEmail] = useState("");
   const [clientPassword, setClientPassword] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
-
-  // ---------------- Admin States ----------------
-  const [adminEmail, setAdminEmail] = useState("");
-  const [adminPassword, setAdminPassword] = useState("");
 
   // ---------------- Persist last view ----------------
   const saveView = (newView) => {
@@ -51,7 +47,7 @@ export default function App() {
       const res = await clientLogin(clientEmail, clientPassword);
       setClientToken(res.data.access_token);
       localStorage.setItem("client_token", res.data.access_token);
-      saveView("client"); // ensure client view shows after login
+      saveView("client");
     } catch (e) {
       alert(e.response?.data?.detail || "Login failed");
     }
@@ -60,26 +56,13 @@ export default function App() {
   const handleClientLogout = () => {
     setClientToken("");
     localStorage.removeItem("client_token");
-    saveView("client"); // stay on client login page
-  };
-
-  // ---------------- Admin Handlers ----------------
-  const handleAdminLogin = async () => {
-    try {
-      const res = await adminLogin(adminEmail, adminPassword);
-      setAdminToken(res.data.access_token);
-      localStorage.setItem("admin_token", res.data.access_token);
-      saveView("admin"); // ensure admin view shows after login
-      alert("Admin login successful");
-    } catch (e) {
-      alert(e.response?.data?.detail || "Admin login failed");
-    }
+    saveView("client");
   };
 
   const handleAdminLogout = () => {
     setAdminToken("");
     localStorage.removeItem("admin_token");
-    saveView("admin"); // stay on admin login page
+    saveView("admin");
   };
 
   return (
@@ -136,12 +119,7 @@ export default function App() {
                 </div>
               </div>
             ) : (
-              <>
-                {/* <button className="logout-btn" onClick={handleClientLogout}>Logout</button> */}
-                {/* <Converter token={clientToken} email={clientEmail} /> */}
-                <Converter token={clientToken} email={clientEmail} logout={handleClientLogout} />
-
-              </>
+              <Converter token={clientToken} email={clientEmail} logout={handleClientLogout} />
             )}
           </div>
         )}
@@ -149,26 +127,7 @@ export default function App() {
         {/* Admin View */}
         {view === 'admin' && (
           <div className="admin-container">
-            {!adminToken ? (
-              <div className="login-box">
-                <h2>Admin Sign In</h2>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={adminEmail}
-                  onChange={e => setAdminEmail(e.target.value)}
-                />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={adminPassword}
-                  onChange={e => setAdminPassword(e.target.value)}
-                />
-                <button onClick={handleAdminLogin}>Sign In</button>
-              </div>
-            ) : (
-              <AdminPanel token={adminToken} onLogout={handleAdminLogout} />
-            )}
+            <AdminPanel token={adminToken} onLogout={handleAdminLogout} setToken={setAdminToken} />
           </div>
         )}
       </main>
@@ -183,6 +142,194 @@ export default function App() {
     </div>
   );
 }
+
+
+
+// import React, { useState } from "react";
+// import Converter from './components/Converter';
+// import AdminPanel from './components/AdminPanel';
+// import { clientLogin, clientRegister, adminLogin } from "./api";
+// import './App.css';
+
+// export default function App() {
+//   // ---------------- Initialize tokens ----------------
+//   const [clientToken, setClientToken] = useState(localStorage.getItem("client_token") || "");
+//   const [adminToken, setAdminToken] = useState(localStorage.getItem("admin_token") || "");
+
+//   // ---------------- Initialize view based on tokens ----------------
+//   const [view, setView] = useState(() => {
+//     const savedView = localStorage.getItem("last_view");
+//     if (savedView) return savedView; // remember last view if saved
+//     if (localStorage.getItem("admin_token")) return "admin";
+//     return "client"; // default
+//   });
+
+//   // ---------------- Client States ----------------
+//   const [clientEmail, setClientEmail] = useState("");
+//   const [clientPassword, setClientPassword] = useState("");
+//   const [termsAccepted, setTermsAccepted] = useState(false);
+
+//   // ---------------- Admin States ----------------
+//   const [adminEmail, setAdminEmail] = useState("");
+//   const [adminPassword, setAdminPassword] = useState("");
+
+//   // ---------------- Persist last view ----------------
+//   const saveView = (newView) => {
+//     setView(newView);
+//     localStorage.setItem("last_view", newView);
+//   };
+
+//   // ---------------- Client Handlers ----------------
+//   const handleClientRegister = async () => {
+//     if (!termsAccepted) {
+//       alert("Please accept the terms and conditions.");
+//       return;
+//     }
+//     try {
+//       await clientRegister(clientEmail, clientPassword);
+//       alert("Account created successfully! Check your email for a welcome message.");
+//     } catch (e) {
+//       alert(e.response?.data?.detail || "Registration failed");
+//     }
+//   };
+
+//   const handleClientLogin = async () => {
+//     try {
+//       const res = await clientLogin(clientEmail, clientPassword);
+//       setClientToken(res.data.access_token);
+//       localStorage.setItem("client_token", res.data.access_token);
+//       saveView("client"); // ensure client view shows after login
+//     } catch (e) {
+//       alert(e.response?.data?.detail || "Login failed");
+//     }
+//   };
+
+//   const handleClientLogout = () => {
+//     setClientToken("");
+//     localStorage.removeItem("client_token");
+//     saveView("client"); // stay on client login page
+//   };
+
+//   // ---------------- Admin Handlers ----------------
+//   const handleAdminLogin = async () => {
+//     try {
+//       const res = await adminLogin(adminEmail, adminPassword);
+//       setAdminToken(res.data.access_token);
+//       localStorage.setItem("admin_token", res.data.access_token);
+//       saveView("admin"); // ensure admin view shows after login
+//       alert("Admin login successful");
+//     } catch (e) {
+//       alert(e.response?.data?.detail || "Admin login failed");
+//     }
+//   };
+
+//   const handleAdminLogout = () => {
+//     setAdminToken("");
+//     localStorage.removeItem("admin_token");
+//     saveView("admin"); // stay on admin login page
+//   };
+
+//   return (
+//     <div className="app-container">
+//       {/* Header */}
+//       <header className="app-header">
+//         <div className="header-container">
+//           <h1>CurrencyX — Pro Converter</h1>
+//           <div className="header-buttons">
+//             <button className={view==='client'?'active':''} onClick={() => saveView('client')}>Client</button>
+//             <button className={view==='admin'?'active':''} onClick={() => saveView('admin')}>Admin</button>
+//           </div>
+//         </div>
+//       </header>
+
+//       {/* Main Content */}
+//       <main className="main-content">
+//         {/* Client View */}
+//         {view === 'client' && (
+//           <div className="client-container">
+//             {!clientToken ? (
+//               <div className="login-box">
+//                 <h2>Sign In to Your Account</h2>
+//                 <p>No account? Create one below.</p>
+//                 <input
+//                   type="email"
+//                   placeholder="Email"
+//                   value={clientEmail}
+//                   onChange={e => setClientEmail(e.target.value)}
+//                 />
+//                 <input
+//                   type="password"
+//                   placeholder="Password"
+//                   value={clientPassword}
+//                   onChange={e => setClientPassword(e.target.value)}
+//                 />
+
+//                 <div className="terms">
+//                   <input
+//                     type="checkbox"
+//                     checked={termsAccepted}
+//                     onChange={e => setTermsAccepted(e.target.checked)}
+//                   />{" "}
+//                   I agree to the <a href="#terms">Terms and Conditions</a>
+//                 </div>
+
+//                 <div className="button-group">
+//                   <button onClick={handleClientRegister}>Create Account</button>
+//                   <button onClick={handleClientLogin}>Sign In</button>
+//                 </div>
+
+//                 <div className="extra-info">
+//                   <p>By creating an account, you can track your conversions and get personalized rates.</p>
+//                 </div>
+//               </div>
+//             ) : (
+//               <>
+//                 {/* <button className="logout-btn" onClick={handleClientLogout}>Logout</button> */}
+//                 {/* <Converter token={clientToken} email={clientEmail} /> */}
+//                 <Converter token={clientToken} email={clientEmail} logout={handleClientLogout} />
+
+//               </>
+//             )}
+//           </div>
+//         )}
+
+//         {/* Admin View */}
+//         {view === 'admin' && (
+//           <div className="admin-container">
+//             {!adminToken ? (
+//               <div className="login-box">
+//                 <h2>Admin Sign In</h2>
+//                 <input
+//                   type="email"
+//                   placeholder="Email"
+//                   value={adminEmail}
+//                   onChange={e => setAdminEmail(e.target.value)}
+//                 />
+//                 <input
+//                   type="password"
+//                   placeholder="Password"
+//                   value={adminPassword}
+//                   onChange={e => setAdminPassword(e.target.value)}
+//                 />
+//                 <button onClick={handleAdminLogin}>Sign In</button>
+//               </div>
+//             ) : (
+//               <AdminPanel token={adminToken} onLogout={handleAdminLogout} />
+//             )}
+//           </div>
+//         )}
+//       </main>
+
+//       {/* Footer */}
+//       <footer className="app-footer">
+//         <div className="footer-container">
+//           <p>© 2025 CurrencyX. All rights reserved.</p>
+//           <p>Developed by Jyothi N</p>
+//         </div>
+//       </footer>
+//     </div>
+//   );
+// }
 
 
 // import React, { useState } from "react";
