@@ -1,0 +1,289 @@
+/* .dashboard-container {
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f6f8;
+  border-radius: 12px;
+  max-width: 900px;
+  margin: 20px auto;
+}
+
+.dashboard-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1f3c88;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.tabs button {
+  background: #e0e0e0;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.tabs button.active {
+  background: #1f3c88;
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.tab-content {
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.stats-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: #3e8ed0;
+  color: #fff;
+  padding: 30px 20px;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 150px;
+  flex: 1;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.popular-pairs ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.popular-pairs li {
+  padding: 8px 0;
+  font-size: 16px;
+}
+
+.daily-chart {
+  width: 100%;
+}
+
+.export-tab {
+  text-align: center;
+}
+
+.export-btn {
+  background: #1f3c88;
+  color: #fff;
+  padding: 12px 25px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+  background: #3e8ed0;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 50px;
+} */
+
+
+
+/* ---------------- Dashboard Container ---------------- */
+.dashboard-container {
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f6fa;
+  min-height: 100vh;
+}
+
+/* ---------------- Header + Export Button ---------------- */
+.header-with-export {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dashboard-title {
+  color: #1f3c88;
+  font-size: 28px;
+  margin: 0;
+}
+
+.export-btn-top {
+  padding: 10px 20px;
+  font-size: 14px;
+  background-color: #1f3c88;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.export-btn-top:hover {
+  background-color: #3e8ed0;
+  transform: translateY(-2px);
+}
+
+/* ---------------- Tabs ---------------- */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #e0e0e0;
+  color: #333;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+  background-color: #d0d0d0;
+}
+
+.tab-btn.active {
+  background-color: #1f3c88;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(31, 60, 136, 0.3);
+}
+
+/* ---------------- Tab Content ---------------- */
+.tab-content {
+  position: relative;
+}
+
+.tab-panel {
+  animation: fadeIn 0.5s ease;
+}
+
+.tab-panel.hidden {
+  display: none;
+  opacity: 0;
+}
+
+.tab-panel.visible {
+  display: block;
+  opacity: 1;
+}
+
+/* ---------------- Stats Cards ---------------- */
+.stats-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.stats-cards .card {
+  flex: 1;
+  min-width: 150px;
+  background-color: #1f3c88;
+  color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 18px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stats-cards .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.stats-cards .card h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+/* ---------------- Popular Pairs ---------------- */
+.pair-list {
+  list-style: none;
+  padding: 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.pair-list li {
+  background-color: #3e8ed0;
+  color: #fff;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pair-list li:hover {
+  transform: scale(1.03);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ---------------- Export Button Inside Tab (if needed) ---------------- */
+.export-btn {
+  padding: 12px 25px;
+  background-color: #1f3c88;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.export-btn:hover {
+  background-color: #3e8ed0;
+  transform: translateY(-2px);
+}
+
+/* ---------------- Animations ---------------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------------- Loading ---------------- */
+.loading {
+  text-align: center;
+  font-size: 22px;
+  color: #1f3c88;
+  margin-top: 50px;
+}

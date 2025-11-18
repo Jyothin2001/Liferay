@@ -30,6 +30,16 @@ export const adminGetConversions = (token) =>
   axios.get(`${ADMIN_API_URL}/conversions`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+export const adminDeleteConversion = (id, token) =>
+  axios.delete(`http://127.0.0.1:8000/delete_conversion/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+
+// export const adminDeleteConversion = (token, logId) =>
+//   axios.delete(`${ADMIN_API_URL}/delete_conversion/${logId}`, {
+//     headers: { Authorization: `Bearer ${token}` },
+//   });
 
 
 

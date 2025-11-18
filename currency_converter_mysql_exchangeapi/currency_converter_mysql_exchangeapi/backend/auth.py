@@ -48,7 +48,7 @@ def get_current_admin(token: str = Depends(oauth2_scheme), db: Session = Depends
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
         if not payload.get("is_admin"):
             raise HTTPException(status_code=403, detail="Not admin")
-        user = db.query(User).filter(User.email == payload.get("email")).first()
+        user = db.query(User).filter(User.email == payload.get("sub")).first()
         if not user or user.is_admin != 1:
             raise HTTPException(status_code=401, detail="Admin not found")
         return user
@@ -73,6 +73,10 @@ def create_default_admin(db: Session):
         db.commit()
         print(f"✅ Admin '{admin_email}' created successfully.")
 
+def admin_required(admin = Depends(get_current_admin)):
+    if not admin:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return admin
 
 
 # User

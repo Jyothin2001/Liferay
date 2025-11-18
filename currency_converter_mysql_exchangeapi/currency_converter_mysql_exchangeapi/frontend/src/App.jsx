@@ -72,7 +72,7 @@ export default function App() {
         <div className="header-container">
           <h1>CurrencyX — Pro Converter</h1>
           <div className="header-buttons">
-            <button className={view==='client'?'active':''} onClick={() => saveView('client')}>Client</button>
+            <button className={view==='client'?'active':''} onClick={() => saveView('client')}>Register</button>
             <button className={view==='admin'?'active':''} onClick={() => saveView('admin')}>Admin</button>
           </div>
         </div>

@@ -5,9 +5,9 @@ from pydantic import BaseModel,Field
 from typing import List
 import jwt, os
 from crud import get_recent_conversions
-from schemas import ConversionLogOut
+from schemas import ConversionLogOut,UserOut
 from models import ConversionLog
-from auth import get_current_admin, get_db
+from auth import get_current_admin, get_db,admin_required
 from datetime import datetime, timedelta
 from models import User
 from schemas import AuthRequest
@@ -183,3 +183,17 @@ def recent_conversions(
     # =============
     return query.order_by(ConversionLog.id.desc()).limit(limit).all()
 
+@router.delete("/delete_conversion/{log_id}")
+def delete_conversion(log_id: int, db: Session = Depends(get_db), admin=Depends(admin_required)):
+    log = db.query(ConversionLog).filter(ConversionLog.id == log_id).first()
+
+    if not log:
+        raise HTTPException(status_code=404, detail="Conversion log not found")
+    
+    db.delete(log)
+    db.commit()
+    return {"message": "Log deleted successfully", "id": log_id}
+
+@router.get("/users", response_model=List[UserOut], dependencies=[Depends(admin_required)])
+def get_users(db: Session = Depends(get_db)):
+    return db.query(User).filter(User.is_admin == 0).all()
