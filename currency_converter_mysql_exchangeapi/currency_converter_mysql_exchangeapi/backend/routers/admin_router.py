@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, HTTPException, Header,Query
 from sqlalchemy.orm import Session
 from auth import get_db, authenticate_admin, create_access_token
 from pydantic import BaseModel,Field
@@ -8,11 +8,12 @@ from crud import get_recent_conversions
 from schemas import ConversionLogOut
 from models import ConversionLog
 from auth import get_current_admin, get_db
-from datetime import datetime
+from datetime import datetime, timedelta
 from models import User
 from schemas import AuthRequest
 from auth import verify_password
 from re import match
+from sqlalchemy import cast, Date,func
 
 router = APIRouter()
 
@@ -128,4 +129,57 @@ def recent_conversions(limit: int = 50, db: Session = Depends(get_db)):
     """
     return get_recent_conversions(db, limit)
 
+
+
+
+
+@router.get(
+    "/conversions",
+    response_model=List[ConversionLogOut],
+    dependencies=[Depends(get_current_admin)]
+)
+def recent_conversions(
+    limit: int = 200,
+    start_date: str | None = Query(None),
+    end_date: str | None = Query(None),
+    from_currency: str | None = Query(None),
+    to_currency: str | None = Query(None),
+    min_amount: float | None = Query(None),
+    max_amount: float | None = Query(None),
+    db: Session = Depends(get_db),
+):
+
+    query = db.query(ConversionLog)
+
+    # ---- DATE FILTERING (PERFECTLY ACCURATE) ----
+    if start_date:
+        query = query.filter(
+            cast(ConversionLog.timestamp, Date) >= start_date
+        )
+
+    if end_date:
+        query = query.filter(
+            cast(ConversionLog.timestamp, Date) <= end_date
+        )
+
+    # ---- CURRENCY FILTERS ----
+    if from_currency:
+        query = query.filter(
+            func.upper(ConversionLog.from_currency) == from_currency.upper().strip()
+        )
+
+    if to_currency:
+        query = query.filter(
+            func.upper(ConversionLog.to_currency) == to_currency.upper().strip()
+        )
+# ---- AMOUNT RANGE FILTER ----
+    if min_amount is not None:
+        query = query.filter(ConversionLog.amount >= min_amount)
+
+    if max_amount is not None:
+        query = query.filter(ConversionLog.amount <= max_amount)
+    # =============
+    #  SORT & LIMIT
+    # =============
+    return query.order_by(ConversionLog.id.desc()).limit(limit).all()
 

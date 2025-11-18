@@ -177,3 +177,35 @@
   font-weight: bold;
   color: #000;
 }
+
+
+/* ===================== FILTER BAR ===================== */
+
+.filters {
+  width: 100%;
+  max-width: 1300px;
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Inputs inside filter bar */
+.filters input {
+  flex: 1;
+  padding: 12px 14px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border 0.2s ease-in-out;
+}
+
+/* Focus effect like your login inputs */
+.filters input:focus {
+  border-color: #1f3c88;
+}

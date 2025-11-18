@@ -9,17 +9,48 @@ export default function AdminPanel() {
   const [token, setToken] = useState(localStorage.getItem('admin_token') || '')
   const [logs, setLogs] = useState([])
 
-  /* ⭐ Pagination states */
   const [currentPage, setCurrentPage] = useState(1)
   const rowsPerPage = 5
 
-  /* ⭐ Pagination calculations */
+  /* ---------------- Filter states ---------------- */    
+  const [filterFrom, setFilterFrom] = useState('')
+  const [filterTo, setFilterTo] = useState('')
+  const [filterStartDate, setFilterStartDate] = useState('')
+  const [filterEndDate, setFilterEndDate] = useState('')
+  const [minAmount, setMinAmount] = useState('');
+  const [maxAmount, setMaxAmount] = useState('');
+
+  /* ---------------- FILTER LOGIC (Corrected) ---------------- */
+  const filteredLogs = logs.filter(log => {
+    const logDate = new Date(log.timestamp).toISOString().split("T")[0]; // yyyy-mm-dd
+
+    // ---- DATE Filters ----
+    if (filterStartDate && logDate < filterStartDate) return false;
+    if (filterEndDate && logDate > filterEndDate) return false;
+
+    // ---- Currency Filters ----
+    if (filterFrom && log.from_currency.toUpperCase() !== filterFrom.toUpperCase().trim()) 
+      return false;
+
+    if (filterTo && log.to_currency.toUpperCase() !== filterTo.toUpperCase().trim()) 
+      return false;
+
+    // ---- Amount min/max ----
+    if (minAmount && Number(log.amount) < Number(minAmount)) 
+      return false;
+
+    if (maxAmount && Number(log.amount) > Number(maxAmount)) 
+      return false;
+
+    return true;
+  });
+
+  /* ---------------- Pagination calculations ---------------- */
   const indexOfLastRow = currentPage * rowsPerPage
   const indexOfFirstRow = indexOfLastRow - rowsPerPage
-  const currentRows = logs.slice(indexOfFirstRow, indexOfLastRow)
-  const totalPages = Math.ceil(logs.length / rowsPerPage)
+  const currentRows = filteredLogs.slice(indexOfFirstRow, indexOfLastRow)
+  const totalPages = Math.ceil(filteredLogs.length / rowsPerPage)
 
-  // Map currency to country code for flags
   const currencyCountryMap = {
     USD: "US", EUR: "EU", INR: "IN", GBP: "GB", JPY: "JP",
     AUD: "AU", CAD: "CA", CHF: "CH", CNY: "CN", SGD: "SG",
@@ -48,7 +79,7 @@ export default function AdminPanel() {
         headers: { Authorization: 'Bearer ' + token }
       })
       setLogs(res.data)
-      setCurrentPage(1) // reset to first page when new logs load
+      setCurrentPage(1)
     } catch (e) {
       alert(e.response?.data?.detail || e.message)
     }
@@ -61,24 +92,12 @@ export default function AdminPanel() {
   return (
     <div className="admin-wrapper">
 
-      {/* -------------------- LOGIN VIEW -------------------- */}
       {!token ? (
         <div className="admin-login-box">
           <h2>Admin Sign In</h2>
 
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            placeholder="Email"
-          />
-
-          <input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            placeholder="Password"
-          />
+          <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
 
           <button onClick={login}>Sign In</button>
 
@@ -86,27 +105,32 @@ export default function AdminPanel() {
             <p>By signing in, you can manage all user conversions securely.</p>
           </div>
         </div>
+
       ) : (
-        /* -------------------- ADMIN TABLE VIEW -------------------- */
         <div className="admin-panel">
 
-          {/* Header Row with Title + Logout */}
           <div className="admin-header-row">
             <h2 className="admin-header-title">Conversion Logs</h2>
 
-            <button
-              className="logout-btn"
-              onClick={() => {
-                setToken('')
-                localStorage.removeItem('admin_token')
-                setLogs([])
-              }}
-            >
+            <button className="logout-btn" onClick={() => {
+              setToken('')
+              localStorage.removeItem('admin_token')
+              setLogs([])
+            }}>
               Logout
             </button>
           </div>
 
-          {/* Table */}
+          {/* FILTER BAR */}
+          <div className="filters">
+            <input type="text" placeholder="From currency" value={filterFrom} onChange={e => setFilterFrom(e.target.value)} />
+            <input type="text" placeholder="To currency" value={filterTo} onChange={e => setFilterTo(e.target.value)} />
+            <input type="date" value={filterStartDate} onChange={e => setFilterStartDate(e.target.value)} />
+            <input type="date" value={filterEndDate} onChange={e => setFilterEndDate(e.target.value)} />
+            <input type="number" placeholder="Min Amount" value={minAmount} onChange={e => setMinAmount(e.target.value)}/>
+            <input type="number" placeholder="Max Amount" value={maxAmount} onChange={e => setMaxAmount(e.target.value)}/>
+          </div>
+
           <div className="table-wrapper">
             <table className="conversion-table">
               <thead>
@@ -126,22 +150,17 @@ export default function AdminPanel() {
                   <tr key={l.id}>
                     <td>{indexOfFirstRow + idx + 1}</td>
                     <td>{new Date(l.timestamp).toLocaleString()}</td>
+
                     <td>
-                      <ReactCountryFlag
-                        countryCode={getCountryCode(l.from_currency)}
-                        svg
-                        style={{ width: '20px', marginRight: '5px' }}
-                      />
+                      <ReactCountryFlag countryCode={getCountryCode(l.from_currency)} svg style={{ width: '20px', marginRight: '5px' }} />
                       {l.from_currency}
                     </td>
+
                     <td>
-                      <ReactCountryFlag
-                        countryCode={getCountryCode(l.to_currency)}
-                        svg
-                        style={{ width: '20px', marginRight: '5px' }}
-                      />
+                      <ReactCountryFlag countryCode={getCountryCode(l.to_currency)} svg style={{ width: '20px', marginRight: '5px' }} />
                       {l.to_currency}
                     </td>
+
                     <td>{l.amount}</td>
                     <td>{l.result}</td>
                     <td>{l.rate}</td>
@@ -150,24 +169,12 @@ export default function AdminPanel() {
               </tbody>
             </table>
 
-            {/* ⭐ Pagination UI: Current / Total */}
             <div className="pagination">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Previous
-              </button>
-
+              <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
               <span>Page {currentPage} / {totalPages}</span>
-
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </button>
+              <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
             </div>
+
           </div>
 
         </div>
@@ -180,10 +187,9 @@ export default function AdminPanel() {
 
 
 
-
-
 // import React, { useState, useEffect } from 'react'
 // import axios from 'axios'
+// import ReactCountryFlag from 'react-country-flag'
 // import './AdminPanel.css'
 
 // export default function AdminPanel() {
@@ -192,16 +198,67 @@ export default function AdminPanel() {
 //   const [token, setToken] = useState(localStorage.getItem('admin_token') || '')
 //   const [logs, setLogs] = useState([])
 
-//   /* ⭐ Pagination states */
+//   /* ---------------- Pagination states ---------------- */
 //   const [currentPage, setCurrentPage] = useState(1)
 //   const rowsPerPage = 5
 
-//   /* ⭐ Pagination calculations */
+//   /* ---------------- Filter states ---------------- */    
+//   const [filterFrom, setFilterFrom] = useState('')          // filter from currency
+//   const [filterTo, setFilterTo] = useState('')              // filter to currency
+//   const [filterStartDate, setFilterStartDate] = useState('') // filter start date
+//   const [filterEndDate, setFilterEndDate] = useState('')     // filter end date
+//   const [minAmount, setMinAmount] = useState('');
+//   const [maxAmount, setMaxAmount] = useState('');
+
+
+// const filteredLogs = logs.filter(log => {
+//   const logDate = new Date(log.timestamp).toISOString().split("T")[0]; // yyyy-mm-dd
+
+//   // From currency
+//   if (filterFrom && log.from_currency !== filterFrom) 
+//     return false;
+
+//   // To currency
+//   if (filterTo && log.to_currency !== filterTo)
+//      return false;
+
+//   // ---- Currency Filters (Case-insensitive)
+//   if (filterFrom && log.from_currency.toUpperCase() !== filterFrom.toUpperCase().trim()) 
+//       return false;
+
+//   if (filterTo && log.to_currency.toUpperCase() !== filterTo.toUpperCase().trim()) 
+//       return false;
+
+//   // Amount range filtering
+//   if (minAmount && log.amount < parseFloat(minAmount))
+//      return false;
+//   if (maxAmount && log.amount > parseFloat(maxAmount))
+//      return false;
+
+
+//     return true;
+// });
+
+
+//   /* ---------------- Pagination calculations ---------------- */
 //   const indexOfLastRow = currentPage * rowsPerPage
 //   const indexOfFirstRow = indexOfLastRow - rowsPerPage
-//   const currentRows = logs.slice(indexOfFirstRow, indexOfLastRow)
-//   const totalPages = Math.ceil(logs.length / rowsPerPage)
+//   const currentRows = filteredLogs.slice(indexOfFirstRow, indexOfLastRow)
+//   const totalPages = Math.ceil(filteredLogs.length / rowsPerPage)
 
+//   // Map currency to country code for flags
+//   const currencyCountryMap = {
+//     USD: "US", EUR: "EU", INR: "IN", GBP: "GB", JPY: "JP",
+//     AUD: "AU", CAD: "CA", CHF: "CH", CNY: "CN", SGD: "SG",
+//     NZD: "NZ", HKD: "HK", SEK: "SE", NOK: "NO", MXN: "MX",
+//     ZAR: "ZA", TRY: "TR", BRL: "BR", RUB: "RU", KRW: "KR",
+//     DKK: "DK", PLN: "PL", THB: "TH", IDR: "ID", MYR: "MY",
+//     PHP: "PH", VND: "VN", AED: "AE", PKR: "PK", LKR: "LK",
+//   }
+
+//   const getCountryCode = (code) => currencyCountryMap[code] || code.slice(0,2).toUpperCase()
+
+//   /* ---------------- Admin login ---------------- */
 //   const login = async () => {
 //     try {
 //       const res = await axios.post('http://localhost:8000/admin/login', { email, password })
@@ -213,13 +270,14 @@ export default function AdminPanel() {
 //     }
 //   }
 
+//   /* ---------------- Fetch conversions ---------------- */
 //   const fetchLogs = async () => {
 //     try {
 //       const res = await axios.get('http://localhost:8000/admin/conversions', {
 //         headers: { Authorization: 'Bearer ' + token }
 //       })
 //       setLogs(res.data)
-//       setCurrentPage(1) // reset to first page when new logs load
+//       setCurrentPage(1)
 //     } catch (e) {
 //       alert(e.response?.data?.detail || e.message)
 //     }
@@ -235,27 +293,30 @@ export default function AdminPanel() {
 //       {/* -------------------- LOGIN VIEW -------------------- */}
 //       {!token ? (
 //         <div className="admin-login-box">
-//           <h2>Admin Login</h2>
+//           <h2>Admin Sign In</h2>
 
-//           <label>Email</label>
 //           <input
+//             type="email"
 //             value={email}
 //             onChange={e => setEmail(e.target.value)}
-//             placeholder="Enter email"
+//             placeholder="Email"
 //           />
 
-//           <label>Password</label>
 //           <input
 //             type="password"
 //             value={password}
 //             onChange={e => setPassword(e.target.value)}
-//             placeholder="Enter password"
+//             placeholder="Password"
 //           />
 
-//           <button className="admin-btn" onClick={login}>Login</button>
+//           <button onClick={login}>Sign In</button>
+
+//           <div className="extra-info">
+//             <p>By signing in, you can manage all user conversions securely.</p>
+//           </div>
 //         </div>
 //       ) : (
-//         /* -------------------- ADMIN TABLE VIEW -------------------- */
+//         /* -------------------- ADMIN TABLE + FILTER VIEW -------------------- */
 //         <div className="admin-panel">
 
 //           {/* Header Row with Title + Logout */}
@@ -274,7 +335,17 @@ export default function AdminPanel() {
 //             </button>
 //           </div>
 
-//           {/* Table */}
+//           {/* ---------------- Filters (Step 2) ---------------- */}
+//           <div className="filters">
+//             <input type="text" placeholder="From currency" value={filterFrom} onChange={e => setFilterFrom(e.target.value)} />
+//             <input type="text" placeholder="To currency" value={filterTo} onChange={e => setFilterTo(e.target.value)} />
+//             <input type="date" value={filterStartDate} onChange={e => setFilterStartDate(e.target.value)} />
+//             <input type="date" value={filterEndDate} onChange={e => setFilterEndDate(e.target.value)} />
+//             <input type="number" placeholder="Min Amount" value={minAmount} onChange={e => setMinAmount(e.target.value)}/>
+//             <input type="number" placeholder="Max Amount" value={maxAmount} onChange={e => setMaxAmount(e.target.value)}/>
+//           </div>
+
+//           {/* ---------------- Table ---------------- */}
 //           <div className="table-wrapper">
 //             <table className="conversion-table">
 //               <thead>
@@ -294,8 +365,23 @@ export default function AdminPanel() {
 //                   <tr key={l.id}>
 //                     <td>{indexOfFirstRow + idx + 1}</td>
 //                     <td>{new Date(l.timestamp).toLocaleString()}</td>
-//                     <td>{l.from_currency}</td>
-//                     <td>{l.to_currency}</td>
+                    
+//                     <td>
+//                       <ReactCountryFlag
+//                         countryCode={getCountryCode(l.from_currency)}
+//                         svg
+//                         style={{ width: '20px', marginRight: '5px' }}
+//                       />
+//                       {l.from_currency}
+//                     </td>
+//                     <td>
+//                       <ReactCountryFlag
+//                         countryCode={getCountryCode(l.to_currency)}
+//                         svg
+//                         style={{ width: '20px', marginRight: '5px' }}
+//                       />
+//                       {l.to_currency}
+//                     </td>
 //                     <td>{l.amount}</td>
 //                     <td>{l.result}</td>
 //                     <td>{l.rate}</td>
@@ -304,23 +390,11 @@ export default function AdminPanel() {
 //               </tbody>
 //             </table>
 
-//             {/* ⭐ Pagination UI: Current / Total */}
+//             {/* Pagination */}
 //             <div className="pagination">
-//               <button
-//                 disabled={currentPage === 1}
-//                 onClick={() => setCurrentPage(currentPage - 1)}
-//               >
-//                 Previous
-//               </button>
-
+//               <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
 //               <span>Page {currentPage} / {totalPages}</span>
-
-//               <button
-//                 disabled={currentPage === totalPages}
-//                 onClick={() => setCurrentPage(currentPage + 1)}
-//               >
-//                 Next
-//               </button>
+//               <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
 //             </div>
 //           </div>
 
@@ -330,4 +404,6 @@ export default function AdminPanel() {
 //     </div>
 //   )
 // }
+
+
 
