@@ -9,6 +9,7 @@ from auth import create_default_admin
 from database import init_db, get_db, engine, Base, SessionLocal
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from pydantic import EmailStr
+from routers import forgot_router
 
 
 
@@ -85,6 +86,8 @@ app.include_router(convert_router.router, prefix="/convert", tags=["convert"])
 app.include_router(admin_router.router, prefix="/admin", tags=["admin"])
 app.include_router(misc_router.router, prefix="", tags=["misc"])
 app.include_router(user_router.router, prefix="/user", tags=["user"])
+app.include_router(forgot_router.router, prefix="/user", tags=["forgot-password"])
+
 
 
 

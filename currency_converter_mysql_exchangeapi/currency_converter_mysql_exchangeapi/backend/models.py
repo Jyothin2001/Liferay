@@ -29,7 +29,7 @@ class User(Base):
     email = Column(String(255), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
     is_admin = Column(Integer, default=0)  # 0 = normal user, 1 = admin
-
+    reset_token = Column(String(255), nullable=True)  # stores reset token temporarily
     conversions = relationship("ConversionLog", back_populates="user")
 
 class ConversionLog(Base):

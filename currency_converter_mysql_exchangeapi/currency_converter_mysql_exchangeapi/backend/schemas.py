@@ -95,3 +95,11 @@ class ConvertResponse(BaseModel):
     to_currency: str
     amount: float
     result: float
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str

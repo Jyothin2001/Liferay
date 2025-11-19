@@ -1,15 +1,24 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Converter from './components/Converter';
 import AdminPanel from './components/AdminPanel';
-import { clientLogin, clientRegister } from "./api";
+import ResetPassword from './components/ResetPassword';
+
+import {
+  clientLogin,
+  clientRegister,
+  clientForgotPassword
+} from "./api";
+
 import './App.css';
 
-export default function App() {
-  // ---------------- Initialize tokens ----------------
+function MainApp() {
+  // ---------------- Tokens ----------------
   const [clientToken, setClientToken] = useState(localStorage.getItem("client_token") || "");
   const [adminToken, setAdminToken] = useState(localStorage.getItem("admin_token") || "");
 
-  // ---------------- Initialize view based on tokens ----------------
+  // ---------------- Last View ----------------
   const [view, setView] = useState(() => {
     const savedView = localStorage.getItem("last_view");
     if (savedView) return savedView;
@@ -17,31 +26,36 @@ export default function App() {
     return "client";
   });
 
-  // ---------------- Client States ----------------
-  const [clientEmail, setClientEmail] = useState("");
-  const [clientPassword, setClientPassword] = useState("");
-  const [termsAccepted, setTermsAccepted] = useState(false);
-
-  // ---------------- Persist last view ----------------
   const saveView = (newView) => {
     setView(newView);
     localStorage.setItem("last_view", newView);
   };
 
-  // ---------------- Client Handlers ----------------
+  // ---------------- Client Login/Register ----------------
+  const [clientEmail, setClientEmail] = useState("");
+  const [clientPassword, setClientPassword] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  // ---------------- Forgot Password Modal ----------------
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+
+  // ---------------- Register ----------------
   const handleClientRegister = async () => {
     if (!termsAccepted) {
-      alert("Please accept the terms and conditions.");
+      alert("Please accept Terms & Conditions.");
       return;
     }
+
     try {
       await clientRegister(clientEmail, clientPassword);
-      alert("Account created successfully! Check your email for a welcome message.");
+      alert("Account created! Check your email for confirmation.");
     } catch (e) {
       alert(e.response?.data?.detail || "Registration failed");
     }
   };
 
+  // ---------------- Login ----------------
   const handleClientLogin = async () => {
     try {
       const res = await clientLogin(clientEmail, clientPassword);
@@ -53,6 +67,7 @@ export default function App() {
     }
   };
 
+  // ---------------- Logout ----------------
   const handleClientLogout = () => {
     setClientToken("");
     localStorage.removeItem("client_token");
@@ -65,46 +80,72 @@ export default function App() {
     saveView("admin");
   };
 
+  // ---------------- Forgot Password ----------------
+  const handleForgotSubmit = async () => {
+    try {
+      const res = await clientForgotPassword(forgotEmail);
+      alert(res.data.message || "Reset link sent!");
+      setShowForgotModal(false);
+    } catch (e) {
+      alert(e.response?.data?.detail || "Failed to send reset link");
+    }
+  };
+
   return (
     <div className="app-container">
-      {/* Header */}
+
+      {/* ---------------- Header ---------------- */}
       <header className="app-header">
         <div className="header-container">
           <h1>CurrencyX — Pro Converter</h1>
           <div className="header-buttons">
-            <button className={view==='client'?'active':''} onClick={() => saveView('client')}>Register</button>
-            <button className={view==='admin'?'active':''} onClick={() => saveView('admin')}>Admin</button>
+            <button
+              className={view === "client" ? "active" : ""}
+              onClick={() => saveView("client")}
+            >
+              Register
+            </button>
+            <button
+              className={view === "admin" ? "active" : ""}
+              onClick={() => saveView("admin")}
+            >
+              Admin
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* ---------------- Main Content ---------------- */}
       <main className="main-content">
-        {/* Client View */}
-        {view === 'client' && (
+        {view === "client" && (
           <div className="client-container">
             {!clientToken ? (
               <div className="login-box">
                 <h2>Sign In to Your Account</h2>
                 <p>No account? Create one below.</p>
+
                 <input
                   type="email"
                   placeholder="Email"
                   value={clientEmail}
-                  onChange={e => setClientEmail(e.target.value)}
+                  onChange={(e) => setClientEmail(e.target.value)}
                 />
                 <input
                   type="password"
                   placeholder="Password"
                   value={clientPassword}
-                  onChange={e => setClientPassword(e.target.value)}
+                  onChange={(e) => setClientPassword(e.target.value)}
                 />
+
+                <p className="forgot-link" onClick={() => setShowForgotModal(true)}>
+                  Forgot Password?
+                </p>
 
                 <div className="terms">
                   <input
                     type="checkbox"
                     checked={termsAccepted}
-                    onChange={e => setTermsAccepted(e.target.checked)}
+                    onChange={(e) => setTermsAccepted(e.target.checked)}
                   />{" "}
                   I agree to the <a href="#terms">Terms and Conditions</a>
                 </div>
@@ -115,33 +156,226 @@ export default function App() {
                 </div>
 
                 <div className="extra-info">
-                  <p>By creating an account, you can track your conversions and get personalized rates.</p>
+                  <p>Track your conversions with your free account.</p>
                 </div>
               </div>
             ) : (
-              <Converter token={clientToken} email={clientEmail} logout={handleClientLogout} />
+              <Converter
+                token={clientToken}
+                email={clientEmail}
+                logout={handleClientLogout}
+              />
             )}
           </div>
         )}
 
-        {/* Admin View */}
-        {view === 'admin' && (
+        {view === "admin" && (
           <div className="admin-container">
-            <AdminPanel token={adminToken} onLogout={handleAdminLogout} setToken={setAdminToken} />
+            <AdminPanel
+              token={adminToken}
+              onLogout={handleAdminLogout}
+              setToken={setAdminToken}
+            />
           </div>
         )}
       </main>
 
-      {/* Footer */}
+      {/* ---------------- Footer ---------------- */}
       <footer className="app-footer">
         <div className="footer-container">
           <p>© 2025 CurrencyX. All rights reserved.</p>
           <p>Developed by Jyothi N</p>
         </div>
       </footer>
+
+      {/* ---------------- Forgot Password Modal ---------------- */}
+      {showForgotModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h2>Reset Your Password</h2>
+            <p>Enter your registered email to receive a reset link.</p>
+
+            <input
+              type="email"
+              placeholder="Enter Email"
+              value={forgotEmail}
+              onChange={(e) => setForgotEmail(e.target.value)}
+            />
+
+            <div className="modal-buttons">
+              <button onClick={handleForgotSubmit}>Send Reset Link</button>
+              <button className="cancel" onClick={() => setShowForgotModal(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainApp />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+      </Routes>
+    </Router>
+  );
+}
+
+
+
+
+
+// import React, { useState } from "react";
+// import Converter from './components/Converter';
+// import AdminPanel from './components/AdminPanel';
+// import { clientLogin, clientRegister } from "./api";
+// import './App.css';
+
+
+
+// export default function App() {
+//   // ---------------- Initialize tokens ----------------
+//   const [clientToken, setClientToken] = useState(localStorage.getItem("client_token") || "");
+//   const [adminToken, setAdminToken] = useState(localStorage.getItem("admin_token") || "");
+
+//   // ---------------- Initialize view based on tokens ----------------
+//   const [view, setView] = useState(() => {
+//     const savedView = localStorage.getItem("last_view");
+//     if (savedView) return savedView;
+//     if (localStorage.getItem("admin_token")) return "admin";
+//     return "client";
+//   });
+
+//   // ---------------- Client States ----------------
+//   const [clientEmail, setClientEmail] = useState("");
+//   const [clientPassword, setClientPassword] = useState("");
+//   const [termsAccepted, setTermsAccepted] = useState(false);
+
+//   // ---------------- Persist last view ----------------
+//   const saveView = (newView) => {
+//     setView(newView);
+//     localStorage.setItem("last_view", newView);
+//   };
+
+//   // ---------------- Client Handlers ----------------
+//   const handleClientRegister = async () => {
+//     if (!termsAccepted) {
+//       alert("Please accept the terms and conditions.");
+//       return;
+//     }
+//     try {
+//       await clientRegister(clientEmail, clientPassword);
+//       alert("Account created successfully! Check your email for a welcome message.");
+//     } catch (e) {
+//       alert(e.response?.data?.detail || "Registration failed");
+//     }
+//   };
+
+//   const handleClientLogin = async () => {
+//     try {
+//       const res = await clientLogin(clientEmail, clientPassword);
+//       setClientToken(res.data.access_token);
+//       localStorage.setItem("client_token", res.data.access_token);
+//       saveView("client");
+//     } catch (e) {
+//       alert(e.response?.data?.detail || "Login failed");
+//     }
+//   };
+
+//   const handleClientLogout = () => {
+//     setClientToken("");
+//     localStorage.removeItem("client_token");
+//     saveView("client");
+//   };
+
+//   const handleAdminLogout = () => {
+//     setAdminToken("");
+//     localStorage.removeItem("admin_token");
+//     saveView("admin");
+//   };
+
+//   return (
+//     <div className="app-container">
+//       {/* Header */}
+//       <header className="app-header">
+//         <div className="header-container">
+//           <h1>CurrencyX — Pro Converter</h1>
+//           <div className="header-buttons">
+//             <button className={view==='client'?'active':''} onClick={() => saveView('client')}>Register</button>
+//             <button className={view==='admin'?'active':''} onClick={() => saveView('admin')}>Admin</button>
+//           </div>
+//         </div>
+//       </header>
+
+//       {/* Main Content */}
+//       <main className="main-content">
+//         {/* Client View */}
+//         {view === 'client' && (
+//           <div className="client-container">
+//             {!clientToken ? (
+//               <div className="login-box">
+//                 <h2>Sign In to Your Account</h2>
+//                 <p>No account? Create one below.</p>
+//                 <input
+//                   type="email"
+//                   placeholder="Email"
+//                   value={clientEmail}
+//                   onChange={e => setClientEmail(e.target.value)}
+//                 />
+//                 <input
+//                   type="password"
+//                   placeholder="Password"
+//                   value={clientPassword}
+//                   onChange={e => setClientPassword(e.target.value)}
+//                 />
+
+//                 <div className="terms">
+//                   <input
+//                     type="checkbox"
+//                     checked={termsAccepted}
+//                     onChange={e => setTermsAccepted(e.target.checked)}
+//                   />{" "}
+//                   I agree to the <a href="#terms">Terms and Conditions</a>
+//                 </div>
+
+//                 <div className="button-group">
+//                   <button onClick={handleClientRegister}>Create Account</button>
+//                   <button onClick={handleClientLogin}>Sign In</button>
+//                 </div>
+
+//                 <div className="extra-info">
+//                   <p>By creating an account, you can track your conversions and get personalized rates.</p>
+//                 </div>
+//               </div>
+//             ) : (
+//               <Converter token={clientToken} email={clientEmail} logout={handleClientLogout} />
+//             )}
+//           </div>
+//         )}
+
+//         {/* Admin View */}
+//         {view === 'admin' && (
+//           <div className="admin-container">
+//             <AdminPanel token={adminToken} onLogout={handleAdminLogout} setToken={setAdminToken} />
+//           </div>
+//         )}
+//       </main>
+
+//       {/* Footer */}
+//       <footer className="app-footer">
+//         <div className="footer-container">
+//           <p>© 2025 CurrencyX. All rights reserved.</p>
+//           <p>Developed by Jyothi N</p>
+//         </div>
+//       </footer>
+//     </div>
+//   );
+// }
 
 
 

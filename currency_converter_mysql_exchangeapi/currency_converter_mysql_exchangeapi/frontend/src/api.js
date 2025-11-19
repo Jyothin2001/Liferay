@@ -20,6 +20,18 @@ export const clientGetConversions = (token) =>
     headers: { Authorization: `Bearer ${token}` },
   });
 
+  export const clientForgotPassword = (email) =>
+  axios.post(`${CLIENT_API_URL}/forgot-password`, { email });
+
+export const clientResetPassword = (token, newPassword) =>
+  axios.post(`${CLIENT_API_URL}/reset-password`, {
+    token,
+    new_password: newPassword
+  });
+
+
+
+
 // ------------------- Admin APIs -------------------
 const ADMIN_API_URL = "http://127.0.0.1:8000/admin";
 

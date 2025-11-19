@@ -1,25 +1,23 @@
 /* ===================== ADMIN WRAPPER ===================== */
-/* Wrapper so page stays centered */
 .admin-wrapper {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1300px;
   display: flex;
   flex-direction: column;
   gap: 25px;
   align-items: center;
+  padding: 20px;
 }
 
 /* ===================== ADMIN HEADER ===================== */
-/* Header row that contains title + logout */
 .admin-header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 4px 0px 4px;
-  margin-bottom: -10px; /* removes space above table */
+  padding: 8px 0;
+  width: 100%;
 }
 
-/* Header title */
 .admin-header-title {
   margin: 0;
   font-size: 24px;
@@ -27,23 +25,30 @@
   color: #1f3c88;
 }
 
-/* ===================== ADMIN LOGIN BOX ===================== */
-/* Plain style login (no card) */
+/* Logout Button */
+.logout-btn {
+  padding: 8px 16px;
+  background: #e53935;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* ===================== LOGIN BOX ===================== */
 .admin-login-box {
   width: 100%;
   max-width: 450px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin: 40px auto; /* center horizontally */
-  text-align: left;  /* align text to left */
-  background: none;  /* remove white background */
-  padding: 0;        /* remove padding */
-  border-radius: 0;  /* remove rounded corners */
-  box-shadow: none;  /* remove shadow */
+  margin: 40px auto;
 }
 
-/* Inputs */
 .admin-login-box input[type="email"],
 .admin-login-box input[type="password"] {
   width: 100%;
@@ -51,7 +56,6 @@
   font-size: 15px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  box-shadow: none; /* remove inset shadow */
   outline: none;
   transition: border 0.2s;
 }
@@ -61,7 +65,6 @@
   border-color: #1f3c88;
 }
 
-/* Login Button */
 .admin-login-box .admin-btn {
   padding: 12px 20px;
   background-color: #1f3c88;
@@ -76,59 +79,83 @@
   background-color: #004aad;
 }
 
-/* ===================== ADMIN PANEL ===================== */
-/* Admin Panel wrapper */
-.admin-panel {
+/* ===================== FILTER BAR ===================== */
+.filters {
   width: 100%;
-  max-width: 1300px;     /* ⭐ Adjust table width here */
+  max-width: 1300px;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 15px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+  margin: 0 auto 20px auto;
+  box-sizing: border-box;
+  align-items: center;
 }
 
-/* Logout Button */
-.logout-row {
-  display: flex;
-  justify-content: flex-end;
+.filters input {
+  flex: 1;
+  padding: 12px 14px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border 0.2s ease-in-out;
 }
 
-.logout-btn {
-  padding: 8px 16px;
-  background: #e53935;
+.filters input:focus {
+  border-color: #1f3c88;
+}
+
+.filters .sort-select {
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  transition: border 0.2s ease-in-out;
+}
+
+.filters .sort-select:focus {
+  border-color: #1f3c88;
+}
+
+/* Export Button next to filters */
+.export-btn-top {
+  padding: 12px 20px;
+  background-color: #1f3c88;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s ease;
 }
 
-.logout-btn:hover {
-  background-color: #d32f2f;
+.export-btn-top:hover {
+  background-color: #3e8ed0;
 }
 
 /* ===================== TABLE STYLES ===================== */
-/* Table Title */
-.table-title {
-  margin-top: 10px;
-  color: #1f3c88;
-}
-
-/* Table Container */
 .table-wrapper {
-  width: 100%;          /* wrapper fills parent */
-  max-width: 1300px;    /* card max width */
+  width: 100%;
+  max-width: 1300px;
   background: white;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
-  margin: 0 auto;       /* center the card */
+  margin: 0 auto;
   box-sizing: border-box;
-  overflow-x: hidden;    /* removes horizontal scroll */
+  overflow-x: auto;
 }
 
-/* Actual Table */
+
 .conversion-table {
-  width: 100%;           /* table fills wrapper */
-  table-layout: fixed;   /* forces table to shrink inside wrapper */
+  width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
@@ -137,12 +164,20 @@
   padding: 12px;
   border-bottom: 1px solid #ddd;
   text-align: left;
-  word-wrap: break-word; /* wrap long text instead of overflowing */
+  word-wrap: break-word;
 }
 
 .conversion-table th {
   background: #1f3c88;
   color: white;
+}
+
+.conversion-table td button {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 /* ===================== PAGINATION ===================== */
@@ -178,34 +213,24 @@
   color: #000;
 }
 
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+  }
 
-/* ===================== FILTER BAR ===================== */
+  .filters input,
+  .filters .sort-select,
+  .export-btn-top {
+    width: 100%;
+  }
 
-.filters {
-  width: 100%;
-  max-width: 1300px;
-  display: flex;
-  gap: 15px;
-  padding: 15px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
-  margin: 0 auto;
-  box-sizing: border-box;
-}
+  .admin-header-row {
+    flex-direction: column;
+    gap: 10px;
+  }
 
-/* Inputs inside filter bar */
-.filters input {
-  flex: 1;
-  padding: 12px 14px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  outline: none;
-  transition: border 0.2s ease-in-out;
-}
-
-/* Focus effect like your login inputs */
-.filters input:focus {
-  border-color: #1f3c88;
+  .logout-btn {
+    align-self: flex-end;
+  }
 }

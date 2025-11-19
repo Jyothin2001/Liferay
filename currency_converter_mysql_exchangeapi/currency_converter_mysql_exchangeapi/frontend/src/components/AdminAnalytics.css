@@ -1,274 +1,171 @@
-/* .dashboard-container {
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f4f6f8;
-  border-radius: 12px;
-  max-width: 900px;
-  margin: 20px auto;
-}
-
-.dashboard-title {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #1f3c88;
-}
-
-.tabs {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.tabs button {
-  background: #e0e0e0;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 25px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.tabs button.active {
-  background: #1f3c88;
-  color: #fff;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
-
-.tab-content {
-  padding: 20px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.stats-cards {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.card {
-  background: #3e8ed0;
-  color: #fff;
-  padding: 30px 20px;
-  border-radius: 10px;
-  text-align: center;
-  min-width: 150px;
-  flex: 1;
-}
-
-.card h3 {
-  margin-bottom: 10px;
-}
-
-.card p {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.popular-pairs ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.popular-pairs li {
-  padding: 8px 0;
-  font-size: 16px;
-}
-
-.daily-chart {
-  width: 100%;
-}
-
-.export-tab {
-  text-align: center;
-}
-
-.export-btn {
-  background: #1f3c88;
-  color: #fff;
-  padding: 12px 25px;
-  border-radius: 25px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-.export-btn:hover {
-  background: #3e8ed0;
-}
-
-.loading {
-  text-align: center;
-  font-size: 18px;
-  margin-top: 50px;
-} */
-
-
-
-/* ---------------- Dashboard Container ---------------- */
+/* Dashboard Container */
 .dashboard-container {
   padding: 20px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: #f4f6fa;
   min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ---------------- Header + Export Button ---------------- */
+/* Header */
 .header-with-export {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .dashboard-title {
-  color: #1f3c88;
   font-size: 28px;
-  margin: 0;
+  color: #1f3c88;
+}
+
+/* Export button beside Daily tab */
+.export-top-box {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
 }
 
 .export-btn-top {
-  padding: 10px 20px;
-  font-size: 14px;
-  background-color: #1f3c88;
-  color: #fff;
+  background: #1f3c88;
+  color: white;
   border: none;
+  padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: 0.3s ease;
 }
 
 .export-btn-top:hover {
-  background-color: #3e8ed0;
-  transform: translateY(-2px);
+  background: #3e8ed0;
 }
 
-/* ---------------- Tabs ---------------- */
+/* Tabs */
 .tabs {
   display: flex;
   justify-content: center;
   gap: 15px;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
+  margin: 25px 0;
 }
 
 .tab-btn {
   padding: 10px 20px;
+  background: #ccc;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  background-color: #e0e0e0;
-  color: #333;
   font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.tab-btn:hover {
-  background-color: #d0d0d0;
+  transition: 0.3s ease;
 }
 
 .tab-btn.active {
-  background-color: #1f3c88;
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(31, 60, 136, 0.3);
+  background: #1f3c88;
+  color: white;
+  box-shadow: 0 4px 12px rgba(31, 60, 136, 0.3);
 }
 
-/* ---------------- Tab Content ---------------- */
-.tab-content {
-  position: relative;
-}
-
+/* ---------- FIX TAB VISIBILITY ---------- */
 .tab-panel {
-  animation: fadeIn 0.5s ease;
-}
-
-.tab-panel.hidden {
   display: none;
-  opacity: 0;
 }
 
 .tab-panel.visible {
-  display: block;
-  opacity: 1;
+  display: block !important;
 }
 
-/* ---------------- Stats Cards ---------------- */
+/* ----------- Stats Cards ----------- */
 .stats-cards {
   display: flex;
-  gap: 20px;
   justify-content: center;
+  gap: 25px;
   flex-wrap: wrap;
 }
 
-.stats-cards .card {
-  flex: 1;
-  min-width: 150px;
-  background-color: #1f3c88;
-  color: #fff;
+.card {
+  background: #1f3c88 !important;
+  color: white !important;
   padding: 25px;
   border-radius: 12px;
+  width: 220px;
   text-align: center;
-  font-size: 18px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: 0.3s ease;
 }
 
-.stats-cards .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.stats-cards .card h3 {
+.card h3 {
   margin-bottom: 10px;
   font-size: 20px;
 }
 
-/* ---------------- Popular Pairs ---------------- */
-.pair-list {
-  list-style: none;
-  padding: 0;
-  max-width: 400px;
-  margin: 0 auto;
+.card p {
+  font-size: 26px;
+  font-weight: bold;
 }
 
-.pair-list li {
-  background-color: #3e8ed0;
-  color: #fff;
-  padding: 10px 15px;
-  margin-bottom: 10px;
-  border-radius: 8px;
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Popular Pairs */
+.section-title {
+  color: #1f3c88;
+  font-size: 22px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.pair-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pair-card {
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  padding: 14px;
+  border-radius: 12px;
+  border-left: 5px solid #1f3c88;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+
+.pair-card:hover {
+  transform: translateY(-3px);
+}
+
+.pair-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pair-icon {
+  font-size: 22px;
+}
+
+.pair-text {
+  font-size: 17px;
   font-weight: 500;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.pair-list li:hover {
-  transform: scale(1.03);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+.pair-count {
+  background: #1f3c88;
+  padding: 6px 14px;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
 }
 
-/* ---------------- Export Button Inside Tab (if needed) ---------------- */
-.export-btn {
-  padding: 12px 25px;
-  background-color: #1f3c88;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.3s ease, transform 0.2s ease;
+/* Loading */
+.loading {
+  text-align: center;
+  color: #1f3c88;
+  margin-top: 40px;
+  font-size: 22px;
 }
 
-.export-btn:hover {
-  background-color: #3e8ed0;
-  transform: translateY(-2px);
-}
-
-/* ---------------- Animations ---------------- */
+/* Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -278,12 +175,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* ---------------- Loading ---------------- */
-.loading {
-  text-align: center;
-  font-size: 22px;
-  color: #1f3c88;
-  margin-top: 50px;
 }
