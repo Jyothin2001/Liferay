@@ -27,7 +27,6 @@ class AdminLogin(BaseModel):
     email: str
     password: str
 
-
 @router.post("/login")
 def admin_login(request: AdminLogin, db: Session = Depends(get_db)):
 
@@ -36,6 +35,8 @@ def admin_login(request: AdminLogin, db: Session = Depends(get_db)):
     # ------------------------
     if not request.email:
         raise HTTPException(status_code=400, detail="Email is required")
+    if " " in request.email:
+        raise HTTPException(status_code=400, detail="Email cannot contain spaces")
     
     # simple regex for email format
     pattern = r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
@@ -47,11 +48,13 @@ def admin_login(request: AdminLogin, db: Session = Depends(get_db)):
     # ------------------------
     if not request.password:
         raise HTTPException(status_code=400, detail="Password is required")
+    if " " in request.password:
+        raise HTTPException(status_code=400, detail="Password cannot contain spaces")
 
     # ------------------------
-    # 3️⃣ Check admin in DB
+    # 3️⃣ Check admin in DB (case-sensitive email)
     # ------------------------
-    user = db.query(User).filter(User.email == request.email).first()
+    user = db.query(User).filter(User.email == request.email).first()  # exact match
     if not user or user.is_admin != 1:
         raise HTTPException(status_code=403, detail="Only admin accounts can log in here")
 
@@ -64,6 +67,43 @@ def admin_login(request: AdminLogin, db: Session = Depends(get_db)):
     access_token = create_access_token({"sub": user.email, "is_admin": True})
 
     return {"message": "Login successful", "access_token": access_token, "token_type": "bearer"}
+
+# @router.post("/login")
+# def admin_login(request: AdminLogin, db: Session = Depends(get_db)):
+
+#     # ------------------------
+#     # 1️⃣ Validate email manually
+#     # ------------------------
+#     if not request.email:
+#         raise HTTPException(status_code=400, detail="Email is required")
+    
+#     # simple regex for email format
+#     pattern = r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+#     if not match(pattern, request.email):
+#         raise HTTPException(status_code=400, detail="Invalid email format (e.g., user@example.com)")
+
+#     # ------------------------
+#     # 2️⃣ Validate password
+#     # ------------------------
+#     if not request.password:
+#         raise HTTPException(status_code=400, detail="Password is required")
+
+#     # ------------------------
+#     # 3️⃣ Check admin in DB
+#     # ------------------------
+#     user = db.query(User).filter(User.email == request.email).first()
+#     if not user or user.is_admin != 1:
+#         raise HTTPException(status_code=403, detail="Only admin accounts can log in here")
+
+#     if not verify_password(request.password, user.hashed_password):
+#         raise HTTPException(status_code=401, detail="Invalid credentials")
+
+#     # ------------------------
+#     # 4️⃣ Create access token
+#     # ------------------------
+#     access_token = create_access_token({"sub": user.email, "is_admin": True})
+
+#     return {"message": "Login successful", "access_token": access_token, "token_type": "bearer"}
 
 
 # Example:
@@ -122,12 +162,12 @@ class ConversionLogOut(BaseModel):
 def get_recent_conversions(db: Session, limit: int = 50):
     return db.query(ConversionLog).order_by(ConversionLog.id.desc()).limit(limit).all()
 
-@router.get("/conversions", response_model=List[ConversionLogOut])
-def recent_conversions(limit: int = 50, db: Session = Depends(get_db)):
-    """
-    Accessible only by admin users with valid Bearer token.
-    """
-    return get_recent_conversions(db, limit)
+# @router.get("/conversions", response_model=List[ConversionLogOut])
+# def recent_conversions(limit: int = 70, db: Session = Depends(get_db)):
+#     """
+#     Accessible only by admin users with valid Bearer token....
+#     """
+#     return get_recent_conversions(db, limit)
 
 
 
@@ -139,7 +179,7 @@ def recent_conversions(limit: int = 50, db: Session = Depends(get_db)):
     dependencies=[Depends(get_current_admin)]
 )
 def recent_conversions(
-    limit: int = 200,
+   
     start_date: str | None = Query(None),
     end_date: str | None = Query(None),
     from_currency: str | None = Query(None),
@@ -181,7 +221,7 @@ def recent_conversions(
     # =============
     #  SORT & LIMIT
     # =============
-    return query.order_by(ConversionLog.id.desc()).limit(limit).all()
+    return query.order_by(ConversionLog.id.desc()).all()
 
 @router.delete("/delete_conversion/{log_id}")
 def delete_conversion(log_id: int, db: Session = Depends(get_db), admin=Depends(admin_required)):

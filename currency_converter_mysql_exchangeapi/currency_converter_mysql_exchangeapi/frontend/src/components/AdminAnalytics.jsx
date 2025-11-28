@@ -181,12 +181,12 @@ export default function AdminAnalytics({ token }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const logRes = await axios.get("http://localhost:8000/admin/conversions", {
+        const logRes = await axios.get("http://192.168.0.102:8000/admin/conversions", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setLogs(Array.isArray(logRes.data) ? logRes.data : logRes.data.conversions || []);
 
-        const userRes = await axios.get("http://localhost:8000/admin/users", {
+        const userRes = await axios.get("http://192.168.0.102:8000/admin/users", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUsers(Array.isArray(userRes.data) ? userRes.data : userRes.data.users || []);

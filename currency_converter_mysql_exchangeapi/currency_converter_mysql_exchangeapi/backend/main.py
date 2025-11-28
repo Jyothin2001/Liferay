@@ -54,7 +54,7 @@ app = FastAPI(title="Currency Converter API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173",   # React dev server
-    "http://127.0.0.1:5173"],  # tighten for production
+    "http://127.0.0.1:5173","http://192.168.0.102:5173","*"],  # tighten for production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -87,6 +87,7 @@ app.include_router(admin_router.router, prefix="/admin", tags=["admin"])
 app.include_router(misc_router.router, prefix="", tags=["misc"])
 app.include_router(user_router.router, prefix="/user", tags=["user"])
 app.include_router(forgot_router.router, prefix="/user", tags=["forgot-password"])
+
 
 
 

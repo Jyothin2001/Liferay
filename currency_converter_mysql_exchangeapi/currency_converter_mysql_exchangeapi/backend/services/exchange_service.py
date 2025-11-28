@@ -83,26 +83,46 @@ load_dotenv()
 
 # API_KEY = "0d162a229870b719134c8e58"
 
+# def fetch_timeseries(base: str, target: str, days: int = 7):
+#     # Get latest rates first
+#     url = f"https://v6.exchangerate-api.com/v6/{API_KEY}/latest/{base}"
+#     response = requests.get(url)
+#     response.raise_for_status()
+#     data = response.json()
+    
+#     if data.get("result") != "success":
+#         return []
+
+#     # Extract rate for target
+#     rate = data["conversion_rates"].get(target)
+    
+#     # For historical data, ExchangeRate-API requires a paid plan; free plan only provides latest
+#     # So you can return the latest rate for each past day as a mock or implement only latest rate
+#     series = []
+#     from datetime import datetime, timedelta
+#     for i in range(days):
+#         date = (datetime.utcnow().date() - timedelta(days=i)).isoformat()
+#         series.append([date, rate])
+
+#     return list(reversed(series))
+
 def fetch_timeseries(base: str, target: str, days: int = 7):
-    # Get latest rates first
     url = f"https://v6.exchangerate-api.com/v6/{API_KEY}/latest/{base}"
     response = requests.get(url)
     response.raise_for_status()
     data = response.json()
-    
+
     if data.get("result") != "success":
         return []
 
-    # Extract rate for target
     rate = data["conversion_rates"].get(target)
-    
-    # For historical data, ExchangeRate-API requires a paid plan; free plan only provides latest
-    # So you can return the latest rate for each past day as a mock or implement only latest rate
     series = []
+
     from datetime import datetime, timedelta
     for i in range(days):
         date = (datetime.utcnow().date() - timedelta(days=i)).isoformat()
-        series.append([date, rate])
+        series.append([date, base, target, rate])
 
     return list(reversed(series))
+
 

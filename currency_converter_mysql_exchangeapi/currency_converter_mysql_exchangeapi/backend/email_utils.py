@@ -29,7 +29,7 @@ async def send_registration_email(email_to: EmailStr, name: str):
     await fm.send_message(message)
 
 async def send_reset_password_email(email: EmailStr, token: str):
-    reset_link = f"http://localhost:5173/reset-password?token={token}"
+    reset_link = f"http://192.168.0.102:5173/reset-password?token={token}"
     message = MessageSchema(
         subject="Reset Your Password",
         recipients=[email],

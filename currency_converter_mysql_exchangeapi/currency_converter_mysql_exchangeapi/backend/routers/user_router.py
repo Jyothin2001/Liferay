@@ -22,84 +22,210 @@ class UserAuth(BaseModel):
     email: str
     password: str
 
+# ---------------- Strong password regex ----------------
+PASSWORD_PATTERN = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+EMAIL_PATTERN = r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+
 
 @router.post("/register")
-def register_user(data: UserAuth, db: Session = Depends(get_db), background_tasks: BackgroundTasks = None):
+def register_user(
+    data: UserAuth,
+    db: Session = Depends(get_db),
+    background_tasks: BackgroundTasks = None
+):
     email = data.email
     password = data.password
 
-    # --------- Email validations ----------
+    # -------- Email validation --------
     if not email:
         raise HTTPException(status_code=400, detail="Email is required")
-    
-    if "@" not in email:
-        raise HTTPException(status_code=400, detail="Email must contain '@'")
-    
-    parts = email.split("@")
-    if len(parts) != 2:
-        raise HTTPException(status_code=400, detail="Email must contain exactly one '@'")
-    
-    local_part, domain_part = parts
-    if "." not in domain_part:
-        raise HTTPException(status_code=400, detail="Email domain must contain '.'")
-    
     if " " in email:
         raise HTTPException(status_code=400, detail="Email cannot contain spaces")
-    
-    pattern = r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
-    if not re.match(pattern, email):
-        raise HTTPException(status_code=400, detail="Email format is invalid (e.g., user@example.com)")
+    if not re.match(EMAIL_PATTERN, email):
+        raise HTTPException(status_code=400, detail="Invalid email format (e.g., user@example.com)")
 
-    # --------- Password validations ----------
+    # -------- Password validation --------
     if not password:
         raise HTTPException(status_code=400, detail="Password is required")
-    
-    if len(password) < 6:
-        raise HTTPException(status_code=400, detail="Password must be at least 6 characters long")
+    if " " in password:
+        raise HTTPException(status_code=400, detail="password cannot contain spaces")
+    if not re.match(PASSWORD_PATTERN, password):
+        raise HTTPException(
+            status_code=400,
+            detail="Password must be at least 8 characters, contain uppercase and lowercase letters, "
+                   "a number, and a special character (@$!%*?&)"
+        )
 
-    # --------- Existing email check ----------
-    existing = db.query(User).filter(User.email == email).first()
-    if existing:
+    # -------- Check existing email --------
+    existing_user = db.query(User).filter(User.email == email).first()
+    if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    # --------- Create user ----------
+    # -------- Create user --------
     hashed_password = hash_password(password)
     new_user = User(email=email, hashed_password=hashed_password, is_admin=0)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    background_tasks.add_task(send_registration_email, new_user.email, new_user.email.split("@")[0])
 
+    # -------- Send registration email --------
+    if background_tasks:
+        background_tasks.add_task(send_registration_email, new_user.email, new_user.email.split("@")[0])
 
     return {"message": "User registered successfully"}
 
 
-# ✅ User Login
-# @router.post("/login")
-# def login_user(data: UserAuth, db: Session = Depends(get_db)):
-#     user = db.query(User).filter(User.email == data.email).first()
-#     if not user or not verify_password(data.password, user.hashed_password):
-#         raise HTTPException(status_code=401, detail="Invalid email or password")
-
-#     if user.is_admin == 1:
-#         raise HTTPException(status_code=403, detail="Admins must use /admin/login")
-
-#     token = create_access_token({"email": user.email, "user_id": user.id, "is_admin": False})
-#     return {"access_token": token, "token_type": "bearer"}
-
+# ---------------- LOGIN ---------------------
 @router.post("/login")
 def login_user(data: UserAuth, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == data.email).first()
-    print("Login attempt:", data.email, data.password)
+    email = data.email
+    password = data.password
+
+    # -------- Input validations --------
+    if not email:
+        raise HTTPException(status_code=400, detail="Email is required")
+    if " " in email:
+        raise HTTPException(status_code=400, detail="Email cannot contain spaces")
+    if not re.match(EMAIL_PATTERN, email):
+        raise HTTPException(status_code=400, detail="Invalid email format (e.g., user@example.com)")
+
+    if not password:
+        raise HTTPException(status_code=400, detail="Password is required")
+    if " " in password:
+        raise HTTPException(status_code=400, detail="password cannot contain spaces")
+    if not re.match(PASSWORD_PATTERN, password):
+        raise HTTPException(
+            status_code=400,
+            detail="Password must be at least 8 characters, contain uppercase and lowercase letters, "
+                   "a number, and a special character (@$!%*?&)"
+        )
+
+    # -------- Fetch user from DB --------
+    user = db.query(User).filter(User.email == email).first()
+    user = db.query(User).filter(User.email == email).first()  # Exact match
+    print("Login attempt:", email)
     print("Stored hash:", user.hashed_password if user else None)
-    if not user or not verify_password(data.password, user.hashed_password):
-        print("Verify failed")
+
+    # -------- Verify password --------
+    if not user or not verify_password(password, user.hashed_password):
+        print("Password verification failed or user not found")
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
-    token = create_access_token({"email": user.email, "user_id": user.id, "is_admin": False})
+    # -------- Create access token --------
+    token = create_access_token({"email": user.email, "user_id": user.id, "is_admin": user.is_admin})
     return {"access_token": token, "token_type": "bearer"}
 
+# @router.post("/register")
+# def register_user(data: UserAuth, db: Session = Depends(get_db), background_tasks: BackgroundTasks = None):
+#     email = data.email
+#     password = data.password
 
+#     # --------- Email validations ----------
+#     if not email:
+#         raise HTTPException(status_code=400, detail="Email is required")
+    
+#     if "@" not in email:
+#         raise HTTPException(status_code=400, detail="Email must contain '@'")
+    
+#     parts = email.split("@")
+#     if len(parts) != 2:
+#         raise HTTPException(status_code=400, detail="Email must contain exactly one '@'")
+    
+#     local_part, domain_part = parts
+#     if "." not in domain_part:
+#         raise HTTPException(status_code=400, detail="Email domain must contain '.'")
+    
+#     if " " in email:
+#         raise HTTPException(status_code=400, detail="Email cannot contain spaces")
+    
+#     pattern = r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+#     if not re.match(pattern, email):
+#         raise HTTPException(status_code=400, detail="Email format is invalid (e.g., user@example.com)")
+
+#     # --------- Password validations ----------
+#     if not password:
+#         raise HTTPException(status_code=400, detail="Password is required")
+    
+#     if len(password) < 6:
+#         raise HTTPException(status_code=400, detail="Password must be at least 6 characters long")
+
+#     # --------- Existing email check ----------
+#     existing = db.query(User).filter(User.email == email).first()
+#     if existing:
+#         raise HTTPException(status_code=400, detail="Email already registered")
+
+#     # --------- Create user ----------
+#     hashed_password = hash_password(password)
+#     new_user = User(email=email, hashed_password=hashed_password, is_admin=0)
+#     db.add(new_user)
+#     db.commit()
+#     db.refresh(new_user)
+#     background_tasks.add_task(send_registration_email, new_user.email, new_user.email.split("@")[0])
+
+
+#     return {"message": "User registered successfully"}
+
+
+# # ✅ User Login
+# # @router.post("/login")
+# # def login_user(data: UserAuth, db: Session = Depends(get_db)):
+# #     user = db.query(User).filter(User.email == data.email).first()
+# #     if not user or not verify_password(data.password, user.hashed_password):
+# #         raise HTTPException(status_code=401, detail="Invalid email or password")
+
+# #     if user.is_admin == 1:
+# #         raise HTTPException(status_code=403, detail="Admins must use /admin/login")
+
+# #     token = create_access_token({"email": user.email, "user_id": user.id, "is_admin": False})
+# #     return {"access_token": token, "token_type": "bearer"}
+
+# # @router.post("/login")
+# # def login_user(data: UserAuth, db: Session = Depends(get_db)):
+# #     user = db.query(User).filter(User.email == data.email).first()
+# #     print("Login attempt:", data.email, data.password)
+# #     print("Stored hash:", user.hashed_password if user else None)
+# #     if not user or not verify_password(data.password, user.hashed_password):
+# #         print("Verify failed")
+# #         raise HTTPException(status_code=401, detail="Invalid email or password")
+
+# #     token = create_access_token({"email": user.email, "user_id": user.id, "is_admin": False})
+# #     return {"access_token": token, "token_type": "bearer"}
+
+# @router.post("/login")
+# def login_user(data: UserAuth, db: Session = Depends(get_db)):
+#     email = data.email
+#     password = data.password
+
+#    # -------- Input validations --------
+#     if not email:
+#         raise HTTPException(status_code=400, detail="Email is required")
+#     if " " in email:
+#         raise HTTPException(status_code=400, detail="Email cannot contain spaces")
+    
+#     # -------- Regex email validation --------
+#     pattern = r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+#     if not re.match(pattern, email):
+#         raise HTTPException(status_code=400, detail="Invalid email format (e.g., user@example.com)")
+
+#     if not password:
+#         raise HTTPException(status_code=400, detail="Password is required")
+#     if len(password) < 6:
+#         raise HTTPException(status_code=400, detail="Password must be at least 6 characters long")
+
+
+#     # -------- Fetch user from DB --------
+#     user = db.query(User).filter(User.email == email).first()
+#     print("Login attempt:", email, password)
+#     print("Stored hash:", user.hashed_password if user else None)
+
+#     # -------- Verify password --------
+#     if not user or not verify_password(password, user.hashed_password):
+#         print("Password verification failed or user not found")
+#         raise HTTPException(status_code=401, detail="Invalid email or password")
+
+#     # -------- Create access token --------
+#     token = create_access_token({"email": user.email, "user_id": user.id, "is_admin": user.is_admin})
+#     return {"access_token": token, "token_type": "bearer"}
 
 # ✅ Current User Dependency
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
@@ -171,7 +297,7 @@ def get_conversions(
 
 # ---------------- EMAIL SENDER FOR RESET LINK ----------------
 async def send_password_reset_email(email: str, reset_token: str):
-    reset_link = f"http://localhost:3000/reset-password?token={reset_token}"
+    reset_link = f"http://192.168.0.102:3000/reset-password?token={reset_token}"
 
     from fastapi_mail import FastMail, MessageSchema
     from email_utils import conf
@@ -208,6 +334,10 @@ async def forgot_password(req: ForgotPasswordRequest, db: Session = Depends(get_
         raise HTTPException(status_code=500, detail="Failed to send reset link")
 
     return {"message": "Reset link sent to email"}
+
+
+
+
 
 
 

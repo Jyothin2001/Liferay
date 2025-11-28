@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // ------------------- Client APIs -------------------
-const CLIENT_API_URL = "http://127.0.0.1:8000/user";
+const CLIENT_API_URL = "http://192.168.0.102:8000/user";
 
 export const clientRegister = (email, password) =>
   axios.post(`${CLIENT_API_URL}/register`, { email, password });
@@ -33,7 +33,7 @@ export const clientResetPassword = (token, newPassword) =>
 
 
 // ------------------- Admin APIs -------------------
-const ADMIN_API_URL = "http://127.0.0.1:8000/admin";
+const ADMIN_API_URL = "http://192.168.0.102:8000/admin";
 
 export const adminLogin = (email, password) =>
   axios.post(`${ADMIN_API_URL}/login`, { email, password });
@@ -43,7 +43,7 @@ export const adminGetConversions = (token) =>
     headers: { Authorization: `Bearer ${token}` },
   });
 export const adminDeleteConversion = (id, token) =>
-  axios.delete(`http://127.0.0.1:8000/delete_conversion/${id}`, {
+  axios.delete(`http://192.168.0.102:8000/delete_conversion/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 

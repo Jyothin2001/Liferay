@@ -1,0 +1,26 @@
+/* ---------------- Historical Rates Card ---------------- */
+.history-card {
+  background: #ffffff;                /* white card */
+  padding: 18px;                      /* padding */
+  border-radius: 12px;                /* rounded corners */
+  box-shadow: 0 6px 20px rgba(16,24,40,0.06); /* subtle shadow */
+  margin-top: 12px;
+}
+
+.history-title {
+  margin: 0 0 12px 0;
+  font-weight: 600;
+  color: #000;                        /* heading color */
+  font-size: 0.95rem;
+}
+
+.history-chart {
+  height: 260px;                       /* fixed chart height */
+  position: relative;
+}
+.history-info {
+  margin: 6px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #007aff;
+}

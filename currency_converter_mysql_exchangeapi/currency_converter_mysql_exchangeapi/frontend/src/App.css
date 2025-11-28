@@ -38,20 +38,32 @@
   font-weight: bold;
 }
 
-.header-buttons button {
+/* Header navigation links styled like buttons */
+.header-buttons button,
+.header-buttons .nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  min-width: 90px;
   margin-left: 10px;
-  padding: 8px 16px;
-  border: none;
+  padding: 0 16px;
   border-radius: 6px;
-  cursor: pointer;
+  font-weight: 500;
   background-color: #64b5f6;
   color: white;
-  font-weight: 500;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
   transition: 0.2s;
+  box-sizing: border-box;
 }
 
 .header-buttons button:hover,
-.header-buttons button.active {
+.header-buttons button.active,
+.header-buttons .nav-link:hover,
+.header-buttons .nav-link.active {
   background-color: #ffeb3b;
   color: #333;
 }
@@ -76,7 +88,7 @@
 
 /* Inputs */
 input[type="email"],
-input[type="password"] {
+input[type=""] {
   width: 100%;
   padding: 16px 20px;
   margin: 8px 0;
@@ -88,7 +100,7 @@ input[type="password"] {
 }
 
 input[type="email"]:focus,
-input[type="password"]:focus {
+input[type=""]:focus {
   border-color: #1f3c88;
   box-shadow: 0 0 0 3px rgba(31,60,136,0.15);
   outline: none;
@@ -169,6 +181,35 @@ input[type="password"]:focus {
   text-align: center;
 }
 
+/* Converter info box on signup/login page */
+.converter-info {
+  background-color: #e1f5fe;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.converter-info h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f3c88;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.converter-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+
+.converter-info ul li {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
 /* Converter header */
 .converter-header {
   display: flex;
@@ -204,10 +245,19 @@ input[type="password"]:focus {
   .button-group {
     flex-direction: column;
   }
+
+  .client-container {
+    flex-direction: column;
+  }
+
+  .converter-info {
+    max-width: 100%;
+  }
 }
+
 .forgot-link {
   margin-top: 8px;
-  text-align: right;
+  text-align: center;
   color: #4ea3ff;
   cursor: pointer;
   font-size: 14px;
@@ -253,4 +303,101 @@ input[type="password"]:focus {
 
 .modal-buttons button.cancel {
   background: gray;
+  color: white;
+}
+
+
+/* ---------------- Modern App Info ---------------- */
+.app-info {
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
+  text-align: center;
+}
+
+.app-info h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1f3c88;
+  margin-bottom: 25px;
+}
+
+.info-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.info-card {
+  background: linear-gradient(135deg, #64b5f6 0%, #1f3c88 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  width: 220px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.info-card img {
+  width: 50px;
+  margin-bottom: 15px;
+}
+
+.info-card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.info-card p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.info-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+
+
+/* Password wrapper keeps input and icon aligned */
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Password input — same design as email input */
+.password-input {
+  width: 100%;
+  padding: 16px 20px;        /* same as email */
+  padding-right: 45px;       /* space so icon does NOT overlap text */
+  margin: 8px 0;
+  font-size: 16px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+  transition: all 0.25s ease-in-out;
+}
+
+/* Focus highlight */
+.password-input:focus {
+  border-color: #1f3c88;
+  box-shadow: 0 0 0 3px rgba(31,60,136,0.15);
+  outline: none;
+}
+
+/* Eye icon */
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+/* Hover effect for icon */
+.password-toggle:hover {
+  color: #1f3c88;
 }

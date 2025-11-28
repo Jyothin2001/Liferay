@@ -2,22 +2,24 @@
 .converter-container {
   max-width: 900px;
   padding: 25px;
-  background: linear-gradient(145deg, #ffffff10, #ffffff05); /* subtle gradient */
-  border-radius: 16px;
-  color: #0b0101; /* default text dark */
+
+  /* Make it invisible */
+  background: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+
+  /* Keep your layout & text styling */
+  color: #0b0101;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-  /* Modern card shadow */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px); /* soft frosted glass effect */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: none;
 }
 
-/* Hover lift effect */
 .converter-container:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25), 0 6px 8px rgba(0, 0, 0, 0.15);
+  transform: none;
+  box-shadow: none;
 }
+
 
 /* ---------------- Header ---------------- */
 .converter-header {
@@ -62,7 +64,7 @@
   border-radius: 12px;
   border: 1px solid #ccc;
   flex: 1;
-  max-width: 180px;
+  max-width: 160px;
   background: #fff;
   color: #000; /* dark input text */
   transition: box-shadow 0.2s ease, border 0.2s ease;
@@ -254,4 +256,28 @@
   .swap-btn {
     margin: 5px 0;
   }
+}
+
+
+
+
+.qr-btn {
+  background-color: #0066ff;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 15px;
+  transition: 0.2s;
+}
+
+.qr-btn:hover {
+  background-color: #004dcc;
+}
+
+.qr-container {
+  margin-top: 15px;
+  text-align: center;
 }
